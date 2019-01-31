@@ -1,0 +1,8 @@
+name: komplexity-env
+channels:
+  - eclarke
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - komplexity=0.3.6=musl
