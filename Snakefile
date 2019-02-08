@@ -23,7 +23,7 @@ rule graftm_sift:
 		R2clean="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
 		package="graftm/7.40.2013_08_greengenes_97_otus.with_euks.gpkg"
 	output:
-		graftm="02-graftm_sifted/{sample}/",
+		graftm=directory("02-graftm_sifted/{sample}/"),
 		log="logs/02-graftM_sifting/{sample}.graftM_log.txt",
 		R1hits="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
 		R2hits="02-graftm_sifted/{sample}.rev.SSU.hits.fa",
