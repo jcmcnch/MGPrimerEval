@@ -23,8 +23,10 @@ rule graftm_sift:
 		R2clean="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
 		package="graftm/7.40.2013_08_greengenes_97_otus.with_euks.gpkg"
 	output:
-		results="02-graftm_sifted/{sample}",
-		log="logs/02-graftM_sifting/{sample}.graftM_log.txt"
+		graftm="02-graftm_sifted/{sample}/",
+		log="logs/02-graftM_sifting/{sample}.graftM_log.txt",
+		R1hits="02-graftm_hits/{sample}.R1.SSU.hits.fa",
+		R2hits="02-graftm_hits/{sample}.R2.SSU.hits.fa"
 	threads:
 		8
 	conda:
@@ -33,12 +35,14 @@ rule graftm_sift:
 		"rm -f {output.log} ; export PATH=\"$PWD/executables:$PATH\" ; "
 		"graftM graft --force --forward {input.R1clean} --reverse {input.R2clean} --search_and_align_only --threads {threads} "
 		"--graftm_package {input.package} --input_sequence_type nucleotide --search_method hmmsearch "
-		"--verbosity 5 --log {output.log} --output_directory {output.results} "#; touch {output.R1sifted} ; touch {output.R2sifted}"
+		"--verbosity 5 --log {output.log} --output_directory {output.graftm} ; "
+		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/forward/{sample}*_hits.fa {R1hits} ;"
+		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/reverse/{sample}*_hits.fa {R2hits}"
 
 rule remove_repeats_komplexity:
 	input:
-		R1sifted="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward_hits.fa",
-		R2sifted="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse_hits.fa"
+		R1sifted="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
+		R2sifted="02-graftm_sifted/{sample}.rev.SSU.hits.fa"
 	output:
 		R1="03-low-complexity-filtered/{sample}.fwd.SSU.keep.fa",
 		R2="03-low-complexity-filtered/{sample}.rev.SSU.keep.fa"
