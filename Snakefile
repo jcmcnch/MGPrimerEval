@@ -25,8 +25,8 @@ rule graftm_sift:
 	output:
 		graftm="02-graftm_sifted/{sample}/",
 		log="logs/02-graftM_sifting/{sample}.graftM_log.txt",
-		R1hits="02-graftm_hits/{sample}.R1.SSU.hits.fa",
-		R2hits="02-graftm_hits/{sample}.R2.SSU.hits.fa"
+		R1hits="02-graftm_hits/{sample}.fwd.SSU.hits.fa",
+		R2hits="02-graftm_hits/{sample}.rev.SSU.hits.fa"
 	threads:
 		8
 	conda:
