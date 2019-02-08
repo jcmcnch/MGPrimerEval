@@ -26,7 +26,9 @@ rule graftm_sift:
 		graftm="02-graftm_sifted/{sample}/",
 		log="logs/02-graftM_sifting/{sample}.graftM_log.txt",
 		R1hits="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
-		R2hits="02-graftm_sifted/{sample}.rev.SSU.hits.fa"
+		R2hits="02-graftm_sifted/{sample}.rev.SSU.hits.fa",
+		R1hmmout="02-graftm_sifted/{sample}.fwd.SSU.hmmout.txt",
+		R2hmmout="02-graftm_sifted/{sample}.rev.SSU.hmmout.txt"
 	threads:
 		8
 	conda:
@@ -36,8 +38,10 @@ rule graftm_sift:
 		"graftM graft --force --forward {input.R1clean} --reverse {input.R2clean} --search_and_align_only --threads {threads} "
 		"--graftm_package {input.package} --input_sequence_type nucleotide --search_method hmmsearch "
 		"--verbosity 5 --log {output.log} --output_directory {output.graftm} ; "
-		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/forward/{sample}*_hits.fa {R1hits} ;"
-		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/reverse/{sample}*_hits.fa {R2hits}"
+		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/forward/{sample}*_hits.fa {R1hits} ; "
+		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/reverse/{sample}*_hits.fa {R2hits} ; "
+		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/forward/{sample}*hmmout.txt {R1hmmout} ; "
+		"ln -s $PWD/02-graftm_sifted/{sample}/{sample}*/reverse/{sample}*hmmout.txt {R2hmmout}"
 
 rule remove_repeats_komplexity:
 	input:
@@ -172,8 +176,8 @@ rule align_EUK:
 
 rule get_strandedness:
 	input:
-		fwd="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward.hmmout.txt",
-		rev="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse.hmmout.txt"
+		fwd="02-graftm_sifted/{sample}.fwd.SSU.hmmout.txt",
+		rev="02-graftm_sifted/{sample}.rev.SSU.hmmout.txt"
 	output:
 		fwd="strand_info/{sample}.strand.fwd.tsv",
 		rev="strand_info/{sample}.strand.rev.tsv"
