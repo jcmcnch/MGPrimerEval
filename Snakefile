@@ -122,7 +122,7 @@ rule align_ARCH:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.ARCH_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.ARCH_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
 		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_fail.fasta {output.log} ; "
 		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_aligned.fasta {output.alignment} "
 
