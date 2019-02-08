@@ -38,10 +38,10 @@ rule graftm_sift:
 		"graftM graft --force --forward {input.R1clean} --reverse {input.R2clean} --search_and_align_only --threads {threads} "
 		"--graftm_package {input.package} --input_sequence_type nucleotide --search_method hmmsearch "
 		"--verbosity 5 --log {output.log} --output_directory {output.graftm} ; "
-		"ln -s $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/forward/{wildcards.sample}*_hits.fa {output.R1hits} ; "
-		"ln -s $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/reverse/{wildcards.sample}*_hits.fa {output.R2hits} ; "
-		"ln -s $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/forward/{wildcards.sample}*hmmout.txt {output.R1hmmout} ; "
-		"ln -s $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/reverse/{wildcards.sample}*hmmout.txt {output.R2hmmout}"
+		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/forward/{wildcards.sample}*_hits.fa` {output.R1hits} ; "
+		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/reverse/{wildcards.sample}*_hits.fa` {output.R2hits} ; "
+		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/forward/{wildcards.sample}*hmmout.txt` {output.R1hmmout} ; "
+		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/reverse/{wildcards.sample}*hmmout.txt` {output.R2hmmout}"
 
 rule remove_repeats_komplexity:
 	input:
