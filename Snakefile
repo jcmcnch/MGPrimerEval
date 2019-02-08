@@ -2,9 +2,6 @@ configfile: "config.yaml"
 
 rule all:
 	input:
-		#expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		#expand("12-full-fastas/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		#"13-classified/all/all.mismatches.RDP.classified"
 		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
@@ -12,43 +9,44 @@ rule fastp_clean:
 		R1="00-fastq/{sample}_repaired_1.fastq.gz",
 		R2="00-fastq/{sample}_repaired_2.fastq.gz"
 	output:
-		R1="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		R2="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
+		R1clean="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
+		R2clean="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
 		log="logs/01-fastp_cleaning/{sample}.log.html"
 	threads: 8
 	shell:
-		"fastp -3 -t 3 -i {input.R1} -I {input.R2} -o {output.R1} -O {output.R2} --thread {threads} --html {output.log}"
+		"fastp -3 -t 3 -i {input.R1} -I {input.R2} -o {output.R1clean} -O {output.R2clean} --thread {threads} --html {output.log}"
 
 
 rule graftm_sift:
 	input:
-		R1="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		R2="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
+		R1clean="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
+		R2clean="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
 		package="graftm/7.40.2013_08_greengenes_97_otus.with_euks.gpkg"
 	output:
 		results="02-graftm_sifted/{sample}",
 		log="logs/02-graftM_sifting/{sample}.graftM_log.txt"
-	threads: 8
+	threads:
+		8
 	conda:
 		"envs/graftm.yaml"
 	shell:
 		"rm -f {output.log} ; export PATH=\"$PWD/executables:$PATH\" ; "
-		"graftM graft --force --forward {input.R1} --reverse {input.R2} --search_and_align_only --threads {threads} "
+		"graftM graft --force --forward {input.R1clean} --reverse {input.R2clean} --search_and_align_only --threads {threads} "
 		"--graftm_package {input.package} --input_sequence_type nucleotide --search_method hmmsearch "
-		"--verbosity 5 --log {output.log} --output_directory {output.results} "
+		"--verbosity 5 --log {output.log} --output_directory {output.results} "#; touch {output.R1sifted} ; touch {output.R2sifted}"
 
 rule remove_repeats_komplexity:
 	input:
-		R1="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward_hits.fa",
-		R2="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse_hits.fa"
+		R1sifted="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward_hits.fa",
+		R2sifted="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse_hits.fa"
 	output:
 		R1="03-low-complexity-filtered/{sample}.fwd.SSU.keep.fa",
 		R2="03-low-complexity-filtered/{sample}.rev.SSU.keep.fa"
 	conda:
 		"envs/komplexity.yaml"
 	shell:
-		"kz --filter --fasta < {input.R1} > {output.R1} ; "
-		"kz --filter --fasta < {input.R2} > {output.R2} "
+		"kz --filter --fasta < {input.R1sifted} > {output.R1} ; "
+		"kz --filter --fasta < {input.R2sifted} > {output.R2} "
 
 rule sort_EUK:
 	input:
@@ -94,7 +92,8 @@ rule sort_CYANO:
 		NONCYANO="04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fa",
 	log:
 		"logs/04-sorting/{sample}.{direction}.bbsplit.BACT-CYANO.log"
-	threads: 8
+	threads:
+		8
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -104,34 +103,20 @@ rule sort_CYANO:
 		"mv {input}*NON-CYANO*.fasta {output.NONCYANO}; mv {input}*CYANO*.fasta {output.CYANO}"
 
 
-rule align_EUK:
-	input:
-		seqs="04-sorted/{sample}.{direction}.SSU.EUK.fa",
-		ref="SSU_refs/Saccharomyces_cerevisiae_S288C_18s-1_NR_132213.1.fa"
-	output:
-		dir=directory("05-pyNAST-aligned/{sample}.{direction}.EUK/"),
-		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.EUK.pyNAST.log"
-	conda:
-		"envs/pynast.yaml"
-	shell:
-		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ; "
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}*pynast_fail.fasta | wc -l` sequences failed to align.\" ; "
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}*EUK_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}*EUK*pynast* {output.dir}"
-
-
 rule align_ARCH:
 	input:
 		seqs="04-sorted/{sample}.{direction}.SSU.ARCH.fa",
 		ref="SSU_refs/Sulfolobus_acidocaldarius_N8_16s.fasta"
 	output:
-		dir=directory("05-pyNAST-aligned/{sample}.{direction}.ARCH/"),
+		alignment="05-pyNAST-aligned/{sample}.{direction}.ARCH/{sample}.{direction}.SSU.ARCH_pynast_aligned.fasta",
 		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.ARCH.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}*pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}*ARCH_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}*ARCH*pynast* {output.dir} "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.ARCH.pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.ARCH_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.ARCH_pynast_fail.fasta {output.log} ; "
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_aligned.fasta {output.alignment} "
 
 
 rule align_BACT:
@@ -139,14 +124,15 @@ rule align_BACT:
 		seqs="04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fa",
 		ref="SSU_refs/Ecoli_16s.fna"
 	output:
-		dir=directory("05-pyNAST-aligned/{sample}.{direction}.NON-CYANO/"),
+		alignment="05-pyNAST-aligned/{sample}.{direction}.BACT-NON-CYANO/{sample}.{direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta",
 		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.BACT-NON-CYANO.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}*pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}*BACT-NON-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}*BACT-NON-CYANO_*pynast* {output.dir} "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.BACT-NON-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-NON-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-NON-CYANO_pynast_fail.fasta {output.log} ; "
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta {output.alignment} "
 
 
 rule align_CYANO:
@@ -154,19 +140,34 @@ rule align_CYANO:
 		seqs="04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fa",
 		ref="SSU_refs/SILVA_132_longest-CYANO-non-Chloroplast.fasta"
 	output:
-		dir=directory("05-pyNAST-aligned/{sample}.{direction}.CYANO/"),
+		alignment="05-pyNAST-aligned/{sample}.{direction}.BACT-CYANO/{sample}.{direction}.SSU.BACT-CYANO_pynast_aligned.fasta",
 		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.BACT-CYANO.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}*pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}*BACT-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}*BACT-CYANO_*pynast* {output.dir} "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.BACT-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-CYANO_pynast_fail.fasta {output.log} ; "
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_aligned.fasta {output.alignment} "
+
+rule align_EUK:
+	input:
+		seqs="04-sorted/{sample}.{direction}.SSU.EUK.fa",
+		ref="SSU_refs/Saccharomyces_cerevisiae_S288C_18s-1_NR_132213.1.fa"
+	output:
+		alignment="05-pyNAST-aligned/{sample}.{direction}.EUK/{sample}.{direction}.SSU.EUK_pynast_aligned.fasta",
+		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.EUK.pyNAST.log"
+	conda:
+		"envs/pynast.yaml"
+	shell:
+		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.EUK.pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.EUK_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.EUK_pynast_fail.fasta {output.log} ; "
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_aligned.fasta {output.alignment} "
+
 
 rule get_strandedness:
 	input:
-		#fwd="02-graftm_sifted/NOV-2012/NOV-2012_1_clean/forward/NOV-2012_1_clean_forward.hmmout.txt",
-		#rev="02-graftm_sifted/NOV-2012/NOV-2012_1_clean/reverse/NOV-2012_1_clean_reverse.hmmout.txt"
 		fwd="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward.hmmout.txt",
 		rev="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse.hmmout.txt"
 	output:
@@ -251,7 +252,7 @@ rule quality_filter_primer_region:
 
 
 rule grab_matching_cutadapt:
-	input:"12-full-fastas/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fasta"
+	input:
 		"09-qual-filtered-primer-region/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.slice.gtQ30.fastq"
 	output:
 		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
@@ -282,8 +283,8 @@ rule grab_full_fastas:
 	input:
 		fwdFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.fastq",
 		revFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.fastq",
-		fwdFA="02-graftm_hits/{sample}_1_clean_forward_hits.fa",
-		revFA="02-graftm_hits/{sample}_1_clean_forward_hits.fa"
+		fwdFA="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward_hits.fa",
+		revFA="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse_hits.fa"
 	output:
 		fwd="12-full-fastas/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.fasta",
 		rev="12-full-fastas/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.fasta"
