@@ -122,8 +122,8 @@ rule align_ARCH:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.ARCH.pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.ARCH_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.ARCH_pynast_fail.fasta {output.log} ; "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.ARCH_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_fail.fasta {output.log} ; "
 		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_aligned.fasta {output.alignment} "
 
 
@@ -138,8 +138,8 @@ rule align_BACT:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.BACT-NON-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-NON-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-NON-CYANO_pynast_fail.fasta {output.log} ; "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.BACT-NON-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_fail.fasta {output.log} ; "
 		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta {output.alignment} "
 
 
@@ -154,8 +154,8 @@ rule align_CYANO:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.BACT-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.BACT-CYANO_pynast_fail.fasta {output.log} ; "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.BACT-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_fail.fasta {output.log} ; "
 		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_aligned.fasta {output.alignment} "
 
 rule align_EUK:
@@ -169,8 +169,8 @@ rule align_EUK:
 		"envs/pynast.yaml"
 	shell:
 		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.EUK.pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.EUK_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.EUK_pynast_fail.fasta {output.log} ; "
+		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.EUK.pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
+		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_fail.fasta {output.log} ; "
 		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_aligned.fasta {output.alignment} "
 
 
