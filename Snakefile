@@ -291,8 +291,8 @@ rule grab_full_fastas:
 	input:
 		fwdFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.fastq",
 		revFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.fastq",
-		fwdFA="02-graftm_sifted/{sample}/{sample}_repaired_1/forward/{sample}_repaired_1_forward_hits.fa",
-		revFA="02-graftm_sifted/{sample}/{sample}_repaired_1/reverse/{sample}_repaired_1_reverse_hits.fa"
+		fwdFA="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
+		revFA="02-graftm_sifted/{sample}.rev.SSU.hits.fa",
 	output:
 		fwd="12-full-fastas/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.fasta",
 		rev="12-full-fastas/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.fasta"
