@@ -4,6 +4,7 @@ rule all:
 	input:
 		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
 		expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+
 rule fastp_clean:
 	input:
 		R1="00-fastq/{sample}_repaired_1.fastq.gz",
@@ -200,8 +201,8 @@ rule get_fastq:
 	input:
 		fwdIDs="aligned-seq-ids/{sample}.SSU.{group}.pyNAST.fwd.ids",
 		revIDs="aligned-seq-ids/{sample}.SSU.{group}.pyNAST.rev.ids",
-		fastqR1="00-fastq/{sample}_repaired_1.fastq.gz",
-		fastqR2="00-fastq/{sample}_repaired_2.fastq.gz"
+		fastqR1="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
+		fastqR2="01-fastp-cleaned/{sample}_2_clean.fastq.gz"
 	output:
 		fwd="06-fastq/{sample}.SSU.{group}.keep.fwd.fastq",
 		rev="06-fastq/{sample}.SSU.{group}.keep.rev.fastq"
