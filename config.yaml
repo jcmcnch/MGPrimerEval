@@ -15,6 +15,12 @@ mismatches:
   1-mismatch : 1
   2-mismatch : 2
 
+primerGroups:
+  ARCH: ["515Y","926R"]
+  EUK: ["515Y","926R","V4F","V4RB"]
+  BACT-CYANO: ["515Y","926R"]
+  BACT-NON-CYANO: ["515Y","926R"]
+
 primerROI:
   EUK:
     515Y: [562,580]
@@ -24,14 +30,20 @@ primerROI:
   ARCH:
     515Y: [486,504]
     926R: [882,901]
+    V4F : [0, 0]
+    V4RB :  [0, 0]
   BACT-NON-CYANO:
     515Y: [515,533]
     926R: [907, 926]
+    V4F : [0, 0]
+    V4RB :  [0, 0]
   BACT-CYANO:
     515Y: [491,509]
     926R: [864,903]
+    V4F : [0, 0]
+    V4RB :  [0, 0]
 
-samples:  
+samples:
   APR-2010 : APR-2010
   APR-2011 : APR-2011
   APR-2013 : APR-2013
