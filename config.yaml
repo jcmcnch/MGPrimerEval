@@ -1,6 +1,8 @@
 primer:
   926R : "AAACTYAAAKRAATTGRCGG" #note that this is reverse complement of primer
   515Y : "GTGYCAGCMGCCGCGGTAA"
+  V4F : "CCAGCASCYGCGGTAATTCC"
+  V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
 
 groups:
   EUK : EUK
@@ -17,6 +19,8 @@ primerROI:
   EUK:
     515Y: [562,580]
     926R: [1131,1150]
+    V4F : [565, 584]
+    V4RB :  [964, 981]
   ARCH:
     515Y: [486,504]
     926R: [882,901]
