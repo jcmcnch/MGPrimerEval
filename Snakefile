@@ -209,8 +209,8 @@ rule get_fastq:
 	conda:
 		"envs/bbmap.yaml"
 	shell:
-		"filterbyname.sh names={input.fwdIDs} app=t include=t in={input.fastqR1} out={output.fwd} ; "
-		"filterbyname.sh names={input.revIDs} app=t include=t in={input.fastqR2} out={output.rev} "
+		"filterbyname.sh names={input.fwdIDs} overwrite=t include=t in={input.fastqR1} out={output.fwd} ; "
+		"filterbyname.sh names={input.revIDs} overwrite=t include=t in={input.fastqR2} out={output.rev} "
 
 
 rule subset_to_primer_region:
