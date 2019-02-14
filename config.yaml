@@ -1,5 +1,6 @@
 primer:
-  926R : "AAACTYAAAKRAATTGRCGG" #note that this is reverse complement of primer
+  926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
+  806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
   515Y : "GTGYCAGCMGCCGCGGTAA"
   V4F : "CCAGCASCYGCGGTAATTCC"
   V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
@@ -19,15 +20,10 @@ mismatches:
   1-mismatch : 1
   2-mismatch : 2
 
-primerGroups:
-  ARCH: ["515Y","926R"]
-  EUK: ["515Y","926R","V4F","V4RB"]
-  BACT-CYANO: ["515Y","926R"]
-  BACT-NON-CYANO: ["515Y","926R"]
-
 primerROI:
   EUK:
     515Y: [562,580]
+    806RB : [0, 0]
     926R: [1131,1150]
     V4F : [565, 584]
     V4RB : [964, 981]
@@ -35,8 +31,10 @@ primerROI:
     785R : [0, 0]
     27F : [0, 0]
     338R : [0, 0]
+
   ARCH:
     515Y: [486,504]
+    806RB : [758, 777]
     926R: [882,901]
     V4F : [0, 0]
     V4RB : [0, 0]
@@ -44,8 +42,10 @@ primerROI:
     785R : [756, 776]
     27F : [0, 0]
     338R : [0, 0]
+
   BACT-NON-CYANO:
     515Y: [515,533]
+    806RB : [787, 806]
     926R: [907, 926]
     V4F : [0, 0]
     V4RB :  [0, 0]
@@ -53,15 +53,17 @@ primerROI:
     785R : [785, 805]
     27F : [6, 27]
     338R : [338, 356]
+
   BACT-CYANO:
     515Y: [491,509]
+    806RB : [763, 782]
     926R: [864,903]
     V4F : [0, 0]
     V4RB : [0, 0]
     341F : [339, 355]
     785R : [761, 781]
     27F : [0, 0] #need to find a new reference as this one is cut off at the beginning of the primer, or just use cutadapt
-    338R : [336, 354] 
+    338R : [336, 354]
 
 samples:
   APR-2010 : APR-2010
