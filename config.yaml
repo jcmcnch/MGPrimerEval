@@ -3,6 +3,10 @@ primer:
   515Y : "GTGYCAGCMGCCGCGGTAA"
   V4F : "CCAGCASCYGCGGTAATTCC"
   V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
+  341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
+  785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
+  27F : "AGRGTTTGATYMTGGCTCAG"
+  338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
 
 groups:
   EUK : EUK
@@ -26,22 +30,38 @@ primerROI:
     515Y: [562,580]
     926R: [1131,1150]
     V4F : [565, 584]
-    V4RB :  [964, 981]
+    V4RB : [964, 981]
+    341F : [0, 0]
+    785R : [0, 0]
+    27F : [0, 0]
+    338R : [0, 0]
   ARCH:
     515Y: [486,504]
     926R: [882,901]
     V4F : [0, 0]
-    V4RB :  [0, 0]
+    V4RB : [0, 0]
+    341F : [358, 374]
+    785R : [756, 776]
+    27F : [0, 0]
+    338R : [0, 0]
   BACT-NON-CYANO:
     515Y: [515,533]
     926R: [907, 926]
     V4F : [0, 0]
     V4RB :  [0, 0]
+    341F : [341, 357]
+    785R : [785, 805]
+    27F : [6, 27]
+    338R : [338, 356]
   BACT-CYANO:
     515Y: [491,509]
     926R: [864,903]
     V4F : [0, 0]
-    V4RB :  [0, 0]
+    V4RB : [0, 0]
+    341F : [339, 355]
+    785R : [761, 781]
+    27F : [0, 0] #need to find a new reference as this one is cut off at the beginning of the primer, or just use cutadapt
+    338R : [336, 354] 
 
 samples:
   APR-2010 : APR-2010
@@ -78,8 +98,8 @@ samples:
   MAY-2011 : MAY-2011
   NOV-2010 : NOV-2010
   NOV-2011 : NOV-2011
-#  NOV-2012 : NOV-2012
-#  OCT-2012 : OCT-2012
+  NOV-2012 : NOV-2012
+  OCT-2012 : OCT-2012
   SEP-2009 : SEP-2009
   SEP-2010 : SEP-2010
   SEP-2011 : SEP-2011
