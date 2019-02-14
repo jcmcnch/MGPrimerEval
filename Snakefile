@@ -147,7 +147,7 @@ rule align_BACT:
 rule align_CYANO:
 	input:
 		seqs="04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fa",
-		ref="SSU_refs/SILVA_132_longest-CYANO-non-Chloroplast.fasta"
+		ref="SSU_refs/longest-CYANO-with-27F.fasta"
 	output:
 		alignment="05-pyNAST-aligned/{sample}.{direction}.BACT-CYANO/{sample}.{direction}.SSU.BACT-CYANO_pynast_aligned.fasta",
 		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.BACT-CYANO.pyNAST.log"
@@ -302,6 +302,7 @@ rule grab_full_fastas:
 	shell:
 		"filterbyname.sh names={input.fwdFQ} include=t in={input.fwdFA} out={output.fwd} ; "
 		"filterbyname.sh names={input.revFQ} include=t in={input.revFA} out={output.rev} "
+"""
 
 rule concatenate_fastas:
 #Note: concatenating because otherwise RDP classifier gets retrained for each set of sequences (very slow!)
@@ -310,9 +311,9 @@ rule concatenate_fastas:
 	output:
 		"tmp.mismatches.concatenated.fasta"
 	shell:
-		"cat {input} >> {output}"
+		"cat {input} >> {output} ; done"
 
-
+"""
 rule classify_mismatches:
 	input:
 		"tmp.mismatches.concatenated.fasta"
