@@ -55,14 +55,14 @@ primerROI:
     338R : [338, 356]
 
   BACT-CYANO:
-    515Y: []
-    806RB : []
-    926R: []
+    515Y: [494, 512]
+    806RB : [766, 785]
+    926R: [867, 906]
     V4F : [0, 0]
     V4RB : [0, 0]
-    341F : []
-    785R : []
-    27F : [] #need to find a new reference as this one is cut off at the beginning of the primer, or just use cutadapt
-    338R : []
+    341F : [345, 361]
+    785R : [764, 784]
+    27F : [18, 37]
+    338R : [342, 360]
 
 samples:
