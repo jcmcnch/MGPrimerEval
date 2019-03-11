@@ -2,7 +2,7 @@ configfile: "config.yaml"
 
 rule all:
 	input:
-		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
+		#expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
 		expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
@@ -31,7 +31,7 @@ rule graftm_sift:
 		R1hmmout="02-graftm_sifted/{sample}.fwd.SSU.hmmout.txt",
 		R2hmmout="02-graftm_sifted/{sample}.rev.SSU.hmmout.txt"
 	threads:
-		8
+		1
 	conda:
 		"envs/graftm.yaml"
 	shell:
@@ -257,7 +257,7 @@ rule quality_filter_primer_region:
 	conda:
 		"envs/fastp.yaml"
 	shell:
-		"fastp -A -q {params.minqual} -l {params.minlen} -u 0 -i {input} -o {output}"
+		"fastp -A -q {params.minqual} -l {params.minlen} -u 0 -i {input} -o {output} -j logs/09-qual-filtering-primer-region/{wildcards.sample}.SSU.{wildcards.direction}.{wildcards.group}_pyNAST_{wildcards.primer}.slice.gtQ30.json -h logs/09-qual-filtering-primer-region/{wildcards.sample}.SSU.{wildcards.direction}.{wildcards.group}_pyNAST_{wildcards.primer}.slice.gtQ30.html"
 
 
 rule grab_matching_cutadapt:
@@ -267,7 +267,7 @@ rule grab_matching_cutadapt:
 		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
 		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq"
 	log:
-		"logs/05-checking/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
+		"logs/09-cutadapt/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
 	params:
 		pattern=lambda wildcards : config["primer"][wildcards.primer],
 		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer])
