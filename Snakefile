@@ -270,10 +270,10 @@ rule grab_matching_cutadapt:
 		"logs/09-cutadapt/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
 	params:
 		pattern=lambda wildcards : config["primer"][wildcards.primer],
-		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer])
+		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer]),
+		lengthPrimer=lambda wildcards : len(config["primer"][wildcards.primer])
 	shell:
-		"cutadapt --no-indels --no-trim -b {params.pattern} --error-rate {params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
-
+		"cutadapt --no-indels --no-trim -O {params.lengthPrimer} -b {params.pattern} --error-rate {params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
 
 rule compute_percentages:
 	input:
