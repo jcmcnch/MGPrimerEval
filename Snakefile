@@ -273,7 +273,7 @@ rule grab_matching_cutadapt:
 		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer]),
 		lengthPrimer=lambda wildcards : len(config["primer"][wildcards.primer])
 	shell:
-		"cutadapt --no-indels --no-trim -O {params.lengthPrimer} -b {params.pattern} --error-rate {params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
+		"cutadapt --no-indels --no-trim --overlap={params.lengthPrimer} -b {params.pattern} --error-rate={params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
 
 rule compute_percentages:
 	input:
