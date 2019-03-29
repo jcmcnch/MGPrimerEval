@@ -24,7 +24,7 @@ do
 done
 
 PS3='Please choose a primer of interest: '
-options=("515Y" "806RB" "926R","V4F","V4RB","341F","785R","27F","338R")
+options=("515Y" "806RB" "926R" "V4F" "V4RB" "341F" "785R" "27F" "338R")
 select opt in "${options[@]}"
 do
     case $opt in
