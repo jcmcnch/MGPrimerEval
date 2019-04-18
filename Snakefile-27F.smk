@@ -1,11 +1,11 @@
-configfile: "config-27F.yaml"
+#configfile: "config-27F.yaml"
 
 rule all:
 	input:
 		#expand("10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 		#expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		#expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.RDP-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
+		#expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
 	input:
@@ -241,6 +241,7 @@ rule get_fastq_for_subset:
 	shell:
 		"filterbyname.sh names={input.fasta} include=t in={input.fastq} out={output}"
 
+
 rule reverse_complement_fastqs:
 	#Cutadapt doesn't search the reverse complement, so have to do this semi-manually using the hmm output
 	input:
@@ -250,6 +251,7 @@ rule reverse_complement_fastqs:
 		"09-complemented-fastqs/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
 	shell:
 		"scripts/reverse-complement-fastq-according-to-HMM-output.py --fastqinput {input.fastq} --strand {input.strandedness} > {output}"
+
 
 rule grab_matching_cutadapt_full:
 	input:
@@ -273,7 +275,7 @@ rule quality_filter_primer_region_27F:
 	input:
 		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
 		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
-		info="10-checked/{primer}/2-mismatch/{sample}.SSU.{direction}.{group}.{primer}.2-mismatch.info" #Assume anything with -1 value is false positive, ignoring
+		info="10-checked/{primer}/6-mismatch/{sample}.SSU.{direction}.{group}.{primer}.6-mismatch.info" #Assume anything with -1 value is false positive, ignoring those with > ~30% mismatches to primer (e.g. for a 20bp primer)
 	output:
 		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
 		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
