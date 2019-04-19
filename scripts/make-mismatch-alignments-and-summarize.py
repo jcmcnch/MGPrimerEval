@@ -2,10 +2,10 @@
 
 import csv
 import pandas as pd
-#from Bio import SeqIO
 import argparse
+import sys
 
-parser = argparse.ArgumentParser(description='This script parses information from a cutadapt info file and produces alignments and a summary of the different sequence variants. Requires biopython and pandas in your environment (can use opedia-env on kraken.usc.edu).')
+parser = argparse.ArgumentParser(description='This script parses information from a cutadapt info file and produces alignments and a summary of the different sequence variants. Requires a relatively recent version of pandas in your environment (can use opedia-env on kraken.usc.edu).')
 
 parser.add_argument('--info', help='The tab-separated info file from cutadapt.')
 
@@ -39,3 +39,9 @@ for seq in set(aSeqs): #count sequences
 summaryDF = pd.DataFrame.from_dict(hashSummary, orient='index', columns=['relative abundance'])
 summaryDF = summaryDF.sort_values("relative abundance", axis=0, ascending=False)
 summaryDF.to_csv(args.summaryout, encoding='utf-8', sep="\t", index_label="variant")
+
+with open(args.alignmentout, "w+") as output_file:
+
+	for key, value in hashSeqs.items():
+
+		output_file.write(">" + key + "\n" + value + "\n")
