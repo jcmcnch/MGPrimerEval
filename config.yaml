@@ -6,8 +6,10 @@ primer:
   V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
   341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
   785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
-  27F : "AGRGTTTGATYMTGGCTCAG"
+  #27F : "AGRGTTTGATYMTGGCTCAG"
   338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
+  1389F : "TTGTACACACCGCCC"
+  1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
 
 groups:
   EUK : EUK
@@ -31,6 +33,8 @@ primerROI:
     785R : [0, 0]
     27F : [0, 0]
     338R : [0, 0]
+    1389F : [1627, 1641]
+    1510R : [1774, 1793]
 
   ARCH:
     515Y: [486,504]
@@ -42,6 +46,8 @@ primerROI:
     785R : [756, 776]
     27F : [0, 0]
     338R : [0, 0]
+    1389F : [0, 0]
+    1510R : [0, 0]
 
   BACT-NON-CYANO:
     515Y: [515,533]
@@ -53,17 +59,21 @@ primerROI:
     785R : [785, 805]
     27F : [6, 27]
     338R : [338, 356]
+    1389F : [0, 0]
+    1510R : [0, 0]
 
   BACT-CYANO:
     515Y: [494, 512]
     806RB : [766, 785]
-    926R: [887, 906]
+    926R: [867, 906]
     V4F : [0, 0]
     V4RB : [0, 0]
     341F : [345, 361]
     785R : [764, 784]
     27F : [18, 37]
     338R : [342, 360]
+    1389F : [0, 0]
+    1510R : [0, 0]
 
 samples:
   APR-2010 : APR-2010
