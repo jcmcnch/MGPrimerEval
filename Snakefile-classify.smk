@@ -15,8 +15,8 @@ rule grab_full_fastas:
 	conda:
 		"envs/bbmap.yaml"
 	shell:
-		"filterbyname.sh names={input.fwdFQ} include=t in={input.fwdFA} out={output.fwd} ; "
-		"filterbyname.sh names={input.revFQ} include=t in={input.revFA} out={output.rev} "
+		"filterbyname.sh names={input.fwdFQ} reads=500 include=t in={input.fwdFA} out={output.fwd} ; "
+		"filterbyname.sh names={input.revFQ} reads=500 include=t in={input.revFA} out={output.rev} "
 
 
 rule concatenate_mismatched_fastas:
@@ -32,12 +32,12 @@ rule classify_mismatches:
 	output:
 		"13-classified/all/all.mismatches.VSEARCH.classified.tsv"
 	threads:
-		10
+		20
 	conda:
 		"envs/vsearch.yaml"
 	shell:
 		"vsearch --sintax {input} "
-		"--db /home/db/phyloFlash/132/test.outputNR96.fasta "
+		"--db /home/db/VSEARCH/silva132_99_sintax.udb "
 		"--tabbedout {output} --threads 40 --sintax_cutoff 0"
 
 rule deconcat_classifications:
@@ -47,7 +47,7 @@ rule deconcat_classifications:
 	output:
 		"13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.VSEARCHsintax-SILVA132.tax"
 	shell:
-		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} > $tmpfile ; "
+		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
 		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} ; "
 		"rm $tmpfile"
 
@@ -64,12 +64,11 @@ rule subsample_matched_fastas:
 	conda:
 		"envs/bbmap.yaml"
 	shell:
-		"filterbyname.sh names={input.fwdFQ} reads=500 include=t in={input.fwdFA} out={output.fwd} ; "
-		"filterbyname.sh names={input.revFQ} reads=500 include=t in={input.revFA} out={output.rev} "
+		"filterbyname.sh names={input.fwdFQ} reads=5000 include=t in={input.fwdFA} out={output.fwd} ; "
+		"filterbyname.sh names={input.revFQ} reads=5000 include=t in={input.revFA} out={output.rev} "
 
 
 rule concatenate_matched_fastas:
-#Note: concatenating because otherwise RDP classifier gets retrained for each set of sequences (very slow!)
 	output:
 		"tmp.matches.subsampled.concatenated.fasta"
 	shell:
@@ -82,16 +81,13 @@ rule classify_matches_subsample:
 	output:
 		"15-matches-classified/all/all.matches.VSEARCH.classified.tsv"
 	threads:
-		10
+		20
 	conda:
-		"envs/qiime1.yaml"
+		"envs/vsearch.yaml"
 	shell:
-		"export RDP_JAR_PATH=\"/home/anaconda/miniconda2/envs/qiime1/bin/rdp_classifier-2.2/rdp_classifier-2.2.jar\" ; "
-		"assign_taxonomy.py --confidence 0 -m rdp -i {input} -o {output} --rdp_max_memory=500000 "
-  		"-t /home/db/SILVA_132/qiime_db/SILVA_132_QIIME_release/taxonomy/taxonomy_all/90/taxonomy_7_levels.txt "
-		"-r /home/db/SILVA_132/qiime_db/SILVA_132_QIIME_release/rep_set/rep_set_all/90/silva132_90.fna ;"
-		"rm tmp.mismatches.concatenated.fasta"
-
+		"vsearch --sintax {input} "
+                "--db /home/db/VSEARCH/silva132_99_sintax.udb "
+                "--tabbedout {output} --threads 40 --sintax_cutoff 0"
 
 rule deconcat_matches_classifications:
 	input:
@@ -100,6 +96,6 @@ rule deconcat_matches_classifications:
 	output:
 		"15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.VSEARCHsintax-SILVA132.tax"
 	shell:
-		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} > $tmpfile ; "
+		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
 		"grep -f $tmpfile {input.concatenated}/tmp.matches.subsampled.concatenated_tax_assignments.txt > {output} || touch {output} ; "
 		"rm $tmpfile"
