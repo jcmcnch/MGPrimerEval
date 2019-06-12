@@ -97,5 +97,5 @@ rule deconcat_matches_classifications:
 		"15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.VSEARCHsintax-SILVA132.tax"
 	shell:
 		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
-		"grep -f $tmpfile {input.concatenated}/tmp.matches.subsampled.concatenated_tax_assignments.txt > {output} || touch {output} ; "
+		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} ; "
 		"rm $tmpfile"
