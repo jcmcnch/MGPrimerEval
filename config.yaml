@@ -20,6 +20,7 @@ mismatches:
   0-mismatch : 0
   1-mismatch : 1
   2-mismatch : 2
+  6-mismatch : 6
 
 primerROI:
   EUK:
