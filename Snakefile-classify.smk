@@ -38,7 +38,7 @@ rule classify_mismatches:
 	shell:
 		"vsearch --sintax {input} "
 		"--db /home/db/VSEARCH/silva132_99_sintax.udb "
-		"--tabbedout {output} --threads 40 --sintax_cutoff 0 --top_hits_only --topn 1"
+		"--tabbedout {output} --threads 40 --sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels"
 
 rule deconcat_classifications:
 	input:
@@ -86,7 +86,7 @@ rule classify_matches_subsample:
 	shell:
 		"vsearch --sintax {input} "
                 "--db /home/db/VSEARCH/silva132_99_sintax.udb "
-                "--tabbedout {output} --threads 40 --sintax_cutoff 0 --top_hits_only --topn 1"
+                "--tabbedout {output} --threads 40 --sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels"
 
 rule deconcat_matches_classifications:
 	input:
