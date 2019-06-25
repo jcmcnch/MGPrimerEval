@@ -1,22 +1,22 @@
 rule all:
 	input:
-		expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
+		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule grab_full_fastas:
 	input:
-		fwdFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.fastq",
-		revFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.fastq",
+		fwdFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
+		revFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
 		fwdFA="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
 		revFA="02-graftm_sifted/{sample}.rev.SSU.hits.fa",
 	output:
-		fwd="12-full-fastas/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.fasta",
-		rev="12-full-fastas/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.fasta"
+		fwd="12-full-fastas/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.nohit.filtered.fasta",
+		rev="12-full-fastas/{sample}.SSU.rev.{group}.{primer}.{mismatches}.nohit.filtered.fasta"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
-		"filterbyname.sh names={input.fwdFQ} reads=500 include=t in={input.fwdFA} out={output.fwd} ; "
-		"filterbyname.sh names={input.revFQ} reads=500 include=t in={input.revFA} out={output.rev} "
+		"filterbyname.sh names={input.fwdFQ} include=t in={input.fwdFA} out={output.fwd} ; "
+		"filterbyname.sh names={input.revFQ} include=t in={input.revFA} out={output.rev} "
 
 
 rule concatenate_mismatched_fastas:
@@ -38,29 +38,28 @@ rule classify_mismatches:
 	shell:
 		"vsearch --sintax {input} "
 		"--db /home/db/VSEARCH/silva132_99_sintax.udb "
-		"--tabbedout {output} --threads 40 --sintax_cutoff 0"
+		"--tabbedout {output} --threads 40 --sintax_cutoff 0 --top_hits_only --topn 1"
 
 rule deconcat_classifications:
 	input:
-		fasta="12-full-fastas/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fasta",
+		fasta="12-full-fastas/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fasta",
 		concatenated="13-classified/all/all.mismatches.VSEARCH.classified.tsv"
 	output:
-		"13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.VSEARCHsintax-SILVA132.tax"
+		"13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax"
 	shell:
 		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
 		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} ; "
-		"rm $tmpfile"
 
 
 rule subsample_matched_fastas:
 	input:
-		fwdFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.hit.fastq",
-		revFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.rev.{group}.{primer}.{mismatches}.hit.fastq",
+		fwdFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.hit.filtered.fastq",
+		revFQ="10-checked/{primer}/{mismatches}/{sample}.SSU.rev.{group}.{primer}.{mismatches}.hit.filtered.fastq",
 		fwdFA="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
 		revFA="02-graftm_sifted/{sample}.rev.SSU.hits.fa",
 	output:
-		fwd="14-subsampled-matched-fastas/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.hit.fasta",
-		rev="14-subsampled-matched-fastas/{sample}.SSU.rev.{group}.{primer}.{mismatches}.hit.fasta"
+		fwd="14-subsampled-matched-fastas/{sample}.SSU.fwd.{group}.{primer}.{mismatches}.hit.filtered.fasta",
+		rev="14-subsampled-matched-fastas/{sample}.SSU.rev.{group}.{primer}.{mismatches}.hit.filtered.fasta"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -79,7 +78,7 @@ rule classify_matches_subsample:
 	input:
 		"tmp.matches.subsampled.concatenated.fasta"
 	output:
-		"15-matches-classified/all/all.matches.VSEARCH.classified.tsv"
+		"15-matches-classified/all/all.matches.filtered.VSEARCH.classified.tsv"
 	threads:
 		20
 	conda:
@@ -87,15 +86,14 @@ rule classify_matches_subsample:
 	shell:
 		"vsearch --sintax {input} "
                 "--db /home/db/VSEARCH/silva132_99_sintax.udb "
-                "--tabbedout {output} --threads 40 --sintax_cutoff 0"
+                "--tabbedout {output} --threads 40 --sintax_cutoff 0 --top_hits_only --topn 1"
 
 rule deconcat_matches_classifications:
 	input:
-		fasta="14-subsampled-matched-fastas/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fasta",
-		concatenated="15-matches-classified/all/all.matches.VSEARCH.classified.tsv"
+		fasta="14-subsampled-matched-fastas/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fasta",
+		concatenated="15-matches-classified/all/all.matches.filtered.VSEARCH.classified.tsv"
 	output:
-		"15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.VSEARCHsintax-SILVA132.tax"
+		"15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax"
 	shell:
 		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
 		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} ; "
-		"rm $tmpfile"
