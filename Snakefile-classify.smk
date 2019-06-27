@@ -24,7 +24,7 @@ rule concatenate_mismatched_fastas:
 	output:
 		"tmp.mismatches.concatenated.fasta"
 	shell:
-		"find ./12-full-fastas -type f -name \"*0-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
+		"find ./12-full-fastas -type f -name \"*2-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
 
 rule classify_mismatches:
 	input:
@@ -71,7 +71,7 @@ rule concatenate_matched_fastas:
 	output:
 		"tmp.matches.subsampled.concatenated.fasta"
 	shell:
-		"find ./14-subsampled-matched-fastas -type f -name \"*0-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
+		"find ./14-subsampled-matched-fastas -type f -name \"*2-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
 
 
 rule classify_matches_subsample:
