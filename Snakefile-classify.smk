@@ -1,7 +1,7 @@
 rule all:
 	input:
-		expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		#expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule grab_full_fastas:
 	input:
@@ -24,7 +24,7 @@ rule concatenate_mismatched_fastas:
 	output:
 		"tmp.mismatches.concatenated.fasta"
 	shell:
-		"find ./12-full-fastas -type f -name \"*.fasta\" -print0 | xargs -0 cat > {output}"
+		"find ./12-full-fastas -type f -name \"*0-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
 
 rule classify_mismatches:
 	input:
@@ -71,7 +71,7 @@ rule concatenate_matched_fastas:
 	output:
 		"tmp.matches.subsampled.concatenated.fasta"
 	shell:
-		"find ./14-subsampled-matched-fastas -type f -name \"*.fasta\" -print0 | xargs -0 cat > {output}"
+		"find ./14-subsampled-matched-fastas -type f -name \"*0-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
 
 
 rule classify_matches_subsample:
