@@ -1,7 +1,9 @@
 rule all:
 	input:
-		expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		#expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 		#expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		expand("intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.normalized.tsv", study=config["study"], sample=config["samples"], group=config["groups"], primer=config["primer"])
+		#expand("intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.minAbund-0.01.tsv", study=config["study"], sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"])
 
 rule grab_full_fastas:
 	input:
@@ -97,3 +99,93 @@ rule deconcat_matches_classifications:
 	shell:
 		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
 		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} ; "
+
+"""
+Rules below comprise a workflow for generating summaries of
+which taxa are most discriminated against by a particular primer set.
+Implemented using common bash tools and tested on Ubuntu 16.04, YMMV.
+"""
+
+rule cat_tax_for_all_samples_matches:
+	output:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.tax"
+	shell:
+		"find 15-matches-classified/individual/ -type f -name "
+		"\"*{wildcards.group}*{wildcards.primer}*0-mismatch*tax\" -print0 | "
+		"xargs -0 cat > {output}"
+
+rule cat_tax_for_all_samples_mismatches:
+	output:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.tax"
+	shell:
+		"find 13-classified/individual/ -type f -name "
+		"\"*{wildcards.group}*{wildcards.primer}*{wildcards.mismatches}*tax\" -print0 | "
+		"xargs -0 cat > {output}"
+
+#Counting order-level groupings (can adjust level with the "cut -d, -f1-4" parameter below)
+rule count_tax_matches:
+	input:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.tax"
+	output:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.tsv"
+	shell:
+		"sed -re 's/\([0-9]{{1}}\.[0-9]{{2}}\)//g' {input} |" #Remove confidence estimations from VSEARCH output
+		"cut -f2 | sort | cut -d, -f1-4 | sort | uniq -c | " #Take only tax column, collapse to order level, then count unique occurrences
+		"tail -f -n +2 | awk '{{print $1,\"\t\",$2}}' > {output}" #Process output into tsv format to stdout
+
+rule count_tax_mismatches:
+	input:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.tax"
+	output:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv"
+	shell:
+		"sed -re 's/\([0-9]{{1}}\.[0-9]{{2}}\)//g' {input} |" #Remove confidence estimations from VSEARCH output
+		"cut -f2 | sort | cut -d, -f1-4 | sort | uniq -c | " #Take only tax column, collapse to order level, then count unique occurrences
+		"tail -f -n +2 | awk '{{print $1,\"\t\",$2}}' > {output}" #Process output into tsv format to stdout
+
+#Now take only those with greater than 1 % abundance using basic python script (can change abundance cutoff if you desire)
+rule filter_tax_matches_by_abundance:
+	input:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.tsv"
+	output:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.min0.01.tsv" #Should probably rename if you change fractional value
+	shell:
+		"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input} 0.01 > {output} " #Can change fractional value here
+
+rule filter_tax_mismatches_by_abundance:
+	input:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv"
+	output:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.min0.01.tsv" #Should probably rename if you change fractional value
+	shell:
+		"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input} 0.01 > {output} " #Can change fractional value here
+
+#Since the matches were subsampled, they need to be normalized before calculating fractions to make them equivalent to the mismatches which were not subsampled (took all of them)
+rule normalize_match_counts_by_total_seqs:
+	input:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.tsv"
+	output:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.normalized.tsv"
+	shell:
+		"totalSeqs=`find 07-subsetted/ -type f -name \"*{wildcards.group}*{wildcards.primer}*\" -print0 | "
+		"xargs -0 cat | grep -c \">\"` ; " #Count number of sequence records in file corresponding to group and primer
+		"subsampledSeqs=`cat {input} | wc -l` ; " #Count number of subsampled seqs
+		"fracSubsampled=`bc <<< \"scale=4; $subsampledSeqs/$totalSeqs\" ; " #Calculate fraction subsampled
+		"while read line ; do ; "
+		"num=`echo $line | awk '{{print $1}}'` ; "
+		"tax=`echo $line | awk '{{print $2}}'` ; "
+		"normalizedNum=`bc <<< \"scale=4; $num/$fracSubsampled\"` ; "
+		"printf \"$tax\t$normalizedNum\n\" ; done < {input} > {output}"
+
+#need to generate summary file for following script
+rule count_total_filtered_hits:
+
+
+#fixing bash script so can run with snakemake
+rule compute_frac_mismatched:
+	input:
+		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.min0.01.tsv"
+	output:
+		targets="intermediate/{study}.{group}.{primer}.targets"
+	shell:
+		"scripts/mismatch-characterization/compute-frac-mismatched.sh {wildcards.primer}.{wildcards.group} {input} {output.targets}"
