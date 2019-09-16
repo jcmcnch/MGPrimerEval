@@ -1,9 +1,15 @@
+CUTOFF = config["cutoff"]
+
 rule all:
 	input:
 		#expand("15-matches-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 		#expand("13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
-		expand("intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.normalized.tsv", study=config["study"], sample=config["samples"], group=config["groups"], primer=config["primer"])
+		#expand("intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.normalized.tsv", study=config["study"], sample=config["samples"], group=config["groups"], primer=config["primer"])
 		#expand("intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.minAbund-0.01.tsv", study=config["study"], sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"])
+		#"intermediate/totalFilteredHits.tsv"
+		#expand("intermediate/{study}.{group}.{primer}.targets", study=config["study"], group=config["groups"], primer=config["primer"]),
+		#expand("intermediate/{study}.{group}.{primer}.totalFilteredHits.tsv", study=config["study"], group=config["groups"], primer=config["primer"])
+		expand("output/{study}.{group}.{primer}.{mismatches}.summary.tsv", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"])
 
 rule grab_full_fastas:
 	input:
@@ -20,13 +26,13 @@ rule grab_full_fastas:
 		"filterbyname.sh names={input.fwdFQ} include=t in={input.fwdFA} out={output.fwd} ; "
 		"filterbyname.sh names={input.revFQ} include=t in={input.revFA} out={output.rev} "
 
-
+#Concatenating 0-mismatch misses because 1-mismatch and 2-mismatch are a subset of the 0-mismatch misses, and can be parsed out later
 rule concatenate_mismatched_fastas:
 #Note: concatenating to speed up classification step; using xargs for large numbers of files (otherwise bash will complain argument list too long)
 	output:
 		"tmp.mismatches.concatenated.fasta"
 	shell:
-		"find ./12-full-fastas -type f -name \"*2-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
+		"find ./12-full-fastas -type f -name \"*0-mismatch*.fasta\" -print0 | xargs -0 cat > {output}"
 
 rule classify_mismatches:
 	input:
@@ -50,7 +56,7 @@ rule deconcat_classifications:
 		"13-classified/individual/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax"
 	shell:
 		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqmagick extract-ids {input.fasta} >> $tmpfile ; "
-		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} ; "
+		"grep -f $tmpfile {input.concatenated} > {output} || touch {output} "
 
 
 rule subsample_matched_fastas:
@@ -68,7 +74,7 @@ rule subsample_matched_fastas:
 		"filterbyname.sh names={input.fwdFQ} reads=5000 include=t in={input.fwdFA} out={output.fwd} ; "
 		"filterbyname.sh names={input.revFQ} reads=5000 include=t in={input.revFA} out={output.rev} "
 
-
+#Concatenating 2-mismatch hits because 1-mismatch and 0-mismatch are a subset of the 2-mismatch hits, and can be parsed out later
 rule concatenate_matched_fastas:
 	output:
 		"tmp.matches.subsampled.concatenated.fasta"
@@ -108,10 +114,10 @@ Implemented using common bash tools and tested on Ubuntu 16.04, YMMV.
 
 rule cat_tax_for_all_samples_matches:
 	output:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.tax"
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.tax"
 	shell:
 		"find 15-matches-classified/individual/ -type f -name "
-		"\"*{wildcards.group}*{wildcards.primer}*0-mismatch*tax\" -print0 | "
+		"\"*{wildcards.group}*{wildcards.primer}*{wildcards.mismatches}*tax\" -print0 | "
 		"xargs -0 cat > {output}"
 
 rule cat_tax_for_all_samples_mismatches:
@@ -125,9 +131,9 @@ rule cat_tax_for_all_samples_mismatches:
 #Counting order-level groupings (can adjust level with the "cut -d, -f1-4" parameter below)
 rule count_tax_matches:
 	input:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.tax"
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.tax"
 	output:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.tsv"
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.tsv"
 	shell:
 		"sed -re 's/\([0-9]{{1}}\.[0-9]{{2}}\)//g' {input} |" #Remove confidence estimations from VSEARCH output
 		"cut -f2 | sort | cut -d, -f1-4 | sort | uniq -c | " #Take only tax column, collapse to order level, then count unique occurrences
@@ -143,49 +149,73 @@ rule count_tax_mismatches:
 		"cut -f2 | sort | cut -d, -f1-4 | sort | uniq -c | " #Take only tax column, collapse to order level, then count unique occurrences
 		"tail -f -n +2 | awk '{{print $1,\"\t\",$2}}' > {output}" #Process output into tsv format to stdout
 
-#Now take only those with greater than 1 % abundance using basic python script (can change abundance cutoff if you desire)
+#Now take only those with greater than 1 % abundance (among mismatches) using basic python script (can change abundance cutoff if you desire)
 rule filter_tax_matches_by_abundance:
 	input:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.tsv"
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.tsv"
+	params:
+		minAbund = CUTOFF  #Change fractional value in config file if desired, default 0.01
 	output:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.min0.01.tsv" #Should probably rename if you change fractional value
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.min" + str(CUTOFF) + ".tsv"
 	shell:
-		"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input} 0.01 > {output} " #Can change fractional value here
+		"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input} {params.minAbund} > {output} "
 
+#Do the same for mismatches, taking only abundant mismatches
 rule filter_tax_mismatches_by_abundance:
 	input:
 		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv"
+	params:
+		minAbund = CUTOFF  #Change fractional value in config file if desired, default 0.01
 	output:
-		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.min0.01.tsv" #Should probably rename if you change fractional value
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.min" + str(CUTOFF) + ".tsv"
 	shell:
-		"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input} 0.01 > {output} " #Can change fractional value here
+		"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input} {params.minAbund} > {output} "
 
-#Since the matches were subsampled, they need to be normalized before calculating fractions to make them equivalent to the mismatches which were not subsampled (took all of them)
+#Since the matches were subsampled, they need to be normalized before calculating fractions to make them equivalent to the mismatches which were not subsampled
+#This is a rough estimate, since it calculates the total fraction subsampled across the whole dataset
 rule normalize_match_counts_by_total_seqs:
 	input:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.tsv"
+		path="10-checked/{primer}/{mismatches}/",
+		countTable="intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.tsv"
 	output:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.normalized.tsv"
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.normalized.tsv"
 	shell:
-		"totalSeqs=`find 07-subsetted/ -type f -name \"*{wildcards.group}*{wildcards.primer}*\" -print0 | "
-		"xargs -0 cat | grep -c \">\"` ; " #Count number of sequence records in file corresponding to group and primer
-		"subsampledSeqs=`cat {input} | wc -l` ; " #Count number of subsampled seqs
-		"fracSubsampled=`bc <<< \"scale=4; $subsampledSeqs/$totalSeqs\" ; " #Calculate fraction subsampled
-		"while read line ; do ; "
-		"num=`echo $line | awk '{{print $1}}'` ; "
-		"tax=`echo $line | awk '{{print $2}}'` ; "
-		"normalizedNum=`bc <<< \"scale=4; $num/$fracSubsampled\"` ; "
-		"printf \"$tax\t$normalizedNum\n\" ; done < {input} > {output}"
+		"scripts/mismatch-characterization/normalize_match_counts_by_total_seqs.sh {input.path} "
+		"{wildcards.group}.{wildcards.primer}.{wildcards.mismatches} " #Pattern for matching, not an input file
+		"{wildcards.group}.{wildcards.primer}.{wildcards.mismatches}.hit.filtered.fasta " #Pattern for matching, not an input file
+		"{input.countTable} > {output}"
 
-#need to generate summary file for following script
+#For a given mismatch threshold, counts the total number of sequences of both matches and classify_mismatches
+#Used to calculate the quantitative importance of each mismatch in terms of the whole dataset
 rule count_total_filtered_hits:
+	input:
+		"10-checked"
+	output:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.totalFilteredSeqs.tsv"
+	shell:
+		"totalFilteredSeqs=`cat {input}/{wildcards.primer}/{wildcards.mismatches}/SRR*{wildcards.group}*filtered.fastq | grep -c \"^@\"` || totalFilteredSeqs=0 ; "
+		"printf \"{wildcards.primer}.{wildcards.group}.{wildcards.mismatches}\t$totalFilteredSeqs\n\" >> {output}"
+
+#identify target taxonomies to quantify; choose only the abundant things
+rule generate_target_files:
+	input:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.min" + str(CUTOFF) + ".tsv",
+		"intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.min" + str(CUTOFF) + ".tsv"
+	output:
+		"intermediate/{study}.{group}.{primer}.{mismatches}.targets"
+	shell:
+		"cat {input} | cut -f1 | sort | uniq > {output}"
 
 
 #fixing bash script so can run with snakemake
 rule compute_frac_mismatched:
 	input:
-		"intermediate/{study}.{group}.{primer}.0-mismatch.hits.all.order.counts.min0.01.tsv"
+		targets="intermediate/{study}.{group}.{primer}.{mismatches}.targets", #target taxonomies
+		totalHits="intermediate/{study}.{group}.{primer}.{mismatches}.totalFilteredSeqs.tsv", #A count of total filtered hits
+		normalized="intermediate/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.normalized.tsv", #Subsampled hits normalized by total
+		counts="intermediate/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv" #mismatched hits
 	output:
-		targets="intermediate/{study}.{group}.{primer}.targets"
+		summary="output/{study}.{group}.{primer}.{mismatches}.summary.tsv" #A summary file that tells how quantitatively significant the mismatches are for the group in question and for the whole dataset
 	shell:
-		"scripts/mismatch-characterization/compute-frac-mismatched.sh {wildcards.primer}.{wildcards.group} {input} {output.targets}"
+		"scripts/mismatch-characterization/compute-frac-mismatched.sh " #bash script that takes the 4 input arguments above
+		"{input.targets} {input.totalHits} {input.counts} {input.normalized} > {output}"
