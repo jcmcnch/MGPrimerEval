@@ -21,18 +21,17 @@ args = parser.parse_args()
 hashCleanSeqs = {}
 
 iStart = int(args.start) - int(args.padding)
-iEnd = int(args.end) + int(args.padding)
+iEnd = int(args.end) + int(args.padding) - 1
+
+iLen = ( iEnd - iStart ) - 100 #force there to be at least 100bp overlap, see below
 
 for record in SeqIO.parse(args.input, "fasta"):
 
 	sequence = str(record.seq).upper()
 
-	#print(sequence[iStart:iEnd])
-	#print(sequence[iStart:iEnd].count('-'))
-
-	if (sequence[iStart:iEnd].count('-') <= 321 ) and ("N" not in sequence[iStart:iEnd]): #321 is hack to get reads that have at least 100bp overlap with the ROI
+	if (sequence[iStart:iEnd].count('-') <= iLen ) and ("N" not in sequence[iStart:iEnd]): #iLen is hack to get reads that have at least 100bp overlap with the ROI
 	
-		hashCleanSeqs[record.id] = sequence
+		hashCleanSeqs[record.id] = sequence[iStart:iEnd].replace("-", "") #take only the slice of the sequence corresponding to the primer region, gaps removed
 	
 with open(args.output, "w+") as output_file:
 
