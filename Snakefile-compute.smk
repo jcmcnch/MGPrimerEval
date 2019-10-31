@@ -1,223 +1,183 @@
-#configfile: "config-27F.yaml"
-
 rule all:
 	input:
-		#expand("10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
-		expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+	    expand("compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev'])
+		#expand("compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq", sample=config["samples"])
+		#expand("10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
+		#expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
 	input:
 		R1="00-fastq/{sample}_repaired_1.fastq.gz",
 		R2="00-fastq/{sample}_repaired_2.fastq.gz"
 	output:
-		R1clean="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		R2clean="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
-		log="logs/01-fastp_cleaning/{sample}.log.html"
-	threads: 8
+		R1clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
+		R2clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz",
+		log="compute-workflow-intermediate/logs/01-fastp_cleaning/{sample}.log.html"
+	threads:
+		8
 	shell:
 		"fastp -3 -t 3 -i {input.R1} -I {input.R2} -o {output.R1clean} -O {output.R2clean} --thread {threads} --html {output.log}"
 
-
-rule graftm_sift:
+rule phyloFlash_sift:
 	input:
-		R1clean="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		R2clean="01-fastp-cleaned/{sample}_2_clean.fastq.gz",
-		package="graftm/7.40.2013_08_greengenes_97_otus.with_euks.gpkg"
+		R1clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
+		R2clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz"
 	output:
-		graftm=directory("02-graftm_sifted/{sample}/"),
-		log="logs/02-graftM_sifting/{sample}.graftM_log.txt",
-		R1hits="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
-		R2hits="02-graftm_sifted/{sample}.rev.SSU.hits.fa",
-		R1hmmout="02-graftm_sifted/{sample}.fwd.SSU.hmmout.txt",
-		R2hmmout="02-graftm_sifted/{sample}.rev.SSU.hmmout.txt"
+		R1hits="compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq",
+		R2hits="compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
+	params:
+		workdir="compute-workflow-intermediate/tmp/",
+		phyloFlash_other="compute-workflow-intermediate/02-phyloFlash_sifted/phyloFlash-other/"
 	threads:
-		1
+		8
 	conda:
-		"envs/graftm.yaml"
+		"envs/phyloflash-env.yaml"
 	shell:
-		"rm -f {output.log} ; export PATH=\"$PWD/executables:$PATH\" ; "
-		"graftM graft --force --forward {input.R1clean} --reverse {input.R2clean} --search_and_align_only --threads {threads} "
-		"--graftm_package {input.package} --input_sequence_type nucleotide --search_method hmmsearch "
-		"--verbosity 5 --log {output.log} --output_directory {output.graftm} ; "
-		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/forward/{wildcards.sample}*_hits.fa` {output.R1hits} ; "
-		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/reverse/{wildcards.sample}*_hits.fa` {output.R2hits} ; "
-		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/forward/{wildcards.sample}*hmmout.txt` {output.R1hmmout} ; "
-		"ln -s `ls $PWD/02-graftm_sifted/{wildcards.sample}/{wildcards.sample}*/reverse/{wildcards.sample}*hmmout.txt` {output.R2hmmout}"
+		"""
+		mkdir -p {params.phyloFlash_other} ; mkdir -p {params.workdir} ; cd {params.workdir} ;
+		phyloFlash.pl -lib {wildcards.sample} -read1 ../../{input.R1clean} -read2 ../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength 144 -id 50 -CPUs {threads} -log -skip_spades -nozip ;
+		mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../{output.R1hits} ;
+		mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../{output.R2hits} ;
+		mv {wildcards.sample}* ../../{params.phyloFlash_other}
+		"""
 
 rule remove_repeats_komplexity:
 	input:
-		R1sifted="02-graftm_sifted/{sample}.fwd.SSU.hits.fa",
-		R2sifted="02-graftm_sifted/{sample}.rev.SSU.hits.fa"
+		R1hits="compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq",
+		R2hits="compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
 	output:
-		R1="03-low-complexity-filtered/{sample}.fwd.SSU.keep.fa",
-		R2="03-low-complexity-filtered/{sample}.rev.SSU.keep.fa"
+		R1="compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq",
+		R2="compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq"
 	conda:
 		"envs/komplexity.yaml"
 	shell:
-		"kz --filter --fasta < {input.R1sifted} > {output.R1} ; "
-		"kz --filter --fasta < {input.R2sifted} > {output.R2} "
+		"kz --filter < {input.R1hits} > {output.R1} ; "
+		"kz --filter < {input.R2hits} > {output.R2} "
 
 rule sort_EUK:
 	input:
-		"03-low-complexity-filtered/{sample}.{direction}.SSU.keep.fa"
+		"compute-workflow-intermediate/03-low-complexity-filtered/{sample}.{direction}.SSU.keep.fastq"
 	output:
-		PROK="04-sorted/{sample}.{direction}.SSU.PROK.fa",
-		EUK="04-sorted/{sample}.{direction}.SSU.EUK.fa",
-	log:
-		"logs/04-sorting/{sample}.{direction}.bbsplit.PROK-EUK.log"
-	threads: 8
-	conda:
-		"envs/bbmap.yaml"
-	shell:
-		"bbsplit.sh threads={threads} -Xmx100g overwrite=t usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
-		"path=/home/db/bbsplit-db/EUK-PROK-bbsplit-db/ "
-		"in={input} basename={input}_%.fasta ; "
-		"mv {input}*EUK*.fasta {output.EUK}; mv {input}*PROK*.fasta {output.PROK}"
-
-
-rule sort_PROK:
-	input:
-		"04-sorted/{sample}.{direction}.SSU.PROK.fa"
-	output:
-		ARCH="04-sorted/{sample}.{direction}.SSU.ARCH.fa",
-		BACT="04-sorted/{sample}.{direction}.SSU.BACT.fa",
-	log:
-		"logs/04-sorting/{sample}.{direction}.bbsplit.ARCH-BACT.log"
-	threads: 8
-	conda:
-		"envs/bbmap.yaml"
-	shell:
-		"bbsplit.sh threads={threads} -Xmx100g overwrite=t usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
-		"path=/home/db/bbsplit-db/BACT-ARCH-bbsplit-db/ "
-		"in={input} basename={input}_%.fasta ; "
-		"mv {input}*ARCH*.fasta {output.ARCH}; mv {input}*BACT*.fasta {output.BACT}"
-
-
-rule sort_CYANO:
-	input:
-		"04-sorted/{sample}.{direction}.SSU.BACT.fa"
-	output:
-		CYANO="04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fa",
-		NONCYANO="04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fa",
-	log:
-		"logs/04-sorting/{sample}.{direction}.bbsplit.BACT-CYANO.log"
+		PROK="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.PROK.fastq",
+		EUK="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.EUK.fastq"
 	threads:
 		8
 	conda:
 		"envs/bbmap.yaml"
+	params:
+		workdir="compute-workflow-intermediate/tmp/"
 	shell:
+		"cd {params.workdir} ; "
+		"bbsplit.sh threads={threads} -Xmx100g overwrite=t usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
+		"path=/home/db/bbsplit-db/EUK-PROK-bbsplit-db/ "
+		"in=../../{input} basename={input}_%.fastq ; "
+		"mv {input}*EUK*.fastq ../../{output.EUK}; mv {input}*PROK*.fastq ../../{output.PROK}"
+
+
+rule sort_PROK:
+	input:
+		"compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.PROK.fastq"
+	output:
+		ARCH="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.ARCH.fastq",
+		BACT="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT.fastq"
+	threads:
+		8
+	conda:
+		"envs/bbmap.yaml"
+	params:
+		workdir="compute-workflow-intermediate/tmp/"
+	shell:
+		"cd {params.workdir} ; "
+		"bbsplit.sh threads={threads} -Xmx100g overwrite=t usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
+		"path=/home/db/bbsplit-db/BACT-ARCH-bbsplit-db/ "
+		"in=../../{input} basename={input}_%.fastq ; "
+		"mv {input}*ARCH*.fastq ../../{output.ARCH}; mv {input}*BACT*.fastq ../../{output.BACT}"
+
+
+rule sort_CYANO:
+	input:
+		"compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT.fastq"
+	output:
+		CYANO="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fastq",
+		NONCYANO="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fastq"
+	threads:
+		8
+	conda:
+		"envs/bbmap.yaml"
+	params:
+		workdir="compute-workflow-intermediate/tmp/"
+	shell:
+		"cd {params.workdir} ; "
 		"bbsplit.sh threads={threads} -Xmx100g overwrite=t usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path=/home/db/bbsplit-db/BACT-CYANO-bbsplit-db/ "
-		"in={input} basename={input}_%.fasta ; "
-		"mv {input}*NON-CYANO*.fasta {output.NONCYANO}; mv {input}*CYANO*.fasta {output.CYANO}"
+		"in=../../{input} basename={input}_%.fastq ; "
+		"mv {input}*NON-CYANO*.fastq ../../{output.NONCYANO}; mv {input}*CYANO*.fastq ../../{output.CYANO}"
 
 
 rule align_ARCH:
 	input:
-		seqs="04-sorted/{sample}.{direction}.SSU.ARCH.fa",
+		seqs="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.ARCH.fastq",
 		ref="SSU_refs/Sulfolobus_acidocaldarius_N8_16s.fasta"
 	output:
-		alignment="05-pyNAST-aligned/{sample}.{direction}.ARCH/{sample}.{direction}.SSU.ARCH_pynast_aligned.fasta",
-		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.ARCH.pyNAST.log"
+		aligned="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.ARCH_pynast_aligned.fasta",
+		log="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.ARCH.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
-		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.ARCH_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_fail.fasta {output.log} ; "
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.ARCH_pynast_aligned.fasta {output.alignment} "
+		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqtk seq -A {input.seqs} > $tmpfile ; "
+		"pynast -p 10 -l 1 -i $tmpfile -t {input.ref} -a {output.aligned} -g {output.log} ; "
+		"rm $tmpfile"
 
 
 rule align_BACT:
 	input:
-		seqs="04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fa",
+		seqs="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fastq",
 		ref="SSU_refs/Ecoli_16s.fna"
 	output:
-		alignment="05-pyNAST-aligned/{sample}.{direction}.BACT-NON-CYANO/{sample}.{direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta",
-		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.BACT-NON-CYANO.pyNAST.log"
+		aligned="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta",
+		log="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-NON-CYANO.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
-		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.BACT-NON-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_fail.fasta {output.log} ; "
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta {output.alignment} "
+		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqtk seq -A {input.seqs} > $tmpfile ; "
+		"pynast -p 10 -l 1 -i $tmpfile -t {input.ref} -a {output.aligned} -g {output.log} ; "
+		"rm $tmpfile"
 
 
 rule align_CYANO:
 	input:
-		seqs="04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fa",
+		seqs="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fastq",
 		ref="SSU_refs/longest-CYANO-with-27F.fasta"
 	output:
-		alignment="05-pyNAST-aligned/{sample}.{direction}.BACT-CYANO/{sample}.{direction}.SSU.BACT-CYANO_pynast_aligned.fasta",
-		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.BACT-CYANO.pyNAST.log"
+		aligned="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-CYANO_pynast_aligned.fasta",
+		log="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-CYANO.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
-		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.BACT-CYANO_pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_fail.fasta {output.log} ; "
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.BACT-CYANO_pynast_aligned.fasta {output.alignment} "
+		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqtk seq -A {input.seqs} > $tmpfile ; "
+		"pynast -p 10 -l 1 -i $tmpfile -t {input.ref} -a {output.aligned} -g {output.log} ; "
+		"rm $tmpfile"
+
 
 rule align_EUK:
 	input:
-		seqs="04-sorted/{sample}.{direction}.SSU.EUK.fa",
+		seqs="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.EUK.fastq",
 		ref="SSU_refs/Saccharomyces_cerevisiae_S288C_18s-1_NR_132213.1.fa"
 	output:
-		alignment="05-pyNAST-aligned/{sample}.{direction}.EUK/{sample}.{direction}.SSU.EUK_pynast_aligned.fasta",
-		log="logs/05-pyNAST-aligning/{sample}.{direction}.SSU.EUK.pyNAST.log"
+		aligned="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.EUK_pynast_aligned.fasta",
+		log="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.EUK.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
-		"pynast -p 10 -l 1 -i {input.seqs} -t {input.ref} ;"
-		"echo \"pyNAST info: `cat 04-sorted/{wildcards.sample}.SSU.EUK.pynast_fail.fasta | wc -l` sequences failed to align.\" ;"
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_log.txt {output.log} ; mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_fail.fasta {output.log} ; "
-		"mv 04-sorted/{wildcards.sample}.{wildcards.direction}.SSU.EUK_pynast_aligned.fasta {output.alignment} "
-
-
-rule get_strandedness:
-	input:
-		fwd="02-graftm_sifted/{sample}.fwd.SSU.hmmout.txt",
-		rev="02-graftm_sifted/{sample}.rev.SSU.hmmout.txt"
-	output:
-		fwd="strand_info/{sample}.strand.fwd.tsv",
-		rev="strand_info/{sample}.strand.rev.tsv"
-	shell:
-		"sed '/^#/d' {input.fwd} | awk '{{print $1,\"\t\",$12}}' > {output.fwd} ; "
-		"sed '/^#/d' {input.rev} | awk '{{print $1,\"\t\",$12}}' > {output.rev}"
-
-
-rule get_ids:
-	input:
-		"05-pyNAST-aligned/{sample}.{direction}.{group}/{sample}.{direction}.SSU.{group}_pynast_aligned.fasta"
-	output:
-		"aligned-seq-ids/{sample}.SSU.{group}.pyNAST.{direction}.ids",
-	shell:
-		"seqmagick extract-ids {input} > {output} "
-
-
-#obtain fastq records from headers for clean, filtered SSU reads
-rule get_fastq:
-	input:
-		fwdIDs="aligned-seq-ids/{sample}.SSU.{group}.pyNAST.fwd.ids",
-		revIDs="aligned-seq-ids/{sample}.SSU.{group}.pyNAST.rev.ids",
-		fastqR1="01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		fastqR2="01-fastp-cleaned/{sample}_2_clean.fastq.gz"
-	output:
-		fwd="06-fastq/{sample}.SSU.{group}.keep.fwd.fastq",
-		rev="06-fastq/{sample}.SSU.{group}.keep.rev.fastq"
-	conda:
-		"envs/bbmap.yaml"
-	shell:
-		"filterbyname.sh names={input.fwdIDs} overwrite=t include=t in={input.fastqR1} out={output.fwd} ; "
-		"filterbyname.sh names={input.revIDs} overwrite=t include=t in={input.fastqR2} out={output.rev} "
-
+		"tmpfile=`mktemp /tmp/fastq-ids.XXXXXXXXXXXXXXXX` ; seqtk seq -A {input.seqs} > $tmpfile ; "
+		"pynast -p 10 -l 1 -i $tmpfile -t {input.ref} -a {output.aligned} -g {output.log} ; "
+		"rm $tmpfile"
 
 rule subset_to_primer_region:
 	input:
-		"05-pyNAST-aligned/{sample}.{direction}.{group}/{sample}.{direction}.SSU.{group}_pynast_aligned.fasta"
+		"compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.{group}_pynast_aligned.fasta"
 	output:
-		"07-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta"
+		"compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta"
 	conda:
 		"envs/biopython.yaml"
 	params:
@@ -226,29 +186,24 @@ rule subset_to_primer_region:
 	shell:
 		"scripts/filter-pyNAST-for-ROI.py --input {input} --output {output} --start {params.start} --end {params.end}"
 
+"""
+Since graftM actually told us which strand the SSU rRNA is on, then we need to add in a rule that infers this from the alignment.
+"""
 
+#If you have many samples and/or primers, it may make sense to implement the --batch flag here
 rule get_fastq_for_subset:
 	#Get the whole fastq files associated with the matching reads
 	input:
-		fasta="07-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
-		fastq="06-fastq/{sample}.SSU.{group}.keep.{direction}.fastq"
+		fasta="compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
+		fastq="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.{group}.fastq"
 	output:
-		"08-fastq-primer-region/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq"
+		fastq=temp("compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq"),
+		fastq_revcomp="compute-workflow-intermediate/07-subsetted-fastq/"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
-		"filterbyname.sh names={input.fasta} include=t in={input.fastq} out={output}"
-
-
-rule reverse_complement_fastqs:
-	#Cutadapt doesn't search the reverse complement, so have to do this semi-manually using the hmm output
-	input:
-		fastq="08-fastq-primer-region/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq",
-		strandedness="strand_info/{sample}.strand.{direction}.tsv"
-	output:
-		"09-complemented-fastqs/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
-	shell:
-		"scripts/reverse-complement-fastq-according-to-HMM-output.py --fastqinput {input.fastq} --strand {input.strandedness} > {output}"
+		"filterbyname.sh names={input.fasta} include=t in={input.fastq} out={output.fastq} ; "
+		"revcompfastq_according_to_pyNAST.py --inpynast {input.fasta} --infastq {output.fastq} --outfastq {output.fastq_revcomp}"
 
 
 rule grab_matching_cutadapt_full:
@@ -268,7 +223,7 @@ rule grab_matching_cutadapt_full:
 		"cutadapt -f fastq --info-file={output.info} --no-indels --no-trim --overlap={params.lengthPrimer} -b {params.pattern} --error-rate={params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
 
 
-rule quality_filter_primer_region_27F:
+rule quality_filter_primer_region:
     #Keep only sequences that have >30 phred score across the whole primer + 5 leading/trailing bases (implicit in script)
 	input:
 		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
