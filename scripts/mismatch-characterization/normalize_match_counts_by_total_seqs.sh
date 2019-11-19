@@ -16,7 +16,7 @@ countTable=$4
 totalSeqs=`find ${inputPath} -type f -name "*${groupPrimerPattern}.hit.filtered.fastq" -print0 | xargs -0 cat | grep -c "^@"` #use -print0 option for find and -0 option for xargs to handle whitespace if present
 
 #Count total number of subsampled seqs post classification and deconcatenation - this is per group/primer, for all samples
-subsampledSeqs=`find 14-subsampled-matched-fastas/ -type f -name "*${subsampledMatchesExpression}" -print0 | xargs -0 cat | grep -c "^>"`
+subsampledSeqs=`find classify-workflow-intermediate/02-matches-subsampled/ -type f -name "*${subsampledMatchesExpression}" -print0 | xargs -0 cat | grep -c "^@"`
 
 #Calculate fraction subsampled; loop to handle corner case of 100% sampling
 if (( $(echo "$subsampledSeqs > 0" | bc -l) )) ; then

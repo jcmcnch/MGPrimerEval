@@ -72,7 +72,7 @@ for item in list(cc(G)):
 hashCounts = {}
 
 SRAid=snakemake.params[0]
-fileLocation=snakemake.params[1] + '01-subsetted/{}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta'.format(SRAid)
+fileLocation=snakemake.params[1] + '01-subsetted/{}.EUK.cleaned.515Y-926R.revcomped.sliced.fasta'.format(SRAid)
 totalSeqs=check_output(['grep', '-c', 'SRR', fileLocation])
 totalSeqs=int(totalSeqs.decode('UTF-8').strip())
 

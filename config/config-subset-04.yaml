@@ -3,20 +3,18 @@ cutoff: 0.01
 study: bioGEOTRACES
 
 primer:
-  926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
-  806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
-  515Y : "GTGYCAGCMGCCGCGGTAA"
+  #926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
+  #806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
+  #515Y : "GTGYCAGCMGCCGCGGTAA"
   V4F : "CCAGCASCYGCGGTAATTCC"
-  V4R : "TYRATCAAGAACGAAAGT" #reverse complement
-  V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
-  338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
-  341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
-  785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
-  27F : "AGRGTTTGATYMTGGCTCAG"
-  1389F : "TTGTACACACCGCCC"
-  1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
-  926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
-  1392R : "GYACACACCGCCCGT" #Chénard et al 2019
+  #V4R : "TYRATCAAGAACGAAAGT"
+  #V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
+  #338R : "TGCWGCCWCCCGTAGGWGT"
+  #341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
+  #785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
+  #27F : "AGRGTTTGATYMTGGCTCAG"
+  #1389F : "TTGTACACACCGCCC"
+  #1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
 
 groups:
   EUK : EUK
@@ -26,7 +24,7 @@ groups:
 
 mismatches:
   0-mismatch : 0
-  1-mismatch : 2
+  1-mismatch : 1
   2-mismatch : 2
   6-mismatch : 6
 
@@ -41,11 +39,9 @@ primerROI:
     341F : [413, 429]
     785R : [996, 1016]
     27F : [0, 0] #Not sure where the homologous region is, ignoring because should be bacterial-specific anyway
-    338R : [410, 428]
+    338R : [0, 0] #Not sure where homologous region is, ignoring because should be bacterial-specific anyway
     1389F : [1627, 1641]
     1510R : [1774, 1793]
-    926wF : [1131, 1150]
-    1392R : [1629, 1643]
 
   ARCH:
     515Y: [486,504]
@@ -57,11 +53,9 @@ primerROI:
     341F : [358, 374]
     785R : [756, 776]
     27F : [15, 34] #Many mismatches, seems correct based off of 21F primer matching this region	
-    338R : [355, 373] 
+    338R : [230, 248] #Hard to tell, may not be really homologous but best match 
     1389F : [1364, 1378] #Only 1-mismatch to ref
     1510R : [1477, 1496] #4-mismatch to ref
-    926wF : [882,901]
-    1392R : [1366,1380]
 
   BACT-NON-CYANO:
     515Y: [515,533]
@@ -76,8 +70,6 @@ primerROI:
     338R : [338, 356]
     1389F : [1390, 1404] #Perfect match to ref
     1510R : [1511, 1530] #4-mismatch to ref
-    926wF : [907,926]
-    1392R : [1392,1406]
 
   BACT-CYANO:
     515Y: [494, 512]
@@ -92,8 +84,6 @@ primerROI:
     338R : [342, 360]
     1389F : [1379, 1393] #Perfect match to ref
     1510R : [1490, 1510] #Looks like this is the homologous region (many mismatches, has an insertion relative to primer)
-    926wF : [887,906]
-    1392R : [1381,1395]
 
 samples:
   SRR5720219 : SRR5720219

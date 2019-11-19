@@ -1,16 +1,12 @@
 #!/bin/bash
 
-for record in `cat primers.txt`; do
+for primer in 926R 806RB 515Y V4F V4R V4RB 341F 785R 27F 1389F 1510R ; do
 
-	primer=$record
+	for group in ARCH BACT-CYANO BACT-NON-CYANO EUK ; do
 
-	for line in `cat groups.txt`; do
+		totalFilteredSeqs=`cat 10-checked/$primer/0-mismatch/SRR*$group*filtered.fastq | grep -c "^@"`
 
-		group=$line
-
-		totalFilteredSeqs=`cat ../10-checked/$primer/0-mismatch/SRR*$group*filtered.fastq | grep -c "^@"`
-
-		printf "$primer.$group\t$totalFilteredSeqs\n"
+		printf "$primer\t$group\t$totalFilteredSeqs\n"
 
 	done
 

@@ -17,6 +17,8 @@ args = parser.parse_args()
 
 hashSeqs = SeqIO.to_dict(SeqIO.parse(args.inpynast, "fasta"))
 
+open(args.outfastq, "a+") #Makes empty file in case there are no records to parse in the input fastq
+
 for record in SeqIO.parse(args.infastq, "fastq"):
 
 	with open(args.outfastq, "a+") as output_file:
@@ -27,7 +29,7 @@ for record in SeqIO.parse(args.infastq, "fastq"):
 			#Comes in this format "RC:$start..$end", where RC: is not always present and start/end indicate the part of the sequence aligned successfully by pyNAST.
 			#RC = reverse complemented
 			#CHANGE the number for slicing the array below IF YOUR FORMATTING DIFFERS
-			
+
 			pyNASTnfo = hashSeqs[record.id].description.split()[3]
 			degappedSeq = str(hashSeqs[record.id].seq).upper().replace("-", "").strip()
 

@@ -31,7 +31,7 @@ for record in SeqIO.parse(args.input, "fasta"):
 
 	if (sequence[iStart:iEnd].count('-') <= iLen ) and ("N" not in sequence[iStart:iEnd]): #iLen is hack to get reads that have at least 100bp overlap with the ROI
 
-		hashCleanSeqs[record.description] = sequence[iStart:iEnd].replace("-", "") #take only the slice of the sequence corresponding to the primer region, gaps removed
+		hashCleanSeqs[record.id] = sequence #take only the slice of the sequence corresponding to the primer region, gaps removed
 
 with open(args.output, "w+") as output_file:
 

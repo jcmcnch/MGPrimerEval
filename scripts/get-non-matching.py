@@ -22,13 +22,24 @@ setAllIDs = set(aAllIDs)
 
 setMissing = setAllIDs - setHitIDs #Those that are missing in the blast results
 
-aOutput = []
+setPresent = setAllIDs - setMissing
+
+aOutputMissing = []
+
+aOutputPresent = []
 
 for record in SeqIO.parse(snakemake.input[1], "fasta"):
 
 	if record.id in setMissing:
 
-		aOutput.append(record)
+		aOutputMissing.append(record)
 
-SeqIO.write(aOutput, snakemake.output[0], "fasta")
+for record in SeqIO.parse(snakemake.input[1], "fasta"):
 
+	if record.id in setPresent:
+
+		aOutputPresent.append(record)
+
+SeqIO.write(aOutputMissing, snakemake.output[0], "fasta")
+
+SeqIO.write(aOutputPresent, snakemake.output[1], "fasta")

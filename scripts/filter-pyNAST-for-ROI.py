@@ -26,12 +26,11 @@ iEnd = int(args.end) + int(args.padding)
 for record in SeqIO.parse(args.input, "fasta"):
 
 	sequence = str(record.seq).upper()
-	header = str(record.id)
 
 	if ("-" not in sequence[iStart:iEnd]) and ("N" not in sequence[iStart:iEnd]):
-
-		hashCleanSeqs[record.id] = sequence
-
+	
+		hashCleanSeqs[record.description] = sequence
+	
 with open(args.output, "w+") as output_file:
 
 	for key, value in hashCleanSeqs.items():

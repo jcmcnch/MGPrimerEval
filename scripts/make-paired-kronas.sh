@@ -24,7 +24,7 @@ do
 done
 
 PS3='Please choose a primer of interest: '
-options=("515Y" "806RB" "926R" "V4F" "V4RB" "341F" "785R" "27F" "338R")
+options=("515Y" "806RB" "926R")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -35,24 +35,6 @@ do
             primer=$opt && echo "you chose $opt"; break
             ;;
         "926R")
-            primer=$opt && echo "you chose $opt"; break
-            ;;
-        "V4F")
-            primer=$opt && echo "you chose $opt"; break
-            ;;
-        "V4RB")
-            primer=$opt && echo "you chose $opt"; break
-            ;;
-        "341F")
-            primer=$opt && echo "you chose $opt"; break
-            ;;
-        "785R")
-            primer=$opt && echo "you chose $opt"; break
-            ;;
-        "27F")
-            primer=$opt && echo "you chose $opt"; break
-            ;;
-        "338R")
             primer=$opt && echo "you chose $opt"; break
             ;;
         *) echo "invalid option $REPLY";;

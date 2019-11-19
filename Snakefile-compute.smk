@@ -1,9 +1,9 @@
 rule all:
 	input:
-	    expand("compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev'])
-		#expand("compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq", sample=config["samples"])
-		#expand("10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		#expand("11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+	    expand("compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
+		expand("compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
+		expand("compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
+		expand("compute-workflow-intermediate/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
 	input:
@@ -186,35 +186,45 @@ rule subset_to_primer_region:
 	shell:
 		"scripts/filter-pyNAST-for-ROI.py --input {input} --output {output} --start {params.start} --end {params.end}"
 
-"""
-Since graftM actually told us which strand the SSU rRNA is on, then we need to add in a rule that infers this from the alignment.
-"""
-
-#If you have many samples and/or primers, it may make sense to implement the --batch flag here
+#If you have many samples and/or primers, it probably makes sense to implement the --batch flag here
 rule get_fastq_for_subset:
 	#Get the whole fastq files associated with the matching reads
 	input:
 		fasta="compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
 		fastq="compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.{group}.fastq"
 	output:
-		fastq=temp("compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq"),
-		fastq_revcomp="compute-workflow-intermediate/07-subsetted-fastq/"
+		fastq="compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq",
 	conda:
 		"envs/bbmap.yaml"
 	shell:
-		"filterbyname.sh names={input.fasta} include=t in={input.fastq} out={output.fastq} ; "
-		"revcompfastq_according_to_pyNAST.py --inpynast {input.fasta} --infastq {output.fastq} --outfastq {output.fastq_revcomp}"
+		#substring=t must be added because pyNAST adds additional information to sequence header
+		"filterbyname.sh substring=t names={input.fasta} include=t in={input.fastq} out={output.fastq} "
+
+"""
+Since graftM actually told us which strand the SSU rRNA is on, then we need to add in a rule that infers this from the alignment.
+"""
+
+rule revcomp_fastqs:
+	input:
+		fasta="compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
+		fastq="compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq"
+	output:
+		fastq_revcomp="compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
+	conda:
+		"envs/biopython.yaml"
+	shell:
+		"./scripts/revcompfastq_according_to_pyNAST.py --inpynast {input.fasta} --infastq {input.fastq} --outfastq {output.fastq_revcomp}"
 
 
 rule grab_matching_cutadapt_full:
 	input:
-		"09-complemented-fastqs/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
+		"compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
 	output:
-		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
-		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
-		info="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info"
+		mismatch="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
+		match="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
+		info="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info"
 	log:
-		"logs/09-cutadapt/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
+		"logs/08-cutadapt/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
 	params:
 		pattern=lambda wildcards : config["primer"][wildcards.primer],
 		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer]),
@@ -226,12 +236,12 @@ rule grab_matching_cutadapt_full:
 rule quality_filter_primer_region:
     #Keep only sequences that have >30 phred score across the whole primer + 5 leading/trailing bases (implicit in script)
 	input:
-		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
-		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
-		info="10-checked/{primer}/6-mismatch/{sample}.SSU.{direction}.{group}.{primer}.6-mismatch.info" #Assume anything with -1 value is false positive, ignoring those with > ~30% mismatches to primer (e.g. for a 20bp primer)
+		mismatch="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
+		match="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
+		info="compute-workflow-intermediate/08-checked/{primer}/6-mismatch/{sample}.SSU.{direction}.{group}.{primer}.6-mismatch.info" #Assume anything with -1 value is false positive, ignoring those with > ~30% mismatches to primer (e.g. for a 20bp primer)
 	output:
-		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
-		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
+		mismatch="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
+		match="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
 	conda:
 		"envs/biopython.yaml"
 	shell:
@@ -241,10 +251,10 @@ rule quality_filter_primer_region:
 
 rule compute_percentages:
 	input:
-		mismatch="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
-		match="10-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
+		mismatch="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
+		match="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
 	output:
-		"11-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv"
+		"compute-workflow-intermediate/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv"
 	shell:
 		"numMatch=`grep -cE \"^@\" {input.match} || numMatch=0` ; numMismatch=`grep -cE \"^@\" {input.mismatch}` || numMismatch=0 ; "
 		"sumTotal=`expr $numMatch + $numMismatch || sumTotal=0` ; "
