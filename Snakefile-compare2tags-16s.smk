@@ -1,5 +1,10 @@
 from datetime import datetime
-datestamp=datetime.today().strftime('%Y-%m-%d')
+#The workflow will date your analysis by default but you can rerun with the same
+#output folder by providing the same datestamp as a string to snakemake
+if config["datestamp"]:
+	datestamp=str(config["datestamp"])
+else:
+	datestamp=datetime.today().strftime('%Y-%m-%d')
 cutoff=config["cutoff"]
 pcid=config["pcid"]
 strCutoff="minAbund-" + str(config["cutoff"])
@@ -15,6 +20,7 @@ iLenR2Trunc=config["iLenR2Trunc"]
 rule all:
 	input:
 		expand("{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
+		expand("{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
 		expand("{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
 		expand("{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
 		expand("{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.html", outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"]))
@@ -47,7 +53,7 @@ rule get_names:
 	output:
 		"{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids"
 	shell:
-		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output}"
+		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output} || touch {output}"
 
 
 rule get_fastq_by_group:
@@ -167,7 +173,8 @@ rule compare_MG_SSU_rRNA_with_ASVs:
 	input:
 		"GP13-sample-SRA.tsv",
 		expand({ASVtable}, ASVtable=config["ASVtable"]),
-		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
+		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
+		"{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	params:
 		"{sample}",
 		"{outdir}/"
@@ -187,6 +194,16 @@ rule plot_ASV_vs_BLAST_results:
 		"{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg"
 	script:
 		"scripts/seaborn-plot-correlations.py"
+
+rule plot_ASV_vs_BLAST_results_log_scale:
+	input:
+		"{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv"
+	params:
+		"{sample}"
+	output:
+		"{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg"
+	script:
+		"scripts/seaborn-plot-correlations-log.py"
 
 rule sift_unmatched:
 	input:

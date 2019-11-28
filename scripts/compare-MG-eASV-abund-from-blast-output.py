@@ -4,6 +4,7 @@ import csv, re
 from subprocess import check_output
 import networkx as nx
 from networkx.algorithms.components.connected import connected_components as cc
+import itertools
 
 hashSampleSRAConversionTable = {}
 
@@ -80,6 +81,8 @@ sampleID=hashSampleSRAConversionTable[SRAid]
 
 outfile = snakemake.output[0]
 handle = open(outfile, "a+") #open handle
+handle.write("\t".join(["cluster", "eASV_frac", "MG_SSU_rRNA_frac"]))
+handle.write("\n")
 
 #Populate hashCounts with proportions from MG and ASV table
 for key, array in hashMembership.items():
@@ -90,3 +93,16 @@ for key, array in hashMembership.items():
 	iFracSumMG = len(array) / float(totalSeqs) #Divide number of MG hits by total to get fraction
 	handle.write("\t".join([";".join(key), str(iFracSumASV), str(iFracSumMG)]))
 	handle.write("\n")
+
+#We also want info on the ones that ARE present in the tags, but not present in the MG reads
+#Use the non-zero ASV id file produced earlier in the pipeline to determine this
+
+aTuple = list(hashMembership.keys())
+allHashes = list(itertools.chain(*aTuple))
+for astrLine in csv.reader(open(snakemake.input[3]), csv.excel_tab):
+	asvHash = astrLine[0].strip()
+	if asvHash not in allHashes: #If the ASV does not appear in BLAST results at the cutoff you specify
+			iLocation = hashASVTable["#OTU ID"].index(asvHash) #Get location in list
+			iFracASV = float(hashASVTable[sampleID][iLocation])
+			handle.write("\t".join([asvHash, str(iFracASV), str(0)]))
+			handle.write("\n")
