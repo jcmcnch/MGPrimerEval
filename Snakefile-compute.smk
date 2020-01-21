@@ -13,6 +13,8 @@ rule fastp_clean:
 		R1clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
 		R2clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz",
 		log="compute-workflow-intermediate/logs/01-fastp_cleaning/{sample}.log.html"
+	conda:
+		"envs/fastp.yaml"
 	threads:
 		8
 	shell:

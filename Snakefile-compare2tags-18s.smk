@@ -53,7 +53,7 @@ rule get_names:
 	output:
 		"{outdir}/01-subsetted/{sample}.EUK.concat.515Y-926R.ids"
 	shell:
-		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output}"
+		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output} || touch {output}"
 
 rule get_fastq_by_group:
 	input:
