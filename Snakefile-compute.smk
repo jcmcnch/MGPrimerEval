@@ -7,8 +7,8 @@ rule all:
 
 rule fastp_clean:
 	input:
-		R1="00-fastq/{sample}_repaired_1.fastq.gz",
-		R2="00-fastq/{sample}_repaired_2.fastq.gz"
+		R1="compute-workflow-intermediate/00-fastq/{sample}_1.fastq.gz",
+		R2="compute-workflow-intermediate/00-fastq/{sample}_2.fastq.gz"
 	output:
 		R1clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
 		R2clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz",
