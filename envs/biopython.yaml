@@ -1,8 +1,9 @@
 name: biopython-env
 channels:
   - anaconda
-  - conda-forge
   - bioconda
+  - conda-forge
+  - default
   - defaults
 dependencies:
   - biopython=1.72
