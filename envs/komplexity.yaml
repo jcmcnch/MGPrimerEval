@@ -5,4 +5,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - komplexity=0.3.6=musl
+  - komplexity=0.3.6
