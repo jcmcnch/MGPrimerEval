@@ -1,0 +1,27 @@
+name: networkx-env
+channels:
+  - anaconda
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - bzip2=1.0.8=h516909a_1
+  - ca-certificates=2019.8.28=0
+  - certifi=2019.9.11=py37_0
+  - decorator=4.4.0=py37_1
+  - libffi=3.2.1=he1b5a44_1006
+  - libgcc-ng=9.1.0=hdf63c60_0
+  - libstdcxx-ng=9.1.0=hdf63c60_0
+  - ncurses=6.1=hf484d3e_1002
+  - networkx=2.3=py_0
+  - openssl=1.1.1=h7b6447c_0
+  - pip=19.2.3=py37_0
+  - python=3.7.3=h33d41f4_1
+  - readline=8.0=hf8c457e_0
+  - setuptools=41.4.0=py37_0
+  - sqlite=3.30.0=hcee41ef_0
+  - tk=8.6.9=hed695b0_1003
+  - wheel=0.33.6=py37_0
+  - xz=5.2.4=h14c3975_1001
+  - zlib=1.2.11=h516909a_1006

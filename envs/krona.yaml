@@ -1,0 +1,9 @@
+name: kronatools-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - krona=2.7=pl526_2
+  - libgcc-ng=7.2.0=hdf63c60_3
+  - perl=5.26.2=h470a237_0
