@@ -1,9 +1,6 @@
 name: pynast-env
 channels:
-  - https://repo.anaconda.com/pkgs/free
-  - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - backports=1.0
   - backports.functools_lru_cache=1.5

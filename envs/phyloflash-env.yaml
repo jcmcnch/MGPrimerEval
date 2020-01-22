@@ -1,8 +1,6 @@
 name: phyloflash-env
 channels:
-  - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - _libgcc_mutex=0.1
   - _r-mutex=1.0.1

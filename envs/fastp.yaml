@@ -1,8 +1,6 @@
 name: fastp-env
 channels:
-  - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - fastp=0.14.1
   - libgcc=7.2.0
