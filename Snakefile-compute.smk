@@ -10,8 +10,8 @@ rule fastp_clean:
 		R1="compute-workflow-intermediate/00-fastq/{sample}_1.fastq.gz",
 		R2="compute-workflow-intermediate/00-fastq/{sample}_2.fastq.gz"
 	output:
-		R1clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		R2clean="compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz",
+		R1clean=temp("compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz"),
+		R2clean=temp("compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz"),
 		log="compute-workflow-intermediate/logs/01-fastp_cleaning/{sample}.log.html"
 	conda:
 		"envs/fastp.yaml"
