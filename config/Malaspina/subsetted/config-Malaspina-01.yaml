@@ -1,6 +1,6 @@
 cutoff: 0.01
 
-study: bioGEOTRACES
+study: Malaspina_Acinas_2019
 
 primer:
   926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
