@@ -7,7 +7,9 @@ primer:
   #806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
   #515Y : "GTGYCAGCMGCCGCGGTAA"
   #V4F : "CCAGCASCYGCGGTAATTCC"
+  #V4R : "TYRATCAAGAACGAAAGT"
   #V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
+  #338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
   341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
   #785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
   #27F : "AGRGTTTGATYMTGGCTCAG"
