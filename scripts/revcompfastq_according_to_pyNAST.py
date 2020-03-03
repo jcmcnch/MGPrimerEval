@@ -30,7 +30,7 @@ for record in SeqIO.parse(args.infastq, "fastq"):
 			#RC = reverse complemented
 			#CHANGE the number for slicing the array below IF YOUR FORMATTING DIFFERS
 
-			pyNASTnfo = hashSeqs[record.id].description.split()[3]
+			pyNASTnfo = hashSeqs[record.id].description.split()[-1]
 			degappedSeq = str(hashSeqs[record.id].seq).upper().replace("-", "").strip()
 
 			if "RC" not in pyNASTnfo: #not reverse complemented
