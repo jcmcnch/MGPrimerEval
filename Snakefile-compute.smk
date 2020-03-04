@@ -1,3 +1,5 @@
+readLength=config["readLength"]
+
 rule all:
 	input:
 	    expand("compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
@@ -37,7 +39,7 @@ rule phyloFlash_sift:
 	shell:
 		"""
 		mkdir -p {params.phyloFlash_other} ; mkdir -p {params.workdir} ; cd {params.workdir} ;
-		phyloFlash.pl -lib {wildcards.sample} -read1 ../../{input.R1clean} -read2 ../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength 144 -id 50 -CPUs {threads} -log -skip_spades -nozip ;
+		phyloFlash.pl -lib {wildcards.sample} -read1 ../../{input.R1clean} -read2 ../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength {readLength} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
 		mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../{output.R1hits} ;
 		mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../{output.R2hits} ;
 		mv {wildcards.sample}* ../../{params.phyloFlash_other}
