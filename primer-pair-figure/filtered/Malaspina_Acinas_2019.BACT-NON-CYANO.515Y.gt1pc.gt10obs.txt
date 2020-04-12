@@ -1,0 +1,10 @@
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales	.00407105
+d:Bacteria,p:Chlamydiae,c:Chlamydiae,o:Chlamydiales	.00179761
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Flavobacteriales	.00169186
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rhizobiales	.00095167
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rhodospirillales	.00079306
+d:Bacteria,p:Patescibacteria,c:Parcubacteria,o:Candidatus_Kaiserbacteria	.00079306
+d:Bacteria,p:Chloroflexi,c:Dehalococcoidia,o:SAR202_clade	.00079306
+d:Bacteria,p:Firmicutes,c:Erysipelotrichia,o:Erysipelotrichales	.00063445
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Pseudomonadales	.00058157
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Alteromonadales	.00058157

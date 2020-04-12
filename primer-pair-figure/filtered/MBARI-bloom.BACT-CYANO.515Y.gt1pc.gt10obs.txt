@@ -1,0 +1,8 @@
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Chloroplast	.00743048
+d:Eukaryota,p:Hacrobia,c:Haptophyta,o:Prymnesiophyceae	.00341002
+d:Eukaryota,p:Archaeplastida,c:Chlorophyta,o:Mamiellophyceae	.00185235
+d:Bacteria,p:Cyanobacteria,c:Cyanobacteria,o:SubsectionI	.00162081
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Synechococcales	.00159976
+d:Eukaryota,p:Stramenopiles,c:Ochrophyta,o:Dictyochophyceae	.00067358
+d:Eukaryota,p:Hacrobia,c:Cryptophyta,o:Cryptophyceae	.00056833
+d:Eukaryota,p:Stramenopiles,c:Ochrophyta,o:Bacillariophyta	.00025259
