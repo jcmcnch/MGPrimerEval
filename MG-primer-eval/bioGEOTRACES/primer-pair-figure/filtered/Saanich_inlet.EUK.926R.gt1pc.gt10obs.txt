@@ -1,1 +1,0 @@
-d:Eukaryota,p:SAR,c:Alveolata,o:Protalveolata	.01426342

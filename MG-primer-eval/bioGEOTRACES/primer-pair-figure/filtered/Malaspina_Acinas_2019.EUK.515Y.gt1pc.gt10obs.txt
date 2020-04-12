@@ -1,2 +1,0 @@
-d:Eukaryota,p:Excavata,c:Discoba,o:Discicristata	.06450060
-d:Eukaryota,p:SAR,c:Rhizaria,o:Retaria	.01251504

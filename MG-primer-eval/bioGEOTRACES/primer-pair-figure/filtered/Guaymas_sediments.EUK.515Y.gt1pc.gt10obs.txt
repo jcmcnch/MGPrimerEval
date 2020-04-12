@@ -1,2 +1,0 @@
-d:Eukaryota,p:SAR,c:Rhizaria,o:Retaria	.00615040
-d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Metazoa_(Animalia)	.00475258

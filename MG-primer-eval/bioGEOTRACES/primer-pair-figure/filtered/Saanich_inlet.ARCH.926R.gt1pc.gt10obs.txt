@@ -1,5 +1,0 @@
-d:Archaea,p:Nanoarchaeaeota,c:Woesearchaeia,o:marine_metagenome	.02009969
-d:Archaea,p:Thaumarchaeota,c:Nitrososphaeria,o:Nitrosopumilales	.00233156
-d:Archaea,p:Diapherotrites,c:Iainarchaeia,o:Iainarchaeales	.00176877
-d:Archaea,p:Nanoarchaeaeota,c:Woesearchaeia,o:uncultured_archaeon	.00152757
-d:Archaea,p:Nanoarchaeaeota,c:Woesearchaeia,o:uncultured_euryarchaeote	.00104518

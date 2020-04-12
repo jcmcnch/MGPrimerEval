@@ -1,8 +1,0 @@
-d:Bacteria,p:Chloroflexi,c:Dehalococcoidia,o:SAR202_clade	.00775687
-d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales	.00334142
-d:Bacteria,p:Epsilonbacteraeota,c:Campylobacteria,o:Campylobacterales	.00171048
-d:Bacteria,p:Patescibacteria,c:Parcubacteria,o:Candidatus_Kaiserbacteria	.00119336
-d:Bacteria,p:Chlamydiae,c:Chlamydiae,o:Chlamydiales	.00099447
-d:Bacteria,p:Patescibacteria,c:Parcubacteria,o:Candidatus_Portnoybacteria	.00075579
-d:Bacteria,p:Planctomycetes,c:Pla3_lineage,o:uncultured_planctomycete	.00059668
-d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Alteromonadales	.00055690

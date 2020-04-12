@@ -1,8 +1,0 @@
-d:Bacteria,p:Epsilonbacteraeota,c:Campylobacteria,o:Campylobacterales	.13638003
-d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales	.01755862
-d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales	.01731809
-d:Bacteria,p:Chloroflexi,c:Anaerolineae,o:SBR1031	.01310883
-d:Bacteria,p:Acetothermia,c:Acetothermiia,o:uncultured_bacterium	.00845860
-d:Bacteria,p:Patescibacteria,c:ABY1,o:Candidatus_Falkowbacteria	.00404890
-d:Bacteria,p:Patescibacteria,c:Parcubacteria,o:uncultured_bacterium	.00340749
-d:Bacteria,p:Patescibacteria,c:Parcubacteria,o:Candidatus_Yanofskybacteria	.00300661

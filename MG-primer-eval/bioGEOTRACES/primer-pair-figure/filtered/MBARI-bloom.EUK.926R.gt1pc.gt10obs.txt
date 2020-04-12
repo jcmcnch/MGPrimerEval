@@ -1,9 +1,0 @@
-d:Eukaryota,p:SAR,c:Alveolata,o:Protalveolata	.00088612
-d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Metazoa_(Animalia)	.00044503
-d:Eukaryota,p:SAR,c:Alveolata,o:Ciliophora	.00043321
-d:Eukaryota,p:Archaeplastida,c:Chloroplastida,o:Charophyta	.00013784
-d:Eukaryota,p:SAR,c:Alveolata,o:Dinoflagellata	.00010239
-d:Eukaryota,p:Opisthokonta,c:Nucletmycea,o:Fungi	.00009452
-d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:Prymnesiales	.00006695
-d:Eukaryota,p:Archaeplastida,c:Chloroplastida,o:Chlorophyta	.00006695
-d:Eukaryota,p:SAR,c:Rhizaria,o:Cercozoa	.00004332
