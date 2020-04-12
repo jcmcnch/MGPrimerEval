@@ -1,0 +1,3 @@
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Synechococcales	.00287342
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Chloroplast	.00182257
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales	.00032839

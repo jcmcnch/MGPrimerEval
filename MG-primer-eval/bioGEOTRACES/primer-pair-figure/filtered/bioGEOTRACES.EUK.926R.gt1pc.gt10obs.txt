@@ -1,0 +1,14 @@
+d:Eukaryota,p:SAR,c:Alveolata,o:Dinoflagellata	.01499644
+d:Eukaryota,p:SAR,c:Alveolata,o:Protalveolata	.01197837
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Metazoa_(Animalia)	.00992609
+d:Eukaryota,p:Archaeplastida,c:Chloroplastida,o:Charophyta	.00886641
+d:Eukaryota,p:Opisthokonta,c:Nucletmycea,o:Fungi	.00496304
+d:Eukaryota,p:SAR,c:Alveolata,o:Ciliophora	.00470818
+d:Eukaryota,p:Excavata,c:Discoba,o:Discicristata	.00347413
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Ochrophyta	.00257541
+d:Eukaryota,p:SAR,c:Rhizaria,o:Cercozoa	.00228031
+d:Eukaryota,p:Archaeplastida,c:Chloroplastida,o:Chlorophyta	.00209252
+d:Eukaryota,p:SAR,c:Rhizaria,o:Retaria	.00158280
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Labyrinthulomycetes	.00118039
+d:Eukaryota,p:SAR,c:Alveolata,o:Apicomplexa	.00109991
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured	.00105967
