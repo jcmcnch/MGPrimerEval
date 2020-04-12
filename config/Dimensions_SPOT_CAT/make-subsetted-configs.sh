@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p subsetted
+
 for item in {01..14} ; do 
 
 	cp config-Dimensions.yaml subsetted/config-Dimensions-$item.yaml
