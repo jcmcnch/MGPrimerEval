@@ -1,7 +1,7 @@
-readLength: <your read length here>
-cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
+readLength: 125
+cutoff: 0.01
 
-study: <your study here> 
+study: Guaymas_sediments 
 
 primer:
   926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
@@ -107,3 +107,7 @@ primerROI:
     1392R : [1381,1395]
 
 samples:
+  SRR6301444 : SRR6301444
+  SRR6301445 : SRR6301445
+  SRR6301446 : SRR6301446
+  SRR6301447 : SRR6301447
