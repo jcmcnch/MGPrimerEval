@@ -1,24 +1,35 @@
+readLength: 150
 cutoff: 0.01
 
 study: BioGEOTRACES
 
 primer:
-  #926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
-  #806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
-  #515Y : "GTGYCAGCMGCCGCGGTAA"
-  #V4F : "CCAGCASCYGCGGTAATTCC"
-  #V4R : "TYRATCAAGAACGAAAGT"
-  #V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
-  #338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
-  #341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
-  #785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
-  #27F : "AGRGTTTGATYMTGGCTCAG"
-  #1389F : "TTGTACACACCGCCC"
-  #1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
-  #926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
-  #1392R : "GYACACACCGCCCGT" #Chénard et al 2019
-  #807F : "GGATTAGATACCCBRGTAGTC"
+  926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
+  806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
+  515Y : "GTGYCAGCMGCCGCGGTAA"
+  V4F : "CCAGCASCYGCGGTAATTCC"
+  V4R : "TYRATCAAGAACGAAAGT"
+  V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
+  338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
+  341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
+  785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
+  27F : "AGRGTTTGATYMTGGCTCAG"
+  1389F : "TTGTACACACCGCCC"
+  1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
+  926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
+  1392R : "GYACACACCGCCCGT" #Chénard et al 2019
+  807F : "GGATTAGATACCCBRGTAGTC"
   1050R : "TGCAYGGYYGTCGHCARCT" #reverse complement
+
+primer_pairs:
+
+  V1-V2_BACT: [27F, 338R]
+  V3-V4_BACT: [341F, 785R]
+  V4_EUK: [V4F, V4RB]
+  V4_PROK: [515Y, 806RB]
+  V4-V5_UNIV: [515Y, 926R]
+  V5-V8_UNIV: [926wF, 1392R]
+  V9_EUK: [1389F, 1510R]
 
 groups:
   EUK : EUK
