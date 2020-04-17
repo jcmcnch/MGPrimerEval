@@ -1,0 +1,92 @@
+taxonomic_group	taxon_primer_hits	taxon_primer_misses	taxon_total_observed	total_filtered_seqs	fraction_total_filtered_sequences_mismatched	fraction_taxon_mismatched
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Synechococcales	27380.0000	126	27506.0	41291	.00305151	.0045
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Chloroplast	11798.0000	75	11873.0	41291	.00181637	.0063
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Nostocales	1632.0000	8	1640.0	41291	.00019374	.0048
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Flavobacteriales	2.0000	6	8.0	41291	.00014531	.7500
+d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales	12.0000	4	16.0	41291	.00009687	.2500
+d:Bacteria,p:Actinobacteria,c:Acidimicrobiia,o:Actinomarinales		2	2	41291	.00004843	1.0000
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales	1.0000	1	2.0	41291	.00002421	.5000
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Betaproteobacteriales	5.0000	1	6.0	41291	.00002421	.1666
+d:Bacteria,p:Spirochaetes,c:Spirochaetia,o:Spirochaetales	6.0000	1	7.0	41291	.00002421	.1428
+d:Bacteria,p:Proteobacteria,c:Deltaproteobacteria,o:Desulfovibrionales		1	1	41291	.00002421	1.0000
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Acetobacterales		1	1	41291	.00002421	1.0000
+d:Bacteria,p:Patescibacteria,c:Microgenomatia,o:Candidatus_Levybacteria		1	1	41291	.00002421	1.0000
+d:Bacteria,p:Chlamydiae,c:Chlamydiae,o:Chlamydiales		1	1	41291	.00002421	1.0000
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Oxyphotobacteria_Incertae_Sedis	27.0000	1	28.0	41291	.00002421	.0357
+d:Bacteria,p:WS4,c:uncultured_bacterium,o:uncultured_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:WS2,c:uncultured_bacterium,o:uncultured_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Verrucomicrobia,c:Verrucomicrobiae,o:Verrucomicrobiales		0	0	41291	0	0
+d:Bacteria,p:Verrucomicrobia,c:Verrucomicrobiae,o:Opitutales		0	0	41291	0	0
+d:Bacteria,p:Thermotogae,c:Thermotogae,o:Thermotogales		0	0	41291	0	0
+d:Bacteria,p:Thermotogae,c:Thermotogae,o:Kosmotogales		0	0	41291	0	0
+d:Bacteria,p:Synergistetes,c:Synergistia,o:Synergistales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Spirochaetes,c:Leptospirae,o:Leptospirales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Xanthomonadales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Thiotrichales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Salinisphaerales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Piscirickettsiales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Ectothiorhodospirales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Diplorickettsiales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Cellvibrionales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Deltaproteobacteria,o:SAR324_clade(Marine_group_B)	2.0000	0	2.0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Deltaproteobacteria,o:Oligoflexales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Deltaproteobacteria,o:Myxococcales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Deltaproteobacteria,o:Desulfuromonadales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Deltaproteobacteria,o:Deltaproteobacteria_Incertae_Sedis		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Sphingomonadales	2.0000	0	2.0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rhizobiales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Puniceispirillales		0	0	41291	0	0
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Micropepsales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Planctomycetes,c:vadinHA49,o:metagenome		0	0	41291	0	0
+d:Bacteria,p:Planctomycetes,c:Planctomycetacia,o:Gemmatales	4.0000	0	4.0	41291	0	0
+d:Bacteria,p:Planctomycetes,c:Pla4_lineage,o:uncultured_bacterium		0	0	41291	0	0
+d:Bacteria,p:Planctomycetes,c:OM190,o:uncultured_planctomycete		0	0	41291	0	0
+d:Bacteria,p:Patescibacteria,c:Parcubacteria,o:uncultured_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Patescibacteria,c:Berkelbacteria,o:uncultured_bacterium		0	0	41291	0	0
+d:Bacteria,p:Patescibacteria,c:ABY1,o:Candidatus_Kerfeldbacteria		0	0	41291	0	0
+d:Bacteria,p:Omnitrophicaeota,c:uncultured_Verrucomicrobia_bacterium,o:uncultured_Verrucomicrobia_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Nitrospinae,c:Nitrospinia,o:Nitrospinales		0	0	41291	0	0
+d:Bacteria,p:Marinimicrobia_(SAR406_clade),c:uncultured_Fibrobacteres/Acidobacteria_group_bacterium,o:uncultured_Fibrobacteres/Acidobacteria_group_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Marinimicrobia_(SAR406_clade),c:uncultured_bacterium,o:uncultured_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Lentisphaerae,c:Lentisphaeria,o:Lentisphaerales		0	0	41291	0	0
+d:Bacteria,p:Gemmatimonadetes,c:Longimicrobia,o:Longimicrobiales		0	0	41291	0	0
+d:Bacteria,p:Fusobacteria,c:Fusobacteriia,o:Fusobacteriales		0	0	41291	0	0
+d:Bacteria,p:Firmicutes,c:Erysipelotrichia,o:Erysipelotrichales	2.0000	0	2.0	41291	0	0
+d:Bacteria,p:Firmicutes,c:Bacilli,o:Lactobacillales		0	0	41291	0	0
+d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Fibrobacteres,c:Fibrobacteria,o:Fibrobacterales	6.0000	0	6.0	41291	0	0
+d:Bacteria,p:Elusimicrobia,c:Lineage_IIc,o:uncultured_bacterium		0	0	41291	0	0
+d:Bacteria,p:Dependentiae,c:Babeliae,o:Babeliales		0	0	41291	0	0
+d:Bacteria,p:Deinococcus-Thermus,c:Deinococci,o:Thermales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Deinococcus-Thermus,c:Deinococci,o:Deinococcales		0	0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Sericytochromatia,o:uncultured_bacterium	4.0000	0	4.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Sericytochromatia,o:metagenome		0	0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Thermosynechococcales	42.0000	0	42.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:SepB-3		0	0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Pseudanabaenales		0	0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Phormidesmiales	48.0000	0	48.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Limnotrichales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Leptolyngbyales	16.0000	0	16.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Gloeobacterales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Fr127	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Eurycoccales	4.0000	0	4.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Melainabacteria,o:Vampirovibrionales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Cyanobacteria,c:Melainabacteria,o:Obscuribacterales	5.0000	0	5.0	41291	0	0
+d:Bacteria,p:Chloroflexi,c:Dehalococcoidia,o:SAR202_clade	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Chloroflexi,c:Anaerolineae,o:SBR1031	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Chloroflexi,c:Anaerolineae,o:Ardenticatenales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Calditrichaeota,c:Calditrichia,o:Calditrichales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:BRC1,c:uncultured_bacterium,o:uncultured_bacterium	2.0000	0	2.0	41291	0	0
+d:Bacteria,p:Bacteroidetes,c:Chlorobia,o:Chlorobiales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Sphingobacteriales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Chitinophagales		0	0	41291	0	0
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Bacteroidales		0	0	41291	0	0
+d:Bacteria,p:Atribacteria,c:JS1,o:uncultured_candidate_division_JS1_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Atribacteria,c:JS1,o:uncultured_bacterium	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Thermoanaerobaculia,o:Thermoanaerobaculales		0	0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Subgroup_22,o:uncultured_bacterium		0	0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Blastocatellia_(Subgroup_4),o:Chloracidobacteriales		0	0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Blastocatellia_(Subgroup_4),o:Blastocatellales		0	0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Aminicenantia,o:Aminicenantales		0	0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Acidobacteriia,o:Solibacterales	1.0000	0	1.0	41291	0	0
+d:Bacteria,p:Acidobacteria,c:Acidobacteriia,o:Acidobacteriales		0	0	41291	0	0

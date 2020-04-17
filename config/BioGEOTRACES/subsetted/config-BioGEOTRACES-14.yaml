@@ -1,3 +1,4 @@
+readLength: 150
 cutoff: 0.01
 
 study: BioGEOTRACES
@@ -16,9 +17,19 @@ primer:
   #1389F : "TTGTACACACCGCCC"
   #1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
   #926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
-  1i392R : "GYACACACCGCCCGT" #Chénard et al 2019
+  1392R : "GYACACACCGCCCGT" #Chénard et al 2019
   #807F : "GGATTAGATACCCBRGTAGTC"
   #1050R : "TGCAYGGYYGTCGHCARCT" #reverse complement
+
+primer_pairs:
+
+  V1-V2_BACT: [27F, 338R]
+  V3-V4_BACT: [341F, 785R]
+  V4_EUK: [V4F, V4RB]
+  V4_PROK: [515Y, 806RB]
+  V4-V5_UNIV: [515Y, 926R]
+  V5-V8_UNIV: [926wF, 1392R]
+  V9_EUK: [1389F, 1510R]
 
 groups:
   EUK : EUK

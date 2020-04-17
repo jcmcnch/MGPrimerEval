@@ -1,0 +1,15 @@
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Ectothiorhodospirales	.00250252
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Flavobacteriales	.00207087
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rhodobacterales	.00166663
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales	.00114763
+d:Bacteria,p:Patescibacteria,c:Gracilibacteria,o:JGI_0000069-P22	.00109967
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:SAR11_clade	.00075538
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Thiomicrospirales	.00030660
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Betaproteobacteriales	.00020897
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rhodospirillales	.00019355
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Chitinophagales	.00018841
+d:Bacteria,p:Epsilonbacteraeota,c:Campylobacteria,o:Campylobacterales	.00017985
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Cellvibrionales	.00016101
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rhizobiales	.00015415
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:SAR86_clade	.00015244
+d:Bacteria,p:Proteobacteria,c:Gammaproteobacteria,o:Thiotrichales	.00014045

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-for item in {01..16} ; do 
+mkdir -p subsetted
+
+for item in {01..14} ; do 
 
 	cp config-BioGEOTRACES.yaml subsetted/config-BioGEOTRACES-$item.yaml
 
@@ -19,6 +21,4 @@ sed -i 's/#27F /27F /' subsetted/*10.yaml
 sed -i 's/#1389F /1389F /' subsetted/*11.yaml
 sed -i 's/#1510R /1510R /' subsetted/*12.yaml
 sed -i 's/#926wF /926wF /' subsetted/*13.yaml
-sed -i 's/#1392R /1i392R /' subsetted/*14.yaml
-sed -i 's/#807F /807F /' subsetted/*15.yaml
-sed -i 's/#1050R /1050R /' subsetted/*16.yaml
+sed -i 's/#1392R /1392R /' subsetted/*14.yaml
