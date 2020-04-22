@@ -6,6 +6,8 @@ rule all:
 		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		#only one target necessary for phytoRef because mismatches and matches are classified in a single rule (no subsampling)
 		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.BACT-CYANO.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-PhytoRef.tax", sample=config["samples"], study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
+		expand("classify-workflow-intermediate/07-normalized-counts/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv", study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
+                expand("output-classify-workflow/{study}.BACT-CYANO.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		#expand("classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		#expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		#expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
@@ -57,7 +59,7 @@ rule classify_matches_subsample:
 		|| touch {output}
 		"""
 #Don't worry about subsampling, since there aren't that many chloroplast sequences
-rule reclassify_cyano_fraction_phytoRef:
+rule classify_cyano_fraction_phytoRef:
 	input:
 		nohits="compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.BACT-CYANO.{primer}.{mismatches}.nohit.filtered.fastq",
 		hits="classify-workflow-intermediate/02-matches-subsampled/{sample}.SSU.{direction}.BACT-CYANO.{primer}.{mismatches}.sub5k.hit.filtered.fastq"
@@ -129,10 +131,10 @@ rule count_tax_matches_and_mismatches_cyano:
                 mismatches=expand("classify-workflow-intermediate/04-tax-concatenated/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.tax", study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
                 matches=expand("classify-workflow-intermediate/04-tax-concatenated/{study}.BACT-CYANO.{primer}.{mismatches}.hits.all.tax", study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"])
         output:
-                matches="classify-workflow-intermediate/05-tax-counts/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.tsv",
-                mismatches="classify-workflow-intermediate/05-tax-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv",
-                taxTableMatches="classify-workflow-intermediate/05-tax-table/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.taxtable",
-                taxTableMismatches="classify-workflow-intermediate/05-tax-table/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.taxtable"
+                matches="classify-workflow-intermediate/05-tax-counts/{study}.BACT-CYANO.{primer}.{mismatches}.hits.all.order.counts.tsv",
+                mismatches="classify-workflow-intermediate/05-tax-counts/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.order.counts.tsv",
+                taxTableMatches="classify-workflow-intermediate/05-tax-table/{study}.BACT-CYANO.{primer}.{mismatches}.hits.all.order.counts.taxtable",
+                taxTableMismatches="classify-workflow-intermediate/05-tax-table/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.order.counts.taxtable"
         shell:
                 "sed -re 's/\([0-9]{{1}}\.[0-9]{{2}}\)//g' {input.matches} | tee {output.taxTableMatches} |" #Remove confidence estimations from VSEARCH output, keep a copy for later steps but also pipe to subsequent commands
                 "cut -f2 | sort | cut -d, -f1-6 | sort | uniq -c | " #Take only tax column, collapse to 6th level (appropriate for chloroplasts), then count unique occurrences
