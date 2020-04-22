@@ -1,7 +1,7 @@
 readLength: 150
 cutoff: 0.01
 
-study: BioGEOTRACES
+study: bioGEOTRACES
 
 primer:
   926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
@@ -18,8 +18,8 @@ primer:
   1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
   926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
   1392R : "GYACACACCGCCCGT" #Chénard et al 2019
-  807F : "GGATTAGATACCCBRGTAGTC"
-  1050R : "TGCAYGGYYGTCGHCARCT" #reverse complement
+  #807F : "GGATTAGATACCCBRGTAGTC"
+  #1050R : "TGCAYGGYYGTCGHCARCT" #reverse complement
 
 primer_pairs:
 
@@ -59,8 +59,8 @@ primerROI:
     1510R : [1774, 1793]
     926wF : [1131, 1150]
     1392R : [1629, 1643]
-    807F : [996, 1016]
-    1050R : [1585, 1603]
+    #807F : [996, 1016]
+    #1050R : [1585, 1603]
 
   ARCH:
     515Y: [486,504]
@@ -77,8 +77,8 @@ primerROI:
     1510R : [1477, 1496] #4-mismatch to ref
     926wF : [882,901]
     1392R : [1366,1380] 
-    807F : [756, 776]
-    1050R : [1021, 1039]
+    #807F : [756, 776]
+    #1050R : [1021, 1039]
 
   BACT-NON-CYANO:
     515Y: [494, 512]
@@ -95,8 +95,8 @@ primerROI:
     1510R : [1490, 1510] #Looks like this is the homologous region (many mismatches, has an insertion relative to primer)
     926wF : [887,906]
     1392R : [1381,1395]
-    807F : [785, 805]
-    1050R : [1052, 1070]
+    #807F : [785, 805]
+    #1050R : [1052, 1070]
 
   BACT-CYANO:
     515Y: [494, 512]
@@ -113,8 +113,8 @@ primerROI:
     1510R : [1490, 1510] #Looks like this is the homologous region (many mismatches, has an insertion relative to primer)
     926wF : [887,906]
     1392R : [1381,1395]
-    807F : [764, 784]
-    1050R : [1033, 1051]
+    #807F : [764, 784]
+    #1050R : [1033, 1051]
 
 samples:
   SRR5720219 : SRR5720219
