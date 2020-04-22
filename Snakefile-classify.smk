@@ -1,3 +1,4 @@
+ruleorder: count_tax_matches_and_mismatches_cyano > count_tax_matches_and_mismatches
 CUTOFF = config["cutoff"]
 
 rule all:
