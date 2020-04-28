@@ -12,5 +12,5 @@ for astrLine in csv.reader(open(sys.argv[1]), csv.excel_tab):
         headerCheck=False
         continue
     if not headerCheck:
-        if float(astrLine[3]) > 10 and float(astrLine[10]) > 10 and float(astrLine[17]) > 10 and float(astrLine[6]) > 0.05: #if at least 10 detected sequences found across all mismatches AND more than 5% mismatched
+        if float(astrLine[3]) > 10 and float(astrLine[10]) > 10 and float(astrLine[17]) > 10 and float(astrLine[6]) > 0.001: #if at least 10 detected sequences found across all mismatches AND more than 0.1% o f taxon is mismatched @ 0-mm
             print('\t'.join([astrLine[0],astrLine[6],astrLine[13],astrLine[20]]))
