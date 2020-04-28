@@ -10,6 +10,7 @@ rule all:
 		expand("classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
+		expand("output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
 		expand("output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.pdf", study=config["study"], group=config["groups"], primer=config["primer"]),
 		expand("output-classify-workflow/summary-mismatch-overlap-primer-pairs/{study}.{group}.{primer_pair}.avgCase.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/pasted-summaries/{study}.{group}.{primer_pair}.pasted.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
@@ -109,8 +110,8 @@ rule cat_tax_for_all_samples_matches_and_mismatches:
 #Counting order-level groupings (can adjust level with the "cut -d, -f1-4" parameter below)
 rule count_tax_matches_and_mismatches:
 	input:
-		mismatches=expand("classify-workflow-intermediate/04-tax-concatenated/{study}.{group}.{primer}.{mismatches}.nohits.all.tax", study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
-		matches=expand("classify-workflow-intermediate/04-tax-concatenated/{study}.{group}.{primer}.{mismatches}.hits.all.tax", study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"])
+		mismatches="classify-workflow-intermediate/04-tax-concatenated/{study}.{group}.{primer}.{mismatches}.nohits.all.tax",
+		matches="classify-workflow-intermediate/04-tax-concatenated/{study}.{group}.{primer}.{mismatches}.hits.all.tax"
 	output:
 		matches="classify-workflow-intermediate/05-tax-counts/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.tsv",
 		mismatches="classify-workflow-intermediate/05-tax-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv",
@@ -127,8 +128,8 @@ rule count_tax_matches_and_mismatches:
 #Counting order-level groupings for cyano at level 6
 rule count_tax_matches_and_mismatches_cyano:
         input:
-                mismatches=expand("classify-workflow-intermediate/04-tax-concatenated/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.tax", study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
-                matches=expand("classify-workflow-intermediate/04-tax-concatenated/{study}.BACT-CYANO.{primer}.{mismatches}.hits.all.tax", study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"])
+                mismatches="classify-workflow-intermediate/04-tax-concatenated/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.tax",
+                matches="classify-workflow-intermediate/04-tax-concatenated/{study}.BACT-CYANO.{primer}.{mismatches}.hits.all.tax"
         output:
                 matches="classify-workflow-intermediate/05-tax-counts/{study}.BACT-CYANO.{primer}.{mismatches}.hits.all.order.counts.tsv",
                 mismatches="classify-workflow-intermediate/05-tax-counts/{study}.BACT-CYANO.{primer}.{mismatches}.nohits.all.order.counts.tsv",
