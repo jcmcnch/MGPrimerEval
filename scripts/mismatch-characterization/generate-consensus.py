@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+#Simple script for determining a consensus primer sequence MGPrimerEval tsv output
+#takes three arguments after script name:
+#1. Input file
+#2. Original degenerate primer sequence
+#3. Desired abundance cutoff (to exclude rare variants that may be errors or at least are not quantitatively important)
+
 import csv
 import sys
 
@@ -18,13 +24,14 @@ hashIUPACambiguousCodes = {
 "N": ["A", "C", "G", "T"]
 }
 
-primerSeq = "AAACTYAAAKRAATTGRCGG"
+primerSeq = str(sys.argv[2])
+cutoff = float(sys.argv[3])
 
 aSeqs = []
 
 for astrLine in csv.reader(open(sys.argv[1]), csv.excel_tab): #iterate through table
 
-    if astrLine[1] != "relative abundance" and float(astrLine[1].strip()) > 0.001: #abundance cutoff
+    if astrLine[1] != "relative abundance" and float(astrLine[1].strip()) >= cutoff: #abundance cutoff
         
         aSeqs.append(astrLine[0].strip())
 
@@ -58,7 +65,7 @@ for array in aSetSeqs:
 		strSeq = strSeq + array[0]
 
 aSeqConsensus = []
-strConsensus = "" #A consensus between the primer and 
+strConsensus = "" #A consensus between the primer and the variants identified from the MG
 
 #Iterate across primer seq
 for i in range(0, len(primerSeq)):
