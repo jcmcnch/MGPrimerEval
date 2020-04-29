@@ -3,6 +3,7 @@ CUTOFF = config["cutoff"]
 
 rule all:
 	input:
+		expand("{study}.EUK.pdf", study=config["study"]),
 		expand("classify-workflow-intermediate/01-mismatches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		#only one target necessary for phytoRef because mismatches and matches are classified in a single rule (no subsampling)
@@ -15,6 +16,26 @@ rule all:
 		expand("output-classify-workflow/summary-mismatch-overlap-primer-pairs/{study}.{group}.{primer_pair}.avgCase.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/pasted-summaries/{study}.{group}.{primer_pair}.pasted.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/normalized-summaries/{study}.{group}.{primer_pair}.normalized.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"])
+
+#this rule assumes your compute pipeline is done! remove and rerun if you add more samples to your pipeline
+rule concatenate_compute_results:
+	output:
+		"{study}.compute-results.tsv"
+	shell:
+		"find ./compute-workflow-intermediate/09-summary/ -type f -name \"*.tsv\" -print0 | xargs -0 cat > {output}"
+
+rule plot_compute_results:
+	input:
+		"{study}.compute-results.tsv"
+	params:
+		"{study}"
+	output:
+		"{study}.EUK.pdf",
+		"{study}.BACT-NON-CYANO.pdf",
+		"{study}.BACT-CYANO.pdf",
+		"{study}.ARCH.pdf"
+	script:
+		"scripts/plot-individual-primers.R"
 
 rule classify_mismatches:
 	input:
