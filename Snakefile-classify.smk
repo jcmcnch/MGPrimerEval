@@ -10,8 +10,8 @@ rule all:
 		expand("classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
-		expand("output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.2mm.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
-		expand("output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.2mm.pdf", study=config["study"], group=config["groups"], primer=config["primer"]),
+		expand("output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
+		expand("output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.{mismatches}.pdf", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/summary-mismatch-overlap-primer-pairs/{study}.{group}.{primer_pair}.avgCase.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/pasted-summaries/{study}.{group}.{primer_pair}.pasted.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/normalized-summaries/{study}.{group}.{primer_pair}.normalized.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"])
@@ -239,28 +239,28 @@ rule summarize_mismatch_info:
 		"output-classify-workflow/{study}.{group}.{primer}.1-mismatch.summary.tsv",
 		"output-classify-workflow/{study}.{group}.{primer}.2-mismatch.summary.tsv"
 	output:
-		pastedSummaries=temp("output-classify-workflow/{study}.{group}.{primer}.2mm.pasted.tsv"),
-		comparisonOutput="output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.2mm.tsv"
+		pastedSummaries=temp("output-classify-workflow/{study}.{group}.{primer}.0-2mm.pasted.tsv"),
+		comparisonOutput="output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.tsv"
 	shell:
 		"paste {input} > {output.pastedSummaries} ; "
 		"scripts/mismatch-characterization/summarize-taxa-mismatches.py {output.pastedSummaries} > {output.comparisonOutput}"
 
 rule generate_barplot_input:
 	input:
-                hits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.2-mismatch.hits.all.order.counts.normalized.tsv",
-                nohits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.2-mismatch.nohits.all.order.counts.normalized.tsv"		
+                hits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.normalized.tsv",
+                nohits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv"		
 	output:
-                "output-classify-workflow/plots/{study}.{group}.{primer}.barplot-input.tsv"
+                "output-classify-workflow/plots/{study}.{group}.{primer}.{mismatches}.barplot-input.tsv"
 	shell:
                 "scripts/mismatch-characterization/generate-barplot-input.py {input.hits} {input.nohits} {output} "
 
 rule make_tax_matchVSmismatch_barplots:
 	input:
-		"output-classify-workflow/plots/{study}.{group}.{primer}.barplot-input.tsv"
+		"output-classify-workflow/plots/{study}.{group}.{primer}.{mismatches}.barplot-input.tsv"
 	params:
 		"{study}.{group}.{primer}"
 	output:
-		"output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.2mm.pdf"
+		"output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.{mismatches}.pdf"
 	script:
 		"scripts/mismatch-characterization/make-taxa-barplots-match-vs-mismatch.R"
 
