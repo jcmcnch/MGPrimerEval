@@ -1,7 +1,7 @@
 readLength: 150
 cutoff: 0.01
 
-study: BioGEOTRACES
+study: bioGEOTRACES
 
 primer:
   #926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
