@@ -1,0 +1,10 @@
+d:Archaea,p:Nanoarchaeaeota,c:Nanohaloarchaeia,o:Deep_Sea_Euryarchaeotic_Group(DSEG)	.02565102
+d:Archaea,p:Nanoarchaeaeota,c:Nanohaloarchaeia,o:Aenigmarchaeales	.01082609
+d:Archaea,p:Altiarchaeota,c:Altiarchaeia,o:uncultured_euryarchaeote	.00907051
+d:Archaea,p:Altiarchaeota,c:Altiarchaeia,o:uncultured_archaeon	.00750999
+d:Archaea,p:Euryarchaeota,c:Archaeoglobi,o:Archaeoglobales	.00721739
+d:Archaea,p:Euryarchaeota,c:Thermococci,o:Thermococcales	.00702233
+d:Archaea,p:Euryarchaeota,c:Thermoplasmata,o:JdFR-43	.00614454
+d:Archaea,p:Euryarchaeota,c:Thermoplasmata,o:uncultured	.00594947
+d:Archaea,p:Euryarchaeota,c:Thermoplasmata,o:Thermoplasmatales	.00351116
+d:Archaea,p:Euryarchaeota,c:Methanomicrobia,o:ANME-1	.00165805

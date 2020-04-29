@@ -1,0 +1,271 @@
+taxonomic_group	taxon_primer_hits	taxon_primer_misses	taxon_total_observed	total_filtered_seqs	fraction_total_filtered_sequences_mismatched	fraction_taxon_mismatched
+d:Eukaryota,p:SAR,c:Alveolata,o:Dinoflagellata	9180.0000	1118	10298.0	74551	.01499644	.1085
+d:Eukaryota,p:SAR,c:Alveolata,o:Protalveolata	20969.0000	893	21862.0	74551	.01197837	.0408
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Metazoa_(Animalia)	15262.0000	740	16002.0	74551	.00992609	.0462
+d:Eukaryota,p:Archaeplastida,c:Chloroplastida,o:Charophyta	985.0000	661	1646.0	74551	.00886641	.4015
+d:Eukaryota,p:Opisthokonta,c:Nucletmycea,o:Fungi	1850.0000	370	2220.0	74551	.00496304	.1666
+d:Eukaryota,p:SAR,c:Alveolata,o:Ciliophora	1215.0000	351	1566.0	74551	.00470818	.2241
+d:Eukaryota,p:Excavata,c:Discoba,o:Discicristata	1053.0000	259	1312.0	74551	.00347413	.1974
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Ochrophyta	2402.0000	192	2594.0	74551	.00257541	.0740
+d:Eukaryota,p:SAR,c:Rhizaria,o:Cercozoa	1847.0000	170	2017.0	74551	.00228031	.0842
+d:Eukaryota,p:Archaeplastida,c:Chloroplastida,o:Chlorophyta	1266.0000	156	1422.0	74551	.00209252	.1097
+d:Eukaryota,p:SAR,c:Rhizaria,o:Retaria	3985.0000	118	4103.0	74551	.00158280	.0287
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Labyrinthulomycetes	284.0000	88	372.0	74551	.00118039	.2365
+d:Eukaryota,p:SAR,c:Alveolata,o:Apicomplexa	160.0000	82	242.0	74551	.00109991	.3388
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured	1221.0000	79	1300.0	74551	.00105967	.0607
+d:Eukaryota,p:Excavata,c:Discoba,o:Jakobida	785.0000	53	838.0	74551	.00071092	.0632
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Peronosporomycetes	119.0000	35	154.0	74551	.00046947	.2272
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Incertae_Sedis	209.0000	35	244.0	74551	.00046947	.1434
+d:Eukaryota,p:Amoebozoa,c:Discosea,o:Flabellinia	70.0000	32	102.0	74551	.00042923	.3137
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Bicosoecida	76.0000	26	102.0	74551	.00034875	.2549
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Choanoflagellida	114.0000	24	138.0	74551	.00032192	.1739
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:Amastigomonas	31.0000	22	53.0	74551	.00029509	.4150
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-3	442.0000	21	463.0	74551	.00028168	.0453
+d:Eukaryota,p:Amoebozoa,c:Discosea,o:Longamoebia	38.0000	20	58.0	74551	.00026827	.3448
+d:Eukaryota,p:Centrohelida,c:uncultured_marine_eukaryote,o:uncultured_marine_eukaryote	234.0000	16	250.0	74551	.00021461	.0640
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-1	237.0000	14	251.0	74551	.00018779	.0557
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-12	29.0000	13	42.0	74551	.00017437	.3095
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Bangiales	16.0000	11	27.0	74551	.00014754	.4074
+d:Eukaryota,p:Cryptophyceae,c:Kathablepharidae,o:uncultured	38.0000	11	49.0	74551	.00014754	.2244
+d:Eukaryota,p:Opisthokonta,c:Nucletmycea,o:Nucleariidae_and_Fonticula_group	16.0000	7	23.0	74551	.00009389	.3043
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:Prymnesiales	882.0000	7	889.0	74551	.00009389	.0078
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Eccrinales	3.0000	6	9.0	74551	.00008048	.6666
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Cryptomonas	8.0000	6	14.0	74551	.00008048	.4285
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-16	9.0000	6	15.0	74551	.00008048	.4000
+d:Bacteria,p:Firmicutes,c:Clostridia,o:Clostridiales	13.0000	6	19.0	74551	.00008048	.3157
+d:Eukaryota,p:Haptophyta,c:uncultured_eukaryote,o:uncultured_eukaryote	33.0000	6	39.0	74551	.00008048	.1538
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:Coccolithales	48.0000	6	54.0	74551	.00008048	.1111
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-11		5	5	74551	.00006706	1.0000
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Teleaulax	64.0000	5	69.0	74551	.00006706	.0724
+d:Eukaryota,p:Amoebozoa,c:Tubulinea,o:Euamoebida	2.0000	4	6.0	74551	.00005365	.6666
+d:Eukaryota,p:Excavata,c:Metamonada,o:Preaxostyla	4.0000	4	8.0	74551	.00005365	.5000
+d:Eukaryota,p:Incertae_Sedis,c:Breviatea,o:NAMAKO-2	7.0000	4	11.0	74551	.00005365	.3636
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Plagioselmis	7.0000	4	11.0	74551	.00005365	.3636
+d:Eukaryota,p:uncultured,c:uncultured_marine_alveolate,o:uncultured_marine_alveolate	13.0000	4	17.0	74551	.00005365	.2352
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Ichthyosporea	18.0000	4	22.0	74551	.00005365	.1818
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-9	50.0000	4	54.0	74551	.00005365	.0740
+d:Eukaryota,p:Incertae_Sedis,c:Telonema,o:uncultured_eukaryote	167.0000	4	171.0	74551	.00005365	.0233
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Rhodellophyceae	1.0000	3	4.0	74551	.00004024	.7500
+d:Eukaryota,p:Amoebozoa,c:metagenome,o:metagenome	1.0000	3	4.0	74551	.00004024	.7500
+d:Eukaryota,p:Amoebozoa,c:Tubulinea,o:Leptomyxida	2.0000	3	5.0	74551	.00004024	.6000
+d:Eukaryota,p:Amoebozoa,c:Tubulinea,o:Arcellinida	3.0000	3	6.0	74551	.00004024	.5000
+d:Eukaryota,p:uncultured,c:uncultured_eukaryote,o:uncultured_eukaryote	4.0000	3	7.0	74551	.00004024	.4285
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Cyanidiales	4.0000	3	7.0	74551	.00004024	.4285
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Placididea	5.0000	3	8.0	74551	.00004024	.3750
+d:Eukaryota,p:Haptophyta,c:Pav3,o:uncultured_haptophyte	11.0000	3	14.0	74551	.00004024	.2142
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Florideophycidae	12.0000	3	15.0	74551	.00004024	.2000
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:uncultured_Apusomonadidae	13.0000	3	16.0	74551	.00004024	.1875
+d:Eukaryota,p:Incertae_Sedis,c:Palpitomonas,o:uncultured_eukaryote	18.0000	3	21.0	74551	.00004024	.1428
+d:Eukaryota,p:SAR,c:Stramenopiles,o:uncultured	25.0000	3	28.0	74551	.00004024	.1071
+d:Eukaryota,p:Haptophyta,c:Pavlovophyceae,o:AA5F1	25.0000	3	28.0	74551	.00004024	.1071
+d:Eukaryota,p:Centrohelida,c:Pterocystis_sp._Oxford3,o:Pterocystis_sp._Oxford3		3	3	74551	.00004024	1.0000
+d:Eukaryota,p:Incertae_Sedis,c:Palustrimonas,o:Palustrimonas_yorkeensis	1.0000	2	3.0	74551	.00002682	.6666
+d:Eukaryota,p:Excavata,c:Metamonada,o:Parabasalia	1.0000	2	3.0	74551	.00002682	.6666
+d:Eukaryota,p:Excavata,c:Metamonada,o:Fornicata	1.0000	2	3.0	74551	.00002682	.6666
+d:Eukaryota,p:Centrohelida,c:CV1-B1-93,o:metagenome	1.0000	2	3.0	74551	.00002682	.6666
+d:Eukaryota,p:Centrohelida,c:Acanthocystidae,o:Pterocystis	1.0000	2	3.0	74551	.00002682	.6666
+d:Eukaryota,p:Amoebozoa,c:uncultured,o:metagenome	1.0000	2	3.0	74551	.00002682	.6666
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:Apusomonas	2.0000	2	4.0	74551	.00002682	.5000
+d:Eukaryota,p:Incertae_Sedis,c:Ancyromonadida,o:Ancyromonas	3.0000	2	5.0	74551	.00002682	.4000
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Chroomonas	5.0000	2	7.0	74551	.00002682	.2857
+d:Eukaryota,p:Amoebozoa,c:Discosea,o:uncultured_marine_eukaryote	5.0000	2	7.0	74551	.00002682	.2857
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Rhodomonas	7.0000	2	9.0	74551	.00002682	.2222
+d:Bacteria,p:Cyanobacteria,c:Oxyphotobacteria,o:Chloroplast	7.0000	2	9.0	74551	.00002682	.2222
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:uncultured_eukaryote	8.0000	2	10.0	74551	.00002682	.2000
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Filasterea	10.0000	2	12.0	74551	.00002682	.1666
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Proteomonas	10.0000	2	12.0	74551	.00002682	.1666
+d:Eukaryota,p:SAR,c:Alveolata,o:Incertae_Sedis	11.0000	2	13.0	74551	.00002682	.1538
+d:Eukaryota,p:Incertae_Sedis,c:Breviatea,o:Subulatomonas	13.0000	2	15.0	74551	.00002682	.1333
+d:Eukaryota,p:NAMAKO-1,c:uncultured_eukaryote,o:uncultured_eukaryote		2	2	74551	.00002682	1.0000
+d:Eukaryota,p:Haptophyta,c:Pavlovophyceae,o:Pavlova		2	2	74551	.00002682	1.0000
+d:Eukaryota,p:Amoebozoa,c:Schizoplasmodiida,o:Nematostelium		2	2	74551	.00002682	1.0000
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Lamproderma		2	2	74551	.00002682	1.0000
+d:Eukaryota,p:Amoebozoa,c:Fractovitelliida,o:Soliformovum		2	2	74551	.00002682	1.0000
+d:Archaea,p:Hadesarchaeaeota,c:uncultured_archaeon,o:uncultured_archaeon		2	2	74551	.00002682	1.0000
+d:Archaea,p:Euryarchaeota,c:Thermoplasmata,o:uncultured		2	2	74551	.00002682	1.0000
+d:Eukaryota,p:Centrohelida,c:uncultured_eukaryote,o:uncultured_eukaryote	24.0000	2	26.0	74551	.00002682	.0769
+d:Archaea,p:Euryarchaeota,c:Thermoplasmata,o:Marine_Group_II	68.0000	2	70.0	74551	.00002682	.0285
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:Phaeocystis	195.0000	2	197.0	74551	.00002682	.0101
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured_marine_dinoflagellate	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:SA1-3C06,c:uncultured_marine_cryptophyte,o:uncultured_marine_cryptophyte	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Opisthokonta,c:Aphelidea,o:uncultured_fungus	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Incertae_Sedis,c:Mantamonas,o:Mantamonas_plastica	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Incertae_Sedis,c:Breviatea,o:Breviata	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:metagenome	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Haptophyta,c:T58,o:uncultured_marine_haptophyte	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Cryptophyceae,c:uncultured,o:uncultured_marine_eukaryote	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Cryptophyceae,c:Kathablepharidae,o:Hatena	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:uncultured_cryptophyte	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Centrohelida,c:Incertae_Sedis,o:Spiculophrys	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Centrohelida,c:H1-10,o:uncultured_eukaryote	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Amoebozoa,c:Schizoplasmodiida,o:uncultured_Amoebozoa	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:Amoebozoa,c:Incertae_Sedis,o:metagenome	1.0000	1	2.0	74551	.00001341	.5000
+d:Bacteria,p:Firmicutes,c:Erysipelotrichia,o:Erysipelotrichales	1.0000	1	2.0	74551	.00001341	.5000
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured_alveolate	2.0000	1	3.0	74551	.00001341	.3333
+d:Eukaryota,p:SAR,c:Alveolata,o:Dinophyceae_sp._Bullet	2.0000	1	3.0	74551	.00001341	.3333
+d:Eukaryota,p:Cryptophyceae,c:Kathablepharidae,o:Katablepharis	2.0000	1	3.0	74551	.00001341	.3333
+d:Eukaryota,p:Centrohelida,c:Acanthocystidae,o:Choanocystis	2.0000	1	3.0	74551	.00001341	.3333
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Compsopogonales	2.0000	1	3.0	74551	.00001341	.3333
+d:Eukaryota,p:uncultured,c:uncultured_marine_eukaryote,o:uncultured_marine_eukaryote	3.0000	1	4.0	74551	.00001341	.2500
+d:Eukaryota,p:Opisthokonta,c:Aphelidea,o:uncultured	3.0000	1	4.0	74551	.00001341	.2500
+d:Eukaryota,p:Amoebozoa,c:Protosporangiida,o:Protosporangiidae	3.0000	1	4.0	74551	.00001341	.2500
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Hyphochytriomycetes	4.0000	1	5.0	74551	.00001341	.2000
+d:Eukaryota,p:Opisthokonta,c:Aphelidea,o:Paraphelidium	4.0000	1	5.0	74551	.00001341	.2000
+d:Archaea,p:Crenarchaeota,c:Bathyarchaeia,o:uncultured_archaeon	4.0000	1	5.0	74551	.00001341	.2000
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:uncultured_eukaryote	5.0000	1	6.0	74551	.00001341	.1666
+d:Eukaryota,p:Centrohelida,c:H15-6,o:uncultured_eukaryote	6.0000	1	7.0	74551	.00001341	.1428
+d:Eukaryota,p:Incertae_Sedis,c:Telonema,o:uncultured_Telonemida	7.0000	1	8.0	74551	.00001341	.1250
+d:Eukaryota,p:Incertae_Sedis,c:Rigifilida,o:Rigifila		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Incertae_Sedis,c:Palpitomonas,o:Palpitomonas_bilix		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Incertae_Sedis,c:Ancyromonadida,o:uncultured_freshwater_eukaryote		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Incertae_Sedis,c:Ancyromonadida,o:metagenome		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Cryptophyceae,c:uncultured,o:eukaryotic_picoplankton_environmental_sample		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:Goniomonas_sp._SH-6		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:Goniomonas_pacifica		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:uncultured		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Centrohelida,c:M1-18D08,o:uncultured_marine_eukaryote		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Porphyridiophyceae		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Amoebozoa,c:Protosteliida,o:metagenome		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Amoebozoa,c:Protosteliida,o:Colobanthus_quitensis		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Amoebozoa,c:Dictyostelia,o:Acytostelium		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Amoebozoa,c:Cavosteliida,o:metagenome		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Amoebozoa,c:Archamoebae,o:Incertae_Sedis		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Amoebozoa,c:Archamoebae,o:Entamoebida		1	1	74551	.00001341	1.0000
+d:Bacteria,p:Planctomycetes,c:Planctomycetacia,o:Pirellulales		1	1	74551	.00001341	1.0000
+d:Bacteria,p:Planctomycetes,c:Brocadiae,o:Brocadiales		1	1	74551	.00001341	1.0000
+d:Bacteria,p:Patescibacteria,c:WS6_(Dojkabacteria),o:uncultured_organism		1	1	74551	.00001341	1.0000
+d:Bacteria,p:Gemmatimonadetes,c:BD2-11_terrestrial_group,o:uncultured_bacterium		1	1	74551	.00001341	1.0000
+d:Archaea,p:Euryarchaeota,c:Thermococci,o:Methanofastidiosales		1	1	74551	.00001341	1.0000
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:Isochrysidales	9.0000	1	10.0	74551	.00001341	.1000
+d:Eukaryota,p:Picozoa,c:uncultured_phototrophic_eukaryote,o:uncultured_phototrophic_eukaryote	13.0000	1	14.0	74551	.00001341	.0714
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-8	16.0000	1	17.0	74551	.00001341	.0588
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-7	17.0000	1	18.0	74551	.00001341	.0555
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:uncultured_marine_eukaryote	23.0000	1	24.0	74551	.00001341	.0416
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:marine_metagenome	28.0000	1	29.0	74551	.00001341	.0344
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Hemiselmis	40.0000	1	41.0	74551	.00001341	.0243
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-4	169.0000	1	170.0	74551	.00001341	.0058
+d:Eukaryota,p:uncultured_marine_eukaryote,c:uncultured_marine_eukaryote,o:uncultured_marine_eukaryote	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:uncultured_dinoflagellate,c:uncultured_dinoflagellate,o:uncultured_dinoflagellate	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:uncultured_marine_eukaryote	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:uncultured_eukaryote	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:Opalinata		0	0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-6	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-24	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-23	7.0000	0	7.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-22	5.0000	0	5.0	74551	0	0
+d:Eukaryota,p:SAR,c:Stramenopiles,o:MAST-2	12.0000	0	12.0	74551	0	0
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured_marine_alveolate	3.0000	0	3.0	74551	0	0
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured_eukaryote	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:SAR,c:Alveolata,o:uncultured_dinoflagellate	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:SAR,c:Alveolata,o:Acavomonidia	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:SA1-3C06,c:uncultured_eukaryote,o:uncultured_eukaryote	5.0000	0	5.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:uncultured_rhodophyte,o:uncultured_rhodophyte		0	0	74551	0	0
+d:Eukaryota,p:Picozoa,c:uncultured_picobiliphyte,o:uncultured_picobiliphyte	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:uncultured_eukaryote,o:uncultured_eukaryote	6.0000	0	6.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:uncultured_biliphyte,o:uncultured_biliphyte	7.0000	0	7.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:Picomonadida,o:uncultured_phototrophic_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Picozoa,c:Picomonadida,o:uncultured_marine_eukaryote	10.0000	0	10.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:Picomonadida,o:uncultured_eukaryote	35.0000	0	35.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:Picomonadida,o:uncultured_biliphyte	25.0000	0	25.0	74551	0	0
+d:Eukaryota,p:Picozoa,c:Picomonadida,o:Picomonadidae	21.0000	0	21.0	74551	0	0
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:metagenome		0	0	74551	0	0
+d:Eukaryota,p:Opisthokonta,c:Holozoa,o:Corallochytrea		0	0	74551	0	0
+d:Eukaryota,p:Opisthokonta,c:Aphelidea,o:Aphelidium	10.0000	0	10.0	74551	0	0
+d:Eukaryota,p:Opisthokonta,c:Aphelidea,o:Amoeboaphelidium_protococcarum	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Telonema,o:uncultured_Telonema	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Telonema,o:uncultured_syndiniales		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Telonema,o:uncultured_marine_eukaryote	24.0000	0	24.0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Rigifilida,o:Micronuclearia	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Rigifilida,o:metagenome		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Palpitomonas,o:uncultured_dinoflagellate		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Mantamonas,o:uncultured_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Breviatea,o:Pygsuia		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:Multimonas		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Apusomonadidae,o:Chelonemonas		0	0	74551	0	0
+d:Eukaryota,p:Incertae_Sedis,c:Ancyromonadida,o:uncultured_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:uncultured,o:uncultured_haptophyte		0	0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:T58,o:uncultured_eukaryote	177.0000	0	177.0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:uncultured	46.0000	0	46.0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Prymnesiophyceae,o:SGUH624	11.0000	0	11.0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Pavlovophyceae,o:uncultured_eukaryote	3.0000	0	3.0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Pavlovophyceae,o:Rebecca		0	0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Pavlovophyceae,o:Diacronema	4.0000	0	4.0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Pav3,o:uncultured_eukaryote	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Haptophyta,c:Haptophyceae_sp._EE-2014,o:Haptophyceae_sp._EE-2014	8.0000	0	8.0	74551	0	0
+d:Eukaryota,p:Excavata,c:metagenome,o:metagenome		0	0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:uncultured,o:uncultured_Proteomonas	3.0000	0	3.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:uncultured,o:uncultured_Goniomonas	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:uncultured,o:uncultured_freshwater_eukaryote	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:uncultured,o:uncultured_eukaryote	12.0000	0	12.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Kathablepharidae,o:Leucocryptos	47.0000	0	47.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:uncultured_microeukaryote	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:Goniomonas_sp._SH-8		0	0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:Goniomonas_sp._ATCC_50108		0	0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Goniomonas,o:Goniomonas_amphinema		0	0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Hanusia	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Guillardia		0	0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Geminigera	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Cryptophyceae,c:Cryptomonadales,o:Chroomonas_sp._M0851		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:Raphidiophryidae,o:Raphidiophrys		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:metagenome,o:metagenome	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:Heterophryidae,o:uncultured_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:Heterophryidae,o:metagenome	4.0000	0	4.0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:Heterophryidae,o:Heterophrys		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:H26-1,o:uncultured_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:H15-6,o:Choanocystis_symna	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:H15-6,o:Choanocystis_sp._Oxford	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:H1-10,o:metagenome		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:CV1-B1-93,o:uncultured_centroheliozoan		0	0	74551	0	0
+d:Eukaryota,p:Centrohelida,c:Acanthocystidae,o:uncultured_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Archaeplastida,c:Rhodophyceae,o:Stylonematales	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Archaeplastida,c:Glaucophyta,o:Glaucocystis		0	0	74551	0	0
+d:Eukaryota,p:Archaeplastida,c:Glaucophyta,o:Cyanoptyche	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:uncultured,o:uncultured_Amoebozoa		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Tubulinea,o:metagenome		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Tubulinea,o:Incertae_Sedis		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Schizoplasmodiida,o:Phalansterium	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Schizoplasmodiida,o:Ceratiomyxella		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Protosteliida,o:Protostelium		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Protosteliida,o:Planoprotostelium		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Protophysarum		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Physarum	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Physarella	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Meriderma		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Didymium	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Comatricha		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Badhamia		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Myxogastria,o:Amaurochaete		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Mycamoeba,o:metagenome		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Mycamoeba,o:Amoebozoa_sp._amCP10		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Incertae_Sedis,o:Luapeleamoeba		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Incertae_Sedis,o:Ischnamoeba		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Incertae_Sedis,o:Dictyamoeba	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Incertae_Sedis,o:Arboramoeba	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Gracilipodida,o:Telaepolella	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Gracilipodida,o:soil_amoeba_AND16	1.0000	0	1.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Gracilipodida,o:Heliamoeba		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Gracilipodida,o:Filamoeba		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Discosea,o:Mayorella_sp._JJP-2003		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Dictyostelia,o:Polysphondylium	3.0000	0	3.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Dictyostelia,o:Dictyostelium	3.0000	0	3.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Cavosteliida,o:uncultured_eukaryote		0	0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Cavosteliida,o:Schizoplasmodiopsis	2.0000	0	2.0	74551	0	0
+d:Eukaryota,p:Amoebozoa,c:Cavosteliida,o:Gephyramoeba_sp._ATCC50654	1.0000	0	1.0	74551	0	0
+d:Bacteria,p:Tenericutes,c:Mollicutes,o:Mollicutes_Incertae_Sedis	1.0000	0	1.0	74551	0	0
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Rickettsiales		0	0	74551	0	0
+d:Bacteria,p:Proteobacteria,c:Alphaproteobacteria,o:Acetobacterales		0	0	74551	0	0
+d:Bacteria,p:Nitrospirae,c:4-29-1,o:uncultured_bacterium		0	0	74551	0	0
+d:Bacteria,p:Latescibacteria,c:Latescibacteria,o:Latescibacterales		0	0	74551	0	0
+d:Bacteria,p:Firmicutes,c:Clostridia,o:MBA03		0	0	74551	0	0
+d:Bacteria,p:Firmicutes,c:Bacilli,o:Bacillales	1.0000	0	1.0	74551	0	0
+d:Bacteria,p:BRC1,c:uncultured_organism,o:uncultured_organism		0	0	74551	0	0
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Flavobacteriales	1.0000	0	1.0	74551	0	0
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Chitinophagales	1.0000	0	1.0	74551	0	0
+d:Bacteria,p:Bacteroidetes,c:Bacteroidia,o:Bacteroidales		0	0	74551	0	0
+d:Archaea,p:Thaumarchaeota,c:Marine_Benthic_Group_A,o:uncultured_crenarchaeote		0	0	74551	0	0
+d:Archaea,p:Nanoarchaeaeota,c:Woesearchaeia,o:uncultured_euryarchaeote	1.0000	0	1.0	74551	0	0
+d:Archaea,p:Hydrothermarchaeota,c:uncultured_archaeon,o:uncultured_archaeon		0	0	74551	0	0
+d:Archaea,p:Euryarchaeota,c:Methanomicrobia,o:Methanosarcinales		0	0	74551	0	0
+d:Archaea,p:Asgardaeota,c:Odinarchaeia,o:uncultured_crenarchaeote	1.0000	0	1.0	74551	0	0
+d:Archaea,p:Asgardaeota,c:Odinarchaeia,o:uncultured_archaeon		0	0	74551	0	0
+d:Archaea,p:Altiarchaeota,c:Altiarchaeia,o:Candidatus_Altiarchaeales_archaeon_IMC4		0	0	74551	0	0
