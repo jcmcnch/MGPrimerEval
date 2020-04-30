@@ -4,12 +4,12 @@ CUTOFF = config["cutoff"]
 rule all:
 	input:
 		expand("{study}.EUK.pdf", study=config["study"]),
-		#expand("classify-workflow-intermediate/01-mismatches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
-		#expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
+		expand("classify-workflow-intermediate/01-mismatches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
+		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		#only one target necessary for phytoRef because mismatches and matches are classified in a single rule (no subsampling)
-		#expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.BACT-CYANO.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-PhytoRef.tax", sample=config["samples"], study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
-
+		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.BACT-CYANO.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-PhytoRef.tax", sample=config["samples"], study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		expand("classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
+		expand("classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.headers.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
@@ -266,6 +266,24 @@ rule summarize_mismatch_info:
 	shell:
 		"paste {input} > {output.pastedSummaries} ; "
 		"scripts/mismatch-characterization/summarize-taxa-mismatches.py {output.pastedSummaries} > {output.comparisonOutput}"
+
+#greater than 50 total mismatches AND > 5% of total sequences mismatched for that taxon
+rule get_taxa_with_many_mismatches:
+	input:
+		"output-classify-workflow/{study}.{group}.{primer}.0-mismatch.summary.tsv"
+	output:
+		"classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.txt"	
+	shell:
+		"./scripts/printTaxaIfGt5pcMismatch100obs.py {input} > {output}"	
+
+rule get_fastq_headers_for_mismatched_taxa:
+	input:
+		taxa="classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.txt",
+		taxtable="classify-workflow-intermediate/05-tax-table/{study}.{group}.{primer}.0-mismatch.nohits.all.order.counts.taxtable"
+	output:
+		"classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.headers.tsv"
+	shell:
+		"grep -f {input.taxa} {input.taxtable} | cut -f1-2 > {output} || touch {output}"
 
 rule generate_barplot_input:
 	input:
