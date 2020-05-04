@@ -3,18 +3,40 @@ CUTOFF = config["cutoff"]
 
 rule all:
 	input:
+		expand("{study}.EUK.pdf", study=config["study"]),
 		expand("classify-workflow-intermediate/01-mismatches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax", sample=config["samples"], study=config["study"], group=["ARCH","BACT-NON-CYANO","EUK"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		#only one target necessary for phytoRef because mismatches and matches are classified in a single rule (no subsampling)
 		expand("classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.BACT-CYANO.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-PhytoRef.tax", sample=config["samples"], study=config["study"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"], direction=['fwd','rev']),
 		expand("classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
-		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
-		expand("output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
-		expand("output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.2mm.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
-		expand("output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.2mm.pdf", study=config["study"], group=config["groups"], primer=config["primer"]),
+		expand("classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.headers.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
+		expand("output-classify-workflow/overall-summaries/{study}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
+		expand("output-classify-workflow/overall-summaries/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv", sample=config["samples"], study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
+		expand("output-classify-workflow/overall-summaries/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.tsv", study=config["study"], group=config["groups"], primer=config["primer"]),
+		expand("output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.{mismatches}.pdf", study=config["study"], group=config["groups"], primer=config["primer"], mismatches=["0-mismatch", "1-mismatch", "2-mismatch"]),
 		expand("output-classify-workflow/summary-mismatch-overlap-primer-pairs/{study}.{group}.{primer_pair}.avgCase.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/pasted-summaries/{study}.{group}.{primer_pair}.pasted.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"]),
 		expand("output-classify-workflow/normalized-summaries/{study}.{group}.{primer_pair}.normalized.tsv", primer_pair=config["primer_pairs"], study=config["study"], group=config["groups"])
+
+#this rule assumes your compute pipeline is done! remove and rerun if you add more samples to your pipeline
+rule concatenate_compute_results:
+	output:
+		"{study}.compute-results.tsv"
+	shell:
+		"find ./compute-workflow-intermediate/09-summary/ -type f -name \"*.tsv\" -print0 | xargs -0 cat > {output}"
+
+rule plot_compute_results:
+	input:
+		"{study}.compute-results.tsv"
+	params:
+		"{study}"
+	output:
+		"{study}.EUK.pdf",
+		"{study}.BACT-NON-CYANO.pdf",
+		"{study}.BACT-CYANO.pdf",
+		"{study}.ARCH.pdf"
+	script:
+		"scripts/plot-individual-primers.R"
 
 rule classify_mismatches:
 	input:
@@ -182,7 +204,7 @@ rule count_total_filtered_hits:
 	output:
 		"classify-workflow-intermediate/08-total-filtered-seqs/{study}.{group}.{primer}.{mismatches}.totalFilteredSeqs.tsv"
 	shell:
-		"totalFilteredSeqs=`cat {input}/{wildcards.primer}/{wildcards.mismatches}/SRR*{wildcards.group}*filtered.fastq | grep -c \"^@\"` || totalFilteredSeqs=0 ; "
+		"totalFilteredSeqs=`cat {input}/{wildcards.primer}/{wildcards.mismatches}/*{wildcards.group}*filtered.fastq | grep -c \"^@\"` || totalFilteredSeqs=0 ; "
 		"printf \"{wildcards.primer}.{wildcards.group}.{wildcards.mismatches}\t$totalFilteredSeqs\n\" >> {output}"
 
 #identify target taxonomies to quantify; choose only the abundant things
@@ -204,7 +226,7 @@ rule compute_frac_mismatched:
 		normalized="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.normalized.tsv", #Subsampled hits normalized by total
 		counts="classify-workflow-intermediate/05-tax-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.tsv" #mismatched hits
 	output:
-		"output-classify-workflow/{study}.{group}.{primer}.{mismatches}.summary.tsv" #A summary file that tells how quantitatively significant the mismatches are for the group in question and for the whole dataset
+		"output-classify-workflow/overall-summaries/{study}.{group}.{primer}.{mismatches}.summary.tsv" #A summary file that tells how quantitatively significant the mismatches are for the group in question and for the whole dataset
 	shell:
 		"scripts/mismatch-characterization/compute-frac-mismatched.sh " #bash script that takes the 4 input arguments above
 		"{input.targets} {input.totalHits} {input.counts} {input.normalized} > {output}"
@@ -225,8 +247,8 @@ rule concatenate_info_files_mismatches:
 #Script requires pandas
 rule make_mismatch_alignments_and_summarize:
 	output:
-		summary="output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv",
-		mismatchAlignment="output-classify-workflow/{study}.{group}.{primer}.{mismatches}.aln.fasta"
+		summary="output-classify-workflow/overall-summaries/{study}.{group}.{primer}.{mismatches}.aln.summary.tsv",
+		mismatchAlignment="output-classify-workflow/overall-summaries/{study}.{group}.{primer}.{mismatches}.aln.fasta"
 	input:
 		"classify-workflow-intermediate/10-concatenated-info-files/{study}.{group}.{primer}.{mismatches}.nohits.all.info"
 	shell:
@@ -235,39 +257,57 @@ rule make_mismatch_alignments_and_summarize:
 
 rule summarize_mismatch_info:
 	input:
-		"output-classify-workflow/{study}.{group}.{primer}.0-mismatch.summary.tsv",
-		"output-classify-workflow/{study}.{group}.{primer}.1-mismatch.summary.tsv",
-		"output-classify-workflow/{study}.{group}.{primer}.2-mismatch.summary.tsv"
+		"output-classify-workflow/overall-summaries/{study}.{group}.{primer}.0-mismatch.summary.tsv",
+		"output-classify-workflow/overall-summaries/{study}.{group}.{primer}.1-mismatch.summary.tsv",
+		"output-classify-workflow/overall-summaries/{study}.{group}.{primer}.2-mismatch.summary.tsv"
 	output:
-		pastedSummaries=temp("output-classify-workflow/{study}.{group}.{primer}.2mm.pasted.tsv"),
-		comparisonOutput="output-classify-workflow/{study}.{group}.{primer}.taxonFracMismatched.2mm.tsv"
+		pastedSummaries=temp("output-classify-workflow/{study}.{group}.{primer}.0-2mm.pasted.tsv"),
+		comparisonOutput="output-classify-workflow/overall-summaries/{study}.{group}.{primer}.taxonFracMismatched.0-2mm.tsv"
 	shell:
 		"paste {input} > {output.pastedSummaries} ; "
 		"scripts/mismatch-characterization/summarize-taxa-mismatches.py {output.pastedSummaries} > {output.comparisonOutput}"
 
+#greater than 50 total mismatches AND > 5% of total sequences mismatched for that taxon
+rule get_taxa_with_many_mismatches:
+	input:
+		"output-classify-workflow/overall-summaries/{study}.{group}.{primer}.0-mismatch.summary.tsv"
+	output:
+		"classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.txt"	
+	shell:
+		"./scripts/printTaxaIfGt5pcMismatch100obs.py {input} > {output}"	
+
+rule get_fastq_headers_for_mismatched_taxa:
+	input:
+		taxa="classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.txt",
+		taxtable="classify-workflow-intermediate/05-tax-table/{study}.{group}.{primer}.0-mismatch.nohits.all.order.counts.taxtable"
+	output:
+		"classify-workflow-intermediate/11-taxa-with-many-mismatches/{study}.{group}.{primer}.0-mismatch.gt50mm-and-5pcmismatched-taxa.headers.tsv"
+	shell:
+		"grep -f {input.taxa} {input.taxtable} | cut -f1-2 > {output} || touch {output}"
+
 rule generate_barplot_input:
 	input:
-                hits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.2-mismatch.hits.all.order.counts.normalized.tsv",
-                nohits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.2-mismatch.nohits.all.order.counts.normalized.tsv"		
+                hits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.hits.all.order.counts.normalized.tsv",
+                nohits="classify-workflow-intermediate/07-normalized-counts/{study}.{group}.{primer}.{mismatches}.nohits.all.order.counts.normalized.tsv"		
 	output:
-                "output-classify-workflow/plots/{study}.{group}.{primer}.barplot-input.tsv"
+                "output-classify-workflow/plots/{study}.{group}.{primer}.{mismatches}.barplot-input.tsv"
 	shell:
                 "scripts/mismatch-characterization/generate-barplot-input.py {input.hits} {input.nohits} {output} "
 
 rule make_tax_matchVSmismatch_barplots:
 	input:
-		"output-classify-workflow/plots/{study}.{group}.{primer}.barplot-input.tsv"
+		"output-classify-workflow/plots/{study}.{group}.{primer}.{mismatches}.barplot-input.tsv"
 	params:
 		"{study}.{group}.{primer}"
 	output:
-		"output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.2mm.pdf"
+		"output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.{mismatches}.pdf"
 	script:
 		"scripts/mismatch-characterization/make-taxa-barplots-match-vs-mismatch.R"
 
 #if a group has more than 10 reads in the summary, and represents at least 1% of the total mismatches, then print it out for further consideration
 rule filter_summary_taxa:
         input:
-                "output-classify-workflow/{study}.{group}.{primer}.0-mismatch.summary.tsv"
+                "output-classify-workflow/overall-summaries/{study}.{group}.{primer}.0-mismatch.summary.tsv"
 	output:
 		"output-classify-workflow/filtered-0-mismatches/{study}.{group}.{primer}.0-mismatch.gt1pc.gt10obs.tsv"
 	shell:
