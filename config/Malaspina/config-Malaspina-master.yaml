@@ -4,20 +4,20 @@ cutoff: 0.01
 study: Malaspina_Acinas_2019
 
 primer:
-  #926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
-  #806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
-  #515Y : "GTGYCAGCMGCCGCGGTAA"
+  926R : "AAACTYAAAKRAATTGRCGG" #reverse complement
+  806RB : "ATTAGAWACCCBNGTAGTCC" #reverse complement
+  515Y : "GTGYCAGCMGCCGCGGTAA"
   V4F : "CCAGCASCYGCGGTAATTCC"
-  #V4R : "TYRATCAAGAACGAAAGT"
-  #V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
-  #338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
-  #341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
-  #785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
-  #27F : "AGRGTTTGATYMTGGCTCAG"
-  #1389F : "TTGTACACACCGCCC"
-  #1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
-  #926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
-  #1392R : "GYACACACCGCCCGT" #Chénard et al 2019
+  V4R : "TYRATCAAGAACGAAAGT"
+  V4RB : "YYRATCAAGAACGAAAGT" #reverse complement
+  338R : "ACWCCTACGGGWGGCWGCA" #reverse complement
+  341F : "CCTACGGGNGGCWGCAG" #2-mismatch already present in Sulfolobus reference SSU rRNA positions 367, 371 so not a truly Prokaryotic primer
+  785R : "GGATTAGATACCCBDGTAGTC" #reverse complement, perfect match to reference
+  27F : "AGRGTTTGATYMTGGCTCAG"
+  1389F : "TTGTACACACCGCCC"
+  1510R : "GTAGGTGAACCTGCRGAAGG" #reverse complement
+  926wF : "AAACTYAAAKGAATTGRCGG" #Chénard et al 2019
+  1392R : "GYACACACCGCCCGT" #Chénard et al 2019
 
 primer_pairs:
 
