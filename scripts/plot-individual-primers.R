@@ -23,8 +23,8 @@ ylabelBACT = paste("Coverage of ", strDatasetName, " SSU rRNA (Bacteria)",sep=""
 ylabelCYANO = paste("Coverage of ", strDatasetName, " SSU rRNA (Cyano + plastid)",sep="")
 ylabelARCH = paste("Coverage of ", strDatasetName, " SSU rRNA (Archaea)",sep="")
 
-
-p <- ggplot(euk.all, aes(x=V4, y=V9, fill=V5)) +
+#Euks (18S)
+p <- ggplot(na.omit(euk.all), aes(x=V4, y=V9, fill=V5)) +
 geom_boxplot() + labs(x="Primer", y=ylabelEUK, fill="Mismatches") +
 facet_grid(. ~ V10, scales="free")
 p<-p+scale_y_continuous(breaks=seq(0,1,0.1))
@@ -55,7 +55,7 @@ bact.all$V10[bact.all$V4=="785R"] <- "V3-V4"
 bact.all$V10[bact.all$V4=="926wF"] <- "V6-V8"
 bact.all$V10[bact.all$V4=="1392R"] <- "V6-V8"
 
-p <- ggplot(bact.all, aes(x=V4, y=V9, fill=V5)) +
+p <- ggplot(na.omit(bact.all), aes(x=V4, y=V9, fill=V5)) +
 geom_boxplot() + labs(x="Primer", y=ylabelBACT, fill="Mismatches") +
 facet_grid(. ~ V10, scales="free")
 p<-p+scale_y_continuous(breaks=seq(0,1,0.1))
@@ -88,7 +88,7 @@ cyano.all$V10[cyano.all$V4=="1392R"] <- "V6-V8"
 cyano.all$V10[cyano.all$V4=="1389F"] <- "V9"
 cyano.all$V10[cyano.all$V4=="1510R"] <- "V9"
 
-p <- ggplot(cyano.all, aes(x=V4, y=V9, fill=V5)) +
+p <- ggplot(na.omit(cyano.all), aes(x=V4, y=V9, fill=V5)) +
 geom_boxplot() + labs(x="Primer", y=ylabelCYANO, fill="Mismatches") +
 facet_grid(. ~ V10, scales="free")
 p<-p+scale_y_continuous(breaks=seq(0,1,0.1))
@@ -115,7 +115,7 @@ arch.all$V10[arch.all$V4=="785R"] <- "V3-V4"
 arch.all$V10[arch.all$V4=="926wF"] <- "V6-V8"
 arch.all$V10[arch.all$V4=="1392R"] <- "V6-V8"
 
-p <- ggplot(arch.all, aes(x=V4, y=V9, fill=V5)) +
+p <- ggplot(na.omit(arch.all), aes(x=V4, y=V9, fill=V5)) +
 geom_boxplot() + labs(x="Primer", y=ylabelARCH, fill="Mismatches") +
 facet_grid(. ~ V10, scales="free")
 p<-p+scale_y_continuous(breaks=seq(0,1,0.1))
