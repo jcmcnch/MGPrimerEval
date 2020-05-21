@@ -33,7 +33,7 @@ rule concat_fwd_and_reverse_alignments:
 	output:
 		"{outdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	shell:
-		"zcat {input.fwd} {input.rev} > {output}"
+		"cat {input.fwd} {input.rev} > {output}"
 
 rule subset_to_primer_region:
 	input:
@@ -151,8 +151,8 @@ rule make_blast_dbs_16S:
 		expand("{{outdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
 	params:
 		filestem="{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
-	conda:
-		"envs/qiime1.yaml"
+#	conda:
+#		"envs/qiime1.yaml"
 	shell:
 		"makeblastdb -in {input} -dbtype nucl -out {params.filestem} ; touch {output}"
 
@@ -164,8 +164,8 @@ rule blast_MG_vs_tags:
 		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
 	params:
 		dbname="{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
-	conda:
-		"envs/qiime1.yaml"
+#	conda:
+#		"envs/qiime1.yaml"
 	shell:
 		"blastn -qcov_hsp_perc 100 -perc_identity {pcid} -outfmt 6 -query {input.query} -db {params.dbname} > {output}"
 
@@ -187,21 +187,25 @@ rule compare_MG_SSU_rRNA_with_ASVs:
 
 rule plot_ASV_vs_BLAST_results:
 	input:
-		"{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv"
+		"{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv",
+		"config/compare/GA03-GP13-sample-SRA.tsv"
 	params:
 		"{sample}"
 	output:
-		"{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg"
+		"{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg",
+		"{outdir}/07-MG-vs-ASV-stats/{sample}.PROK.nonzero.ASV.comparison.stats.tsv"
 	script:
 		"scripts/seaborn-plot-correlations.py"
 
 rule plot_ASV_vs_BLAST_results_log_scale:
 	input:
-		"{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv"
+		"{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv",
+                "config/compare/GA03-GP13-sample-SRA.tsv"
 	params:
 		"{sample}"
 	output:
-		"{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg"
+		"{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg",
+                "{outdir}/07-MG-vs-ASV-stats/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.stats.tsv"
 	script:
 		"scripts/seaborn-plot-correlations-log.py"
 
