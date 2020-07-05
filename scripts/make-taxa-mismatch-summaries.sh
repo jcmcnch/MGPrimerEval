@@ -19,7 +19,12 @@ for primer in 926R 806RB 515Y V4F V4R V4RB 341F 785R 27F 1389F 1510R ; do
 		
 			grep "$taxon" $input | cut -f1 > $output
 			
-			grep -f $output classify-workflow-intermediate/10-concatenated-info-files/*.$group.$primer.2-mismatch.nohits.all.info > $info
+			#add loop because grep -f takes forever and eats all of kraken's RAM!
+			while read line ; do
+
+				grep "$line" classify-workflow-intermediate/10-concatenated-info-files/*.$group.$primer.2-mismatch.nohits.all.info >> $info
+
+			done < $output
 
 			./scripts/make-mismatch-alignments-and-summarize.py --info $info --alignmentout output-classify-workflow/taxa-mismatch-summaries/$study.$group.$primer.$cleantaxon.ali.fasta --summaryout output-classify-workflow/taxa-mismatch-summaries/$study.$group.$primer.$cleantaxon.summary.tsv 
 
@@ -28,4 +33,3 @@ for primer in 926R 806RB 515Y V4F V4R V4RB 341F 785R 27F 1389F 1510R ; do
 	done
 
 done
-
