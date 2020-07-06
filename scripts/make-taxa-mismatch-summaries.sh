@@ -3,6 +3,11 @@
 #any old pandas-containing environment will do
 source activate opedia-env
 
+#cleanup previous failed runs, if files exist
+rm classify-workflow-intermediate/11-taxa-with-many-mismatches/*info
+rm classify-workflow-intermediate/11-taxa-with-many-mismatches/*ids
+rm -rf output-classify-workflow/taxa-mismatch-summaries
+
 mkdir -p output-classify-workflow/taxa-mismatch-summaries
 
 for primer in 926R 806RB 515Y V4F V4R V4RB 341F 785R 27F 1389F 1510R ; do
