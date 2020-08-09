@@ -93,7 +93,7 @@ primerROI:
   BACT-CYANO:
     515Y: [494, 512]
     806RB : [766, 785]
-    926R: [867, 906]
+    926R: [887, 906]
     V4F : [497, 516] #4-mismatch to ref
     V4RB : [732, 749] #Many mismatch to ref 
     V4R : [732, 749]
