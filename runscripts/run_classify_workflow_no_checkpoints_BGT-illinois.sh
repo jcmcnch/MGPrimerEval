@@ -19,7 +19,7 @@ done
 
 for item in config/BioGEOTRACES/subsetted-illinois/*; do
 
-	snakemake --snakefile Snakefile-classify.smk  --configfile $item --use-conda --cores $cores --until reclassify_cyano_fraction_phytoRef
+	snakemake --snakefile Snakefile-classify.smk  --configfile $item --use-conda --cores $cores --until classify_cyano_fraction_phytoRef
 
 done
 

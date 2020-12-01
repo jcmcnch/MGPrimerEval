@@ -22,7 +22,7 @@ done
 for item in config/TARA-gt3uM/subsetted/*; do
 
 	echo $item
-	#snakemake --snakefile Snakefile-classify.smk  --configfile $item --use-conda --cores $cores --until reclassify_cyano_fraction_phytoRef
+	#snakemake --snakefile Snakefile-classify.smk  --configfile $item --use-conda --cores $cores --until classify_cyano_fraction_phytoRef
 
 done
 
