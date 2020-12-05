@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash -i
 
 #any old pandas-containing environment will do
-source activate opedia-env
+conda activate opedia-env
 
 #cleanup previous failed runs, if files exist
 rm classify-workflow-intermediate/11-taxa-with-many-mismatches/*info
