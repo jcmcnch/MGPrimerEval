@@ -35,6 +35,8 @@ rule plot_compute_results:
 		"{study}.BACT-NON-CYANO.pdf",
 		"{study}.BACT-CYANO.pdf",
 		"{study}.ARCH.pdf"
+	conda:
+		"envs/ggplot2.yaml"
 	script:
 		"scripts/plot-individual-primers.R"
 
@@ -299,6 +301,8 @@ rule make_tax_matchVSmismatch_barplots:
 		"output-classify-workflow/plots/{study}.{group}.{primer}.{mismatches}.barplot-input.tsv"
 	params:
 		"{study}.{group}.{primer}"
+	conda:
+		"envs/ggplot2.yaml"
 	output:
 		"output-classify-workflow/plots/matchVSmismatch-barplots/{study}.{group}.{primer}.taxonFracMismatched.{mismatches}.pdf"
 	script:
