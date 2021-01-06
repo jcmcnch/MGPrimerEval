@@ -1,2 +1,0 @@
-d:Archaea,p:Euryarchaeota,c:Thermoplasmata,o:Marine_Group_II	.00144009
-d:Archaea,p:Thaumarchaeota,c:Nitrososphaeria,o:Nitrosopumilales	.00053489
