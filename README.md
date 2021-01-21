@@ -24,17 +24,16 @@ I usually make a new folder for each new dataset I'm analyzing to keep things or
 
 `git clone git@github.com:jcmcnch/MGPrimerEval.git MGPrimerEval-tutorial`
 
-1. Now, once you `cd` into the folder, everything is set up for you. You just need to add data into the folder `intermediate/compute-workflow-intermediate/00-fastq/`. You can use your own data, or if you'd like you can clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into the tutorial folder, install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) and use the template script `tutorial/download-BGT.sh` to download a small subset of the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176). *Keep in mind, this is still a lot of data! Maybe do it on a work server, not your home network unless you have unlimited bandwidth.*
-2. Create a configuration file from a template. One is provided for this tutorial, but you might do it as follows: bash munging. *Make sure to modify it to suit your needs*. You can add/remove primers as you see fit, and you should put in the appropriate suffixes.
-3. Install Snakemake (give link; note has not been tested on Windows)
-4. Activate environment (assume snakemake-env)
-5. Now you can run it simply with the following commands:
-6. If you are running into issues with DAG generation taking a long time.
+1. Now, `cd` into the folder. If you have data to play with, add it into the folder `intermediate/compute-workflow-intermediate/00-fastq/`. If not, clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into the tutorial folder (you should now see a `ena-fast-download` subfolder), install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) (which is a way to download things *very fast*) and use the script `./tutorial/download-BGT.sh` to download a small subset of the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176). The script will also put the files into the right spot. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
+2. The next step is to set up your configuration file for snakemake to read so it knows what samples to analyze. If you're using the BioGEOTRACES data, there is already a configuration file in `config/tutorial/config.yaml`. If not, you can use the template at `config/config-template.yaml`. *Make sure to modify it to suit your needs*. You can add/remove primers as you see fit (just comment them out for example), and you should put in the appropriate suffixes for your data (i.e. what should be stripped off to get te sample name), and also the read lengths for your data (e.g. base pairs per read).
+3. Before you run snakemake, you'll have to activate the conda environment i.e. `source activate snakemake-env`.
+3. Now, run the compute step (upon which the other two modules depend) as follows if you downloaded the tutorial data: `snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml`. Snakemake will now automagically install all software dependencies and should begin cranking out data.
+If you are running into issues with DAG generation taking a long time.
 
 Known issues:
 
+* If you are running into issues with DAG generation (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is) taking a long time, especially if you have a *lot* of samples, you might need to subset your workflow. This may be fixed in newer versions of snakemake, but was an issue for me about a year ago. You can find some examples of how to do so in the `runscripts` folder.
 * bbmap/bbsplit steps sometimes can hang under situations of high RAM use. In this case, just CTRL-C and restart your workflow.
 
-This is a snakemake pipeline that determines primer mismatches to SSU rRNA in metagenomic data. It can be customized with whatever primer sequence you want to put in (just change the config.yaml file), you just need to make sure to reverse complement the reverse primer. You'll probably also have to customize the "00-fastq" file input unless you have the exact same input format.
-
+A visual demonstration of the compute module:
 ![Rule graph for initial (Snakefile-compute.smk) steps](https://github.com/jcmcnch/MGPrimerEval/blob/master/images/Snakefile-compute.svg)
