@@ -1,4 +1,7 @@
 readLength=config["readLength"]
+readlimit=config["readlimit"]
+suffixR1=config["suffixR1"]
+suffixR2=config["suffixR2"]
 
 rule all:
 	input:
@@ -31,19 +34,21 @@ rule phyloFlash_sift:
 		R2hits="compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
 	params:
 		workdir="compute-workflow-intermediate/tmp/",
-		phyloFlash_other="compute-workflow-intermediate/02-phyloFlash_sifted/phyloFlash-other/"
+		phyloFlash_other="compute-workflow-intermediate/02-phyloFlash_sifted/phyloFlash-other/",
+		readlimit=readlimit
 	threads:
 		8
 	conda:
 		"envs/phyloflash-env.yaml"
 	shell:
-		"""
-		mkdir -p {params.phyloFlash_other} ; mkdir -p {params.workdir} ; cd {params.workdir} ;
-		phyloFlash.pl -lib {wildcards.sample} -read1 ../../{input.R1clean} -read2 ../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength {readLength} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
-		mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../{output.R1hits} ;
-		mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../{output.R2hits} ;
-		mv {wildcards.sample}* ../../{params.phyloFlash_other}
-		"""
+                """
+                mkdir -p {params.phyloFlash_other} ; mkdir -p {params.workdir} ; cd {params.workdir} ;
+                phyloFlash.pl -readlimit {params.readlimit} -lib {wildcards.sample} -read1 ../../{input.R1clean} -read2 ../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength {readLength} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
+                mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../{output.R1hits} ;
+                mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../{output.R2hits} ;
+                mv {wildcards.sample}* ../../{params.phyloFlash_other}
+                """
+
 
 rule remove_repeats_komplexity:
 	input:
