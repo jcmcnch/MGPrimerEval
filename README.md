@@ -14,21 +14,20 @@ We have described the results of this analysis already for oceanic ecosystems (s
 
 ### Input Requirements:
 
-The only thing you need are raw, *unassembled* paired-end meta'omics data. The compute step by default limits the number of retrieved SSU rRNA per sample to 1 million, but you can tweak this if you'd like to get more data back.
+The only thing you need are raw, *unassembled* paired-end meta'omics data. The pipeline will extract SSU rRNA and analyze them automatically from your data. By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
 
 ### Tutorial
 
-I'm going to assume you're familiar with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like screen or tmux to keep a persistent session alive. I'll also assume you've followed the [snakemake install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) with the small difference that my conda environment for snakemake is `snakemake-env` not `snakemake` as found in the install instructions.
+I'm going to assume you're familiar with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like screen or tmux to keep a persistent session alive. I'll also assume you've followed the [snakemake install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) with the small difference that my conda environment for snakemake is `snakemake-env` not `snakemake`.
 
 I usually make a new folder for each new dataset I'm analyzing to keep things organized. For the purposes of this tutorial, let's download the repo into a folder called `MGPrimerEval-tutorial` as follows:
 
 `git clone git@github.com:jcmcnch/MGPrimerEval.git MGPrimerEval-tutorial`
 
 1. Now, `cd` into the folder. If you have data to play with, add it into the folder `intermediate/compute-workflow-intermediate/00-fastq/`. If not, clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into the tutorial folder (you should now see a `ena-fast-download` subfolder), install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) (which is a way to download things *very fast*) and use the script `./tutorial/download-BGT.sh` to download a small subset of the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176). The script will also put the files into the right spot. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
-2. The next step is to set up your configuration file for snakemake to read so it knows what samples to analyze. If you're using the BioGEOTRACES data, there is already a configuration file in `config/tutorial/config.yaml`. If not, you can use the template at `config/config-template.yaml`. *Make sure to modify it to suit your needs*. You can add/remove primers as you see fit (just comment them out for example), and you should put in the appropriate suffixes for your data (i.e. what should be stripped off to get te sample name), and also the read lengths for your data (e.g. base pairs per read).
+2. The next step is to set up your configuration file for snakemake to read so it knows what samples to analyze. If you're using the BioGEOTRACES data, there is already a configuration file in `config/tutorial/config.yaml`. If not, you can use the template at `config/config-template.yaml`. *Make sure to modify it to suit your needs*. You can add/remove primers as you see fit (to remove existing primers, just comment them out from the config), and you should put in the appropriate suffixes for your data (i.e. what should be stripped off to get the sample name), and also the read lengths for your data (e.g. base pairs per read - this parameter is used by phyloFlash).
 3. Before you run snakemake, you'll have to activate the conda environment i.e. `source activate snakemake-env`.
-3. Now, run the compute step (upon which the other two modules depend) as follows if you downloaded the tutorial data: `snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml`. Snakemake will now automagically install all software dependencies and should begin cranking out data.
-If you are running into issues with DAG generation taking a long time.
+4. Now, run the compute step (upon which the other two modules depend) as follows if you downloaded the tutorial data: `snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml`. Snakemake will now automagically install all software dependencies and should begin cranking out data.
 
 Known issues:
 
