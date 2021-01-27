@@ -79,8 +79,8 @@ rule sort_EUK:
 		"cd {params.workdir} ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path=/home/db/bbsplit-db/EUK-PROK-bbsplit-db/ "
-		"in=../../{input} basename={input}_%.fastq ; "
-		"mv {input}*EUK*.fastq ../../{output.EUK}; mv {input}*PROK*.fastq ../../{output.PROK}"
+		"in=../../../{input} basename={input}_%.fastq ; "
+		"mv {input}*EUK*.fastq ../../../{output.EUK}; mv {input}*PROK*.fastq ../../../{output.PROK}"
 
 
 rule sort_PROK:
@@ -99,8 +99,8 @@ rule sort_PROK:
 		"cd {params.workdir} ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path=/home/db/bbsplit-db/BACT-ARCH-bbsplit-db/ "
-		"in=../../{input} basename={input}_%.fastq ; "
-		"mv {input}*ARCH*.fastq ../../{output.ARCH}; mv {input}*BACT*.fastq ../../{output.BACT}"
+		"in=../../../{input} basename={input}_%.fastq ; "
+		"mv {input}*ARCH*.fastq ../../../{output.ARCH}; mv {input}*BACT*.fastq ../../../{output.BACT}"
 
 
 rule sort_CYANO:
@@ -119,8 +119,8 @@ rule sort_CYANO:
 		"cd {params.workdir} ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path=/home/db/bbsplit-db/BACT-CYANO-bbsplit-db/ "
-		"in=../../{input} basename={input}_%.fastq ; "
-		"mv {input}*NON-CYANO*.fastq ../../{output.NONCYANO}; mv {input}*CYANO*.fastq ../../{output.CYANO}"
+		"in=../../../{input} basename={input}_%.fastq ; "
+		"mv {input}*NON-CYANO*.fastq ../../../{output.NONCYANO}; mv {input}*CYANO*.fastq ../../../{output.CYANO}"
 
 
 rule align_ARCH:
