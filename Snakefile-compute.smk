@@ -43,10 +43,10 @@ rule phyloFlash_sift:
 	shell:
                 """
                 mkdir -p {params.phyloFlash_other} ; mkdir -p {params.workdir} ; cd {params.workdir} ;
-                phyloFlash.pl -readlimit {params.readlimit} -lib {wildcards.sample} -read1 ../../{input.R1clean} -read2 ../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength {readLength} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
-                mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../{output.R1hits} ;
-                mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../{output.R2hits} ;
-                mv {wildcards.sample}* ../../{params.phyloFlash_other}
+                phyloFlash.pl -readlimit {params.readlimit} -lib {wildcards.sample} -read1 ../../../{input.R1clean} -read2 ../../../{input.R2clean} -dbhome /home/db/phyloFlash/132 -readlength {readLength} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
+                mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../../{output.R1hits} ;
+                mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../../{output.R2hits} ;
+                mv {wildcards.sample}* ../../../{params.phyloFlash_other}
                 """
 
 
