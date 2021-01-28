@@ -18,11 +18,11 @@ The only thing you need are raw, *unassembled* paired-end meta'omics data. The p
 
 ### Tutorial
 
-**These steps were tested on a remote server running Ubuntu 16.04.**
+**These steps were tested on a remote server running Ubuntu 16.04 in January 2021.**
 
 I'm going to assume you're familiar with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive. I'll also assume you've followed the [snakemake install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) with the small difference that my conda environment for snakemake is `snakemake-env` not `snakemake`.
 
-Our pipeline depends on open-source software, and leans heavily in particular on the wonderful [phyloFlash package](https://github.com/HRGV/phyloFlash/blob/master/README.md). Before running the tutorial, choose a sensible location for the database, clone their repository, run their download script (e.g. `./phyloFlash/phyloFlash_makedb.pl --remote`), and then provide the path where you downloaded the data to your configuration file (i.e. edit the line `phyloFlashDB: "/home/jesse/databases/phyloFlash` with your filepath).
+Our pipeline depends on open-source software, and leans heavily in particular on the wonderful [phyloFlash package](https://github.com/HRGV/phyloFlash/blob/master/README.md). Before running the tutorial, choose a sensible location for the database, install phyloFlash (`conda create -n pf sortmerna=2.1b phyloflash`), activate the environment (`conda activate pf`), run their download script in the sensible location (e.g. `phyloFlash_makedb.pl --remote`), and then provide the path where you downloaded the data to your configuration file (i.e. edit the line `phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/` with your filepath).
 
 I usually make a new folder for each new dataset I'm analyzing to keep things organized. For the purposes of this tutorial, let's download the repo into a folder called `MGPrimerEval-tutorial` as follows:
 
