@@ -22,6 +22,8 @@ The only thing you need are raw, *unassembled* paired-end meta'omics data. The p
 
 I'm going to assume you're familiar with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive. I'll also assume you've followed the [snakemake install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) with the small difference that my conda environment for snakemake is `snakemake-env` not `snakemake`.
 
+Our pipeline depends on open-source software, and leans heavily in particular on the wonderful [phyloFlash package](https://github.com/HRGV/phyloFlash/blob/master/README.md). Before running the tutorial, please follow their instructions for downloading the phyloFlash database (I believe what I did was install via conda and then run their database install perl script), and place the path where you downloaded the data into your configuration file (i.e. edit the line `phyloFlashDB: "/home/db/phyloFlash/132` with your filepath).
+
 I usually make a new folder for each new dataset I'm analyzing to keep things organized. For the purposes of this tutorial, let's download the repo into a folder called `MGPrimerEval-tutorial` as follows:
 
 `git clone git@github.com:jcmcnch/MGPrimerEval.git MGPrimerEval-tutorial`
