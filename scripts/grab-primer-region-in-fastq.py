@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.7
 
 """
 Code taken from user "Jon" on biostars, see: https://www.biostars.org/p/163928/
