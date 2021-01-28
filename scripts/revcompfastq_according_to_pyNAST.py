@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.7
 
 from Bio import SeqIO, Seq
 from Bio.Alphabet import generic_dna
