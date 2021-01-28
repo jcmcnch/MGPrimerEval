@@ -2,7 +2,7 @@ readLength=config["readLength"]
 readlimit=config["readlimit"]
 suffixR1=config["suffixR1"]
 suffixR2=config["suffixR2"]
-phyloFlashDB="/home/db/phyloFlash/132"
+phyloFlashDB=config["phyloFlashDB"]
 
 rule all:
 	input:
