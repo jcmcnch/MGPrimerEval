@@ -1,8 +1,9 @@
-readLength=config["readLength"]
+#readLength=config["readLength"] #no longer needed for phyloFlash 3.4
 readlimit=config["readlimit"]
 suffixR1=config["suffixR1"]
 suffixR2=config["suffixR2"]
 phyloFlashDB=config["phyloFlashDB"]
+bbsplitDBpath=config["bbsplitDBpath"]
 
 rule all:
 	input:
@@ -45,12 +46,11 @@ rule phyloFlash_sift:
 	shell:
                 """
                 mkdir -p {params.phyloFlash_other} ; mkdir -p {params.workdir} ; cd {params.workdir} ;
-                phyloFlash.pl -readlimit {params.readlimit} -lib {wildcards.sample} -read1 ../../../{input.R1clean} -read2 ../../../{input.R2clean} -dbhome {params.db} -readlength {readLength} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
+                phyloFlash.pl -readlimit {params.readlimit} -lib {wildcards.sample} -read1 ../../../{input.R1clean} -read2 ../../../{input.R2clean} -dbhome {params.db} -id 50 -CPUs {threads} -log -skip_spades -nozip ;
                 mv {wildcards.sample}.`basename {input.R1clean}`.SSU.1.fq ../../../{output.R1hits} ;
                 mv {wildcards.sample}.`basename {input.R1clean}`.SSU.2.fq ../../../{output.R2hits} ;
                 mv {wildcards.sample}* ../../../{params.phyloFlash_other}
                 """
-
 
 rule remove_repeats_komplexity:
 	input:
@@ -76,11 +76,12 @@ rule sort_EUK:
 	conda:
 		"envs/bbmap.yaml"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/"
+		workdir="intermediate/compute-workflow-intermediate/tmp/",
+		bbsplitdb=bbsplitDBpath + "/EUK-PROK-bbsplit-db/"
 	shell:
 		"cd {params.workdir} ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
-		"path=/home/db/bbsplit-db/EUK-PROK-bbsplit-db/ "
+		"path={params.bbsplitdb} "
 		"in=../../../{input} basename={input}_%.fastq ; "
 		"mv {input}*EUK*.fastq ../../../{output.EUK}; mv {input}*PROK*.fastq ../../../{output.PROK}"
 
@@ -96,11 +97,12 @@ rule sort_PROK:
 	conda:
 		"envs/bbmap.yaml"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/"
+		workdir="intermediate/compute-workflow-intermediate/tmp/",
+                bbsplitdb=bbsplitDBpath + "/BACT-ARCH-bbsplit-db/"
 	shell:
 		"cd {params.workdir} ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
-		"path=/home/db/bbsplit-db/BACT-ARCH-bbsplit-db/ "
+		"path={params.bbsplitdb} "
 		"in=../../../{input} basename={input}_%.fastq ; "
 		"mv {input}*ARCH*.fastq ../../../{output.ARCH}; mv {input}*BACT*.fastq ../../../{output.BACT}"
 
@@ -116,11 +118,12 @@ rule sort_CYANO:
 	conda:
 		"envs/bbmap.yaml"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/"
+		workdir="intermediate/compute-workflow-intermediate/tmp/",
+                bbsplitdb=bbsplitDBpath + "/BACT-CYANO-bbsplit-db/"
 	shell:
 		"cd {params.workdir} ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
-		"path=/home/db/bbsplit-db/BACT-CYANO-bbsplit-db/ "
+		"path={params.bbsplitdb} "
 		"in=../../../{input} basename={input}_%.fastq ; "
 		"mv {input}*NON-CYANO*.fastq ../../../{output.NONCYANO}; mv {input}*CYANO*.fastq ../../../{output.CYANO}"
 
