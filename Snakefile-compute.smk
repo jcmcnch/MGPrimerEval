@@ -239,6 +239,8 @@ rule grab_matching_cutadapt_full:
 		info="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info"
 	log:
 		"logs/08-cutadapt/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
+	conda:
+		"envs/cutadapt-env.yaml"
 	params:
 		pattern=lambda wildcards : config["primer"][wildcards.primer],
 		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer]),
