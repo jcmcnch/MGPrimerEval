@@ -246,7 +246,7 @@ rule grab_matching_cutadapt_full:
 		errorRate=lambda wildcards : config["mismatches"][wildcards.mismatches] / len(config["primer"][wildcards.primer]),
 		lengthPrimer=lambda wildcards : len(config["primer"][wildcards.primer])
 	shell:
-		"cutadapt -f fastq --info-file={output.info} --no-indels --no-trim --overlap={params.lengthPrimer} -b {params.pattern} --error-rate={params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
+		"cutadapt --info-file={output.info} --no-indels --no-trim --overlap={params.lengthPrimer} -b {params.pattern} --error-rate={params.errorRate} --untrimmed-output={output.mismatch} --output={output.match} {input}"
 
 
 rule quality_filter_primer_region:
