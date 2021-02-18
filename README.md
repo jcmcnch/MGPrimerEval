@@ -14,7 +14,23 @@ We have described the results of this analysis already for oceanic ecosystems (s
 
 ### Input Requirements:
 
-The only thing you need are raw, *unassembled* paired-end meta'omics data. The pipeline will extract SSU rRNA and analyze them automatically from your data. By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
+The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental pattern (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
+
+### Overview of Pipeline Steps:
+
+The following is a brief summary of pipeline steps:
+1. Extract SSU rRNA fragments (16S and 18S)
+2. Quality control data
+3. Split SSU rRNA into 4 categories:
+- *Archaea*
+- *Eukarya* (18S)
+- *Bacteria* (not including *Cyanobacteria*)
+- *Cyanobacteria* (including chloroplast 16S sequences derived from eukaryotic phytoplankton)
+4. Align and subset these data
+5. Compare PCR primers specified in the config file with your SSU rRNA fragments
+6. Classify matching/mismatching fragments to get their taxonomy
+7. Summarize data
+ compares these . and analyze them automatically from your data. By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
 
 ## Tutorial
 
