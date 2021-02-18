@@ -19,18 +19,24 @@ The only thing you need are raw, *unassembled* paired-end meta'omics data such a
 ### Overview of Pipeline Steps:
 
 The following is a brief summary of pipeline steps:
-1. Extract SSU rRNA fragments (16S and 18S)
-2. Quality control data
-3. Split SSU rRNA into 4 categories:
+1. Extract SSU rRNA fragments (16S and 18S) from your input data\*
+2. Quality control retrieved fragments
+3. Split SSU rRNA fragments into 4 categories:
 - *Archaea*
 - *Eukarya* (18S)
 - *Bacteria* (not including *Cyanobacteria*)
 - *Cyanobacteria* (including chloroplast 16S sequences derived from eukaryotic phytoplankton)
-4. Align and subset these data
+4. Align to a reference and subset these fragments to SSU rRNA region
 5. Compare PCR primers specified in the config file with your SSU rRNA fragments
 6. Classify matching/mismatching fragments to get their taxonomy
-7. Summarize data
- compares these . and analyze them automatically from your data. By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
+7. Summarize data in tabular and graphical formats
+
+\*By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
+
+This pipeline is designed to address very basic questions at varying levels of detail:
+1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences (including degenerate bases) in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment/dataset?*
+2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo/primer set?*
+3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an ``optimal" primer set for my environment?*
 
 ## Tutorial
 
