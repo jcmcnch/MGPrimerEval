@@ -1,4 +1,4 @@
-## Preamble & Pipeline Rationale
+## Preamble
 
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws, but may be subject to human error/oversight. This pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest. It does so with three main modules\*:
 
@@ -10,7 +10,7 @@ Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU 
 
 We have described the results of this analysis already for oceanic ecosystems (see preprint [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v1)), but we should note that *our pipeline is agnostic to primer/dataset* and thus could be used on any meta-'omics dataset. We hope the instructions below are enough to get you started. If there are any bugs, or questions, please open a github issue above and we'll do our best to help.
 
-## Usage
+## Detailed Overview
 
 ### Input Requirements:
 
@@ -33,10 +33,16 @@ The following is a brief summary of pipeline steps:
 
 \*By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
 
+### Motivating Scientific Questions
+
 This pipeline is designed to address very basic questions at varying levels of detail:
-1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences (including degenerate bases) in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment/dataset?*
-2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo/primer set?*
+1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences (including degenerate bases) in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
+2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo / primer set?*
 3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an ``optimal" primer set for my environment?*
+
+## Basic Usage
+
+
 
 ## Tutorial
 
