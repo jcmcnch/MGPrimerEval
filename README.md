@@ -68,6 +68,14 @@ The *compare* workflow (only if you have paired metagenomes and amplicon sequenc
 
 The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial below showing how to download and process example data if you just want to test the mechanics and make sure it runs on your system.
 
+### Setting up a snakemake conda environment
+
+Assuming you have the [python3 version of miniconda](https://conda.io/en/latest/miniconda.html) installed, install snakemake into its own environment as follows:
+
+```
+
+```
+
 ### Cloning the Repository
 
 First, clone the repo into a new folder we'll call `myDataset` and enter that folder.
@@ -80,6 +88,17 @@ First, clone the repo into a new folder we'll call `myDataset` and enter that fo
 Link your raw data into the input folder. For example:
 
 `ln -s /full/path/to/your/data/*gz intermediate/compute-workflow-intermediate/00-fastq/`
+
+### Downloading databases for phyloFlash and SSU rRNA splitting
+
+1. PhyloFlash Database for Retrieving SSU rRNA fragments
+
+```
+
+```
+
+2. Database for Splitting SSU rRNA fragments
+
 
 ### Setting up your configuration file
 
@@ -105,17 +124,7 @@ bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
 study: <your study here>
 ```
 
-### Downloading databases for phyloFlash and SSU rRNA splitting
-
-1. PhyloFlash Database for Retrieving SSU rRNA fragments
-
-```
-
-```
-
-2. Database for Splitting SSU rRNA fragments
-
-## Tutorial
+## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
 **These steps were tested on a remote server running Ubuntu 16.04 in January 2021.**
 
