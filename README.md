@@ -12,13 +12,20 @@ We have described the results of this analysis already for oceanic ecosystems (s
 
 ## Detailed Overview
 
+### Motivating Scientific Questions
+
+This pipeline is designed to address several related questions at different levels of detail:
+1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences (including degenerate bases) in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
+2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo / primer set?*
+3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an ``optimal" primer set for my environment?*
+
 ### Input Requirements:
 
-The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental pattern (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
+The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix=gz). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental pattern (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
 
 ### Overview of Pipeline Steps:
 
-The following is a brief summary of pipeline steps:
+The pipeline steps are roughly as follows:
 1. Extract SSU rRNA fragments (16S and 18S) from your input data\*
 2. Quality control retrieved fragments
 3. Split SSU rRNA fragments into 4 categories:
@@ -29,20 +36,64 @@ The following is a brief summary of pipeline steps:
 4. Align to a reference and subset these fragments to SSU rRNA region
 5. Compare PCR primers specified in the config file with your SSU rRNA fragments
 6. Classify matching/mismatching fragments to get their taxonomy
-7. Summarize data in tabular and graphical formats
+7. Summarize data
 
 \*By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
 
-### Motivating Scientific Questions
+### Expected output files
 
-This pipeline is designed to address very basic questions at varying levels of detail:
-1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences (including degenerate bases) in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
-2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo / primer set?*
-3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an ``optimal" primer set for my environment?*
+*NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`).*
 
-## Basic Usage
+If you run just the *compute* workflow:
+- phyloFlash summaries of taxa present in your metagenome/-transcriptome (can be useful to make sure your sample is what you think it is)
+- QC'd SSU rRNA fragments
+- Sorted SSU rRNA fragments (into categories noted above)
+- Aligned SSU rRNA fragments
+- Fragments subsetted from alignments to primer regions, and sorted into matching and non-matching at 0, 1, and 2-mismatch thresholds
+
+If you additionally run the *classify* workflow using output from above, you will get:
+- A graphical summary of the overall results
+- Taxonomic assignments for above matching/mismatching fragments
+- Tabular summaries across your whole dataset, indicating the proportions of order-level taxonomic groups are matched or mismatched for each primer/group/mismatch threshold (e.g. summarizing mismatches to *Archaea* for the primer 515Y at a 0-mismatch threshold)
+- Tabular summaries of the primer variants, both for the groups indicated above *and* for taxa that have abundant mismatches (so you can correct these mismatches or at least know what they are, even if the taxa are rare)
+
+The *compare* workflow (only if you have paired metagenomes and amplicon sequences you want to intercompare):
+- SSU rRNA fragments subsetted to the primer region (done separately for 16S and 18S)
+- A BLASTn-based comparison between MG SSU rRNA fragments and amplicon sequence variants (using ASVs as a BLAST database and the MG SSU rRNA as query)
+- A direct intercomparison between taxonomic groups found in MG SSU rRNA and ASVs *from the same sample*, summarized in graphical and tabular format (includes R^2 values of relative abundances; see manuscript text for more details)
+
+## Quickstart
+
+The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial further down with some example data if you just want to test the mechanics and make sure it runs on your system.
+
+### Cloning the Repository
+
+First, clone the repo into a new folder we'll call `myDataset` and enter that folder.
+
+`git clone https://github.com/jcmcnch/MGPrimerEval.git myDataset`
+`cd myDataset`
+
+### Adding your raw data
+
+Link your raw data into the input folder. For example:
+
+`ln -s /full/path/to/your/data/*gz intermediate/compute-workflow-intermediate/00-fastq/`
+
+### Setting up your configuration file
+
+The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your samples at the end. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
+
+`mkdir config/myDataset`
+`cp config/config-template.yaml config/myDataset/myDataset.yaml`
+``
+
+### Getting setup: Downloading databases
+
+1. PhyloFlash Database for Retrieving SSU rRNA fragments
 
 
+
+2. Database for Splitting SSU rRNA fragments
 
 ## Tutorial
 
