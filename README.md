@@ -85,9 +85,10 @@ Link your raw data into the input folder. For example:
 
 The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your samples at the end. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
 
-`mkdir config/myDataset`
-`cp config/config-template.yaml config/myDataset/myDataset.yaml`
 ```
+mkdir config/myDataset`
+cp config/config-template.yaml config/myDataset/myDataset.yaml
+#Append sample names to template config, assuming a suffix of `1.fastq.gz` :
 for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do
 
 	printf "  $file : $file\n" 
