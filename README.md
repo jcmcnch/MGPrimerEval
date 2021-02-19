@@ -46,7 +46,7 @@ The pipeline steps are roughly as follows:
 
 *NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`).*
 
-If you run just the *compute* workflow:
+If you run just the *compute* workflow, you will get:
 - phyloFlash summaries of taxa present in your metagenome/-transcriptome (can be useful to make sure your sample is what you think it is)
 - QC'd SSU rRNA fragments
 - Sorted SSU rRNA fragments (into categories noted above)
@@ -66,7 +66,7 @@ The *compare* workflow (only if you have paired metagenomes and amplicon sequenc
 
 ## Quickstart
 
-The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial further down with some example data if you just want to test the mechanics and make sure it runs on your system.
+The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial below showing how to download and process example data if you just want to test the mechanics and make sure it runs on your system.
 
 ### Cloning the Repository
 
@@ -87,7 +87,13 @@ The template configuration file comes pre-set with a number of primers that we t
 
 `mkdir config/myDataset`
 `cp config/config-template.yaml config/myDataset/myDataset.yaml`
-``
+```
+for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do
+
+	printf "  $file : $file\n" 
+
+done >> config/myDataset/myDataset.yaml
+```
 
 ### Getting setup: Downloading databases
 
