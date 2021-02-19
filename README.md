@@ -86,7 +86,7 @@ Link your raw data into the input folder. For example:
 The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your samples at the end. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
 
 ```
-mkdir config/myDataset`
+mkdir config/myDataset
 cp config/config-template.yaml config/myDataset/myDataset.yaml
 #Append sample names to template config, assuming a suffix of `1.fastq.gz` :
 for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do
@@ -96,11 +96,22 @@ for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fas
 done >> config/myDataset/myDataset.yaml
 ```
 
-### Getting setup: Downloading databases
+Now, you need to edit your config file to include a unique name for your study (will be appended to output files) and the paths to the databases set up above. After opening the file in your favourite editor, look for and edit the following lines:
+
+```
+phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
+bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
+
+study: <your study here>
+```
+
+### Downloading databases for phyloFlash and SSU rRNA splitting
 
 1. PhyloFlash Database for Retrieving SSU rRNA fragments
 
+```
 
+```
 
 2. Database for Splitting SSU rRNA fragments
 
