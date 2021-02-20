@@ -135,7 +135,7 @@ If you do not already have bbmap installed locally, make a conda environment cal
 
 `mamba create -c agbiome --name bbmap-env bbtools`
 
-Now, download and create the database:
+Now, download and create the database (should only take a few minutes):
 
 ```
 mkdir -p ~/databases/bbsplit-db/
@@ -145,6 +145,10 @@ for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do
 done
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
+
+3. Adding `uclust` to your path:
+
+If you don't already have access to `uclust`, please email me at mcnichol at alum dot mit dot edu and I'll send you the binary.
 
 ### Setting up your configuration file
 
@@ -161,12 +165,13 @@ for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fas
 done >> config/myDataset/myDataset.yaml
 ```
 
-Now, you need to edit your config file to include a unique name for your study (which will be appended to output files) and the paths to the databases set up above. After opening the file in your favourite editor, look for and edit the following lines:
+Now, you need to edit your config file to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
 
 ```
+suffixR1: "_1.fastq.gz" #NCBI format
+suffixR2: "_2.fastq.gz" #NCBI format
 phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
-
 study: <your study here>
 ```
 
@@ -176,6 +181,19 @@ For example, if you used the above commands to install the databases, the paths 
 /home/<your username>/databases/phyloFlash-db/138.1/
 /home/<your username>/databases/bbsplit-db/
 ```
+
+If you don't need or want to test all the primers specified in the config, just comment them out. If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so). Or you can just open a github issue and I can add them to the template config. *NB: If you're adding new primers, don't forget to reverse complement the reverse primer sequence.*
+
+## Running the workflow
+
+The simplest invocation would be as follows:
+
+```
+conda activate snakemake-env
+snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml
+```
+
+You can also do a variety of test run
 
 ## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
