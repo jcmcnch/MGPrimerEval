@@ -17,7 +17,8 @@ We have described the results of this analysis already for oceanic ecosystems (s
 This pipeline is designed to address several related questions at different levels of detail:
 1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences\* in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
 2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo / primer set?*
-3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an ``optimal" primer set for my environment?*
+3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an "optimal" primer set for my environment?*
+4. How well do results from PCR primers compare with metagenomic reads? *i.e. are the two methods consistent or inconsistent with one another?*
 
 \*Note: the pipeline *does* handle degenerate primers as a query, and returns a perfect match if one of the variants specified in your degenerate sequence matches the target.
 
@@ -64,45 +65,90 @@ The *compare* workflow (only if you have paired metagenomes and amplicon sequenc
 - A BLASTn-based comparison between MG SSU rRNA fragments and amplicon sequence variants (using ASVs as a BLAST database and the MG SSU rRNA as query)
 - A direct intercomparison between taxonomic groups found in MG SSU rRNA and ASVs *from the same sample*, summarized in graphical and tabular format (includes R^2 values of relative abundances; see manuscript text for more details)
 
-## Quickstart
+### Open-source software and database dependencies
 
-The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial below showing how to download and process example data if you just want to test the mechanics and make sure it runs on your system.
+This pipeline depends on a number of amazing free and open source software packages such as:
 
-### Setting up a snakemake conda environment
+- [Snakemake](https://snakemake.readthedocs.io/en/stable/) which runs the whole workflow.
+- The wonderful [phyloFlash package](https://github.com/HRGV/phyloFlash/blob/master/README.md) which uses a curated version of the SILVA database to retrieve SSU rRNA from meta'omics data (both 16S and 18S).
+- [bbtools](https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/installation-guide/), the "Swiss Army Knife" of bioinformatics - which we use for splitting the SSU rRNA into different categories as well as data manipulation (bbtools is also a dependency of phyloFlash).
+- [cutadapt](https://cutadapt.readthedocs.io/en/stable/) which is used for matching the primers to metagenomic reads.
+- [VSEARCH](https://github.com/torognes/vsearch) which is used to taxonomically classify reads.
+- [fastp](https://github.com/OpenGene/fastp) which is used to quality-control raw reads.
+- [seqtk](https://github.com/lh3/seqtk) which is used for basic sequence manipulation.
+- [pyNAST](https://github.com/biocore/pynast) which is used to align SSU rRNA sequences against a reference.
 
-Assuming you have the [python3 version of miniconda](https://conda.io/en/latest/miniconda.html) installed, install snakemake into its own environment as follows:
+Our taxonomic classification and splitting steps also heavily depend on the [SILVA database project](https://www.arb-silva.de/), which is an expert-curated database that is the most comprehensive SSU rRNA database for diverse global environments.
+
+## Running the pipeline with your own data
+
+The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial below showing how to download and process example data if you just want to test the mechanics and make sure it runs on your system. To run the tutorial, you need
+
+These instructions assume you have familiarity with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive for remote servers. 
+
+### Setting up and activating a snakemake conda environment
+
+Assuming you have the [python3 version of miniconda](https://conda.io/en/latest/miniconda.html) installed, install snakemake into its own environment and activate it as follows:
 
 ```
-
+#install mamba, which is faster than conda
+conda install -c conda-forge mamba
+#create an environment named snakemake-env
+mamba create -c conda-forge -c bioconda -n snakemake-env snakemake
+conda activate snakemake-env
 ```
 
-### Cloning the Repository
+[Source for install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
 
-First, clone the repo into a new folder we'll call `myDataset` and enter that folder.
+### Cloning the repository and adding raw data
+
+Now, clone the repo into a new folder we'll call `myDataset` and enter that folder.
 
 `git clone https://github.com/jcmcnch/MGPrimerEval.git myDataset`
 `cd myDataset`
 
-### Adding your raw data
-
-Link your raw data into the input folder. For example:
+Link your raw data into the input folder (the `ln -s` "softlink" prevents data duplication). For example:
 
 `ln -s /full/path/to/your/data/*gz intermediate/compute-workflow-intermediate/00-fastq/`
 
-### Downloading databases for phyloFlash and SSU rRNA splitting
+### Downloading databases for phyloFlash and SSU rRNA splitting, and adding `uclust` to your path
 
 1. PhyloFlash Database for Retrieving SSU rRNA fragments
 
-```
+Install phyloFlash into its own environment and run the database install script (will take some hours as phyloFlash runs quality-control steps on the database but this only needs to be run once):
 
 ```
+mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash
+conda activate pf
+#change directory to suit your needs
+mkdir -p ~/databases/phyloFlash-db/
+cd ~/databases/phyloFlash-db/
+phyloFlash_makedb.pl --remote
+#now go do something else for few hours while the database is downloaded and QC'd
+```
+
+\*Note: `sortmerna` is not used in this pipeline but is part of the conda recipe.
 
 2. Database for Splitting SSU rRNA fragments
 
+If you do not already have bbmap installed locally, make a conda environment called bbmap-env:
+
+`mamba create -c agbiome --name bbmap-env bbtools`
+
+Now, download and install the database:
+
+```
+mkdir -p ~/databases/bbsplit-db/
+cd ~/databases/bbsplit-db
+for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do
+	curl -O -J -L https://osf.io/$item/download
+done
+
+```
 
 ### Setting up your configuration file
 
-The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your samples at the end. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
+The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your sample names at the end in the format `  sample : sample`. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
 
 ```
 mkdir config/myDataset
