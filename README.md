@@ -135,7 +135,7 @@ If you do not already have bbmap installed locally, make a conda environment cal
 
 `mamba create -c agbiome --name bbmap-env bbtools`
 
-Now, download and install the database:
+Now, download and create the database:
 
 ```
 mkdir -p ~/databases/bbsplit-db/
@@ -143,7 +143,7 @@ cd ~/databases/bbsplit-db
 for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do
 	curl -O -J -L https://osf.io/$item/download
 done
-
+chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
 ### Setting up your configuration file
@@ -161,13 +161,20 @@ for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fas
 done >> config/myDataset/myDataset.yaml
 ```
 
-Now, you need to edit your config file to include a unique name for your study (will be appended to output files) and the paths to the databases set up above. After opening the file in your favourite editor, look for and edit the following lines:
+Now, you need to edit your config file to include a unique name for your study (which will be appended to output files) and the paths to the databases set up above. After opening the file in your favourite editor, look for and edit the following lines:
 
 ```
 phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
 
 study: <your study here>
+```
+
+For example, if you used the above commands to install the databases, the paths would be:
+
+```
+/home/<your username>/databases/phyloFlash-db/138.1/
+/home/<your username>/databases/bbsplit-db/
 ```
 
 ## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
