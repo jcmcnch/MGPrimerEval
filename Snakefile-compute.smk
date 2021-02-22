@@ -4,6 +4,9 @@ suffixR1=config["suffixR1"]
 suffixR2=config["suffixR2"]
 phyloFlashDB=config["phyloFlashDB"]
 bbsplitDBpath=config["bbsplitDBpath"]
+#Prefix to add uclust executable to path
+uclustpath=config["uclustpath"]
+shell.prefix('PATH=' + uclustpath + ":$PATH ')
 
 rule all:
 	input:

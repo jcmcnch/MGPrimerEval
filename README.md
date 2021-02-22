@@ -150,11 +150,22 @@ done
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
-3. Adding `uclust` to your path:
+3. Getting the `uclust` executable:
 
 The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of qiime), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable I used by email by the author of `uclust`.
 
+All you need to do is put the binary in a sensible location, and make a note of the full path to add to the config file (next section). This way, when you run the workflow, this executable will be found. For example:
 
+```
+#enter your analysis folder
+cd /home/jesse/MGPrimerEval-tutorial
+#make a directory for binaries, enter directory
+mkdir bin ; cd bin
+#copy uclust into this directory
+cp /location/of/uclust .
+#get full path
+pwd
+```
 
 ### Setting up your configuration file
 
@@ -171,13 +182,15 @@ for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fas
 done >> config/myDataset/myDataset.yaml
 ```
 
-Now, you need to edit your config file to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
+Now, you need to edit your config file to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, the path to `uclust`, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
 
 ```
 suffixR1: "_1.fastq.gz" #NCBI format
 suffixR2: "_2.fastq.gz" #NCBI format
+cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
 phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
+uclustpath: "/home/jesse/MGPrimerEval-tutorial/bin"
 study: <your study here>
 ```
 
@@ -227,7 +240,7 @@ I usually make a new folder for each new dataset I'm analyzing to keep things or
 Known issues:
 
 * If you are running into issues with DAG generation (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is) taking a long time, especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
-* bbmap/bbsplit steps sometimes can hang under situations of high RAM use. In this case, just CTRL-C and restart your workflow.
+* bbmap/bbsplit steps sometimes can hang under situations of high RAM use - it will just get stuck at a particular step and not proceed further. To resolve this, just kill (i.e. CTRL-C) and restart your workflow.
 
 A visual demonstration of the compute module:
 ![Rule graph for initial (Snakefile-compute.smk) steps](https://github.com/jcmcnch/MGPrimerEval/blob/master/images/Snakefile-compute.svg)
