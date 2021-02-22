@@ -118,7 +118,11 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 Install phyloFlash into its own environment and run the database install script (will take some hours as phyloFlash runs quality-control steps on the database but this only needs to be run once):
 
 ```
+#Install mamba into your base environment (if not already installed)
+conda install -c conda-forge mamba
+#Use mamba to create phyloFlash environment
 mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash
+#If you're getting errors, you may need to run `conda update conda` or do a fresh install of miniconda if updating is not easy (sometimes you get all sorts of incompatibilities which can just be solved by a fresh install)
 conda activate pf
 #change directory to suit your needs
 mkdir -p ~/databases/phyloFlash-db/
@@ -148,7 +152,9 @@ chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 
 3. Adding `uclust` to your path:
 
-If you don't already have access to `uclust`, please email me at mcnichol at alum dot mit dot edu and I'll send you the binary.
+The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of qiime), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable I used by email by the author of `uclust`.
+
+
 
 ### Setting up your configuration file
 
@@ -220,7 +226,7 @@ I usually make a new folder for each new dataset I'm analyzing to keep things or
 
 Known issues:
 
-* If you are running into issues with DAG generation (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is) taking a long time, especially if you have a *lot* of samples, you might need to subset your workflow. This may be fixed in newer versions of snakemake, but was an issue for me about a year ago. You can find some examples of how to do so in the `runscripts` folder.
+* If you are running into issues with DAG generation (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is) taking a long time, especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
 * bbmap/bbsplit steps sometimes can hang under situations of high RAM use. In this case, just CTRL-C and restart your workflow.
 
 A visual demonstration of the compute module:
