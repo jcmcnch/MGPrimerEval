@@ -6,7 +6,7 @@ phyloFlashDB=config["phyloFlashDB"]
 bbsplitDBpath=config["bbsplitDBpath"]
 #Prefix to add uclust executable to path
 uclustpath=config["uclustpath"]
-shell.prefix('PATH=' + uclustpath + ":$PATH ')
+shell.prefix('PATH=' + uclustpath + ':$PATH ')
 
 rule all:
 	input:
