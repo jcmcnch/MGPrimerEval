@@ -1,11 +1,12 @@
 #readLength: <your read length here> #use new auto-detect function in phyloFlash 3.4
 readlimit: 1000000 #the number of reads phyloFlash will extract. Metagenomes never typically get more than a million, but metatranscriptomes will potentially get lots more than a million.
+cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
 suffixR1: "_1.fastq.gz" #NCBI format
 suffixR2: "_2.fastq.gz" #NCBI format
 cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
-phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database
+phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
-
+uclustpath: "/home/jesse/MGPrimerEval-tutorial/bin"
 study: MGPrimerEval-tutorial 
 
 primer:
