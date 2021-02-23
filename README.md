@@ -106,8 +106,10 @@ conda activate snakemake-env
 
 Now, clone the repo into a new folder we'll call `myDataset` and enter that folder.
 
-`git clone https://github.com/jcmcnch/MGPrimerEval.git myDataset`
-`cd myDataset`
+```
+git clone https://github.com/jcmcnch/MGPrimerEval.git myDataset
+cd myDataset
+```
 
 Link your raw data into the input folder (the `ln -s` "softlink" prevents data duplication). For example:
 
