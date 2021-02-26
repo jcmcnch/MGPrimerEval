@@ -95,12 +95,13 @@ Assuming you have the [python3 version of miniconda](https://conda.io/en/latest/
 ```
 #install mamba, which is faster than conda
 conda install -c conda-forge mamba
-#create an environment named snakemake-env
+
+#create an environment named snakemake-env and activate it
 mamba create -c conda-forge -c bioconda -n snakemake-env snakemake
 conda activate snakemake-env
 ```
 
-[Source for install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
+[More info on snakemake installation can be found here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
 
 ### Cloning the repository and adding raw data
 
@@ -122,20 +123,24 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 Install phyloFlash into its own environment and run the database install script (will take some hours as phyloFlash runs quality-control steps on the database but this only needs to be run once):
 
 ```
-#Install mamba into your base environment (if not already installed)
+#Install mamba into your base environment (if not already installed with snakemake)
 conda install -c conda-forge mamba
-#Use mamba to create phyloFlash environment
+
+#Use mamba to create phyloFlash environment, then activate it
 mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash
-#If you're getting errors, you may need to run `conda update conda` or do a fresh install of miniconda if updating is not easy (sometimes you get all sorts of incompatibilities which can just be solved by a fresh install)
 conda activate pf
-#change directory to suit your needs
+
+#NB: If you're getting errors, you may need to run `conda update conda` or do a fresh install of miniconda if updating is not easy (sometimes you get all sorts of incompatibilities which can just be solved by a fresh install)
+
+#change directory to somewhere appropriate to your setup, e.g.:
 mkdir -p ~/databases/phyloFlash-db/
 cd ~/databases/phyloFlash-db/
 phyloFlash_makedb.pl --remote
+
 #now go do something else for few hours while the database is downloaded and QC'd
 ```
 
-\*Note: `sortmerna` is not used in this pipeline but is part of the conda recipe.
+\*Note: `sortmerna` is not used in this pipeline but is part of the default conda recipe.
 
 2. Database for Splitting SSU rRNA fragments
 
@@ -146,9 +151,13 @@ If you do not already have bbmap installed locally, make a conda environment cal
 Now, download and create the database (should only take a few minutes):
 
 ```
-mkdir -p ~/databases/bbsplit-db/
-cd ~/databases/bbsplit-db
+#Make directory, go into it
+mkdir -p ~/databases/bbsplit-db/ ; cd ~/databases/bbsplit-db
+
+#Download files to create database from OSF:
 for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do ; curl -O -J -L https://osf.io/$item/download ; done
+
+#Make install script executable, run
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
@@ -161,11 +170,14 @@ All you need to do is put the binary in a sensible location, and make a note of 
 ```
 #enter your analysis folder
 cd /home/jesse/MGPrimerEval-tutorial
+
 #make a directory for binaries, enter directory
 mkdir bin ; cd bin
+
 #copy uclust into this directory
 cp /location/of/uclust .
-#get full path
+
+#get full path (for your config file)
 pwd
 ```
 
@@ -174,14 +186,11 @@ pwd
 The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your sample names at the end in the format `  sample : sample`. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
 
 ```
-mkdir config/myDataset
-cp config/config-template.yaml config/myDataset/myDataset.yaml
+#Make a new subfolder, and copy the template in
+mkdir config/myDataset ; cp config/config-template.yaml config/myDataset/myDataset.yaml
+
 #Append sample names to template config, assuming a suffix of `1.fastq.gz` :
-for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do
-
-	printf "  $file : $file\n" 
-
-done >> config/myDataset/myDataset.yaml
+for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do ; printf "  $file : $file\n" ; done >> config/myDataset/myDataset.yaml
 ```
 
 Now, you need to edit your config file to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, the path to `uclust`, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
