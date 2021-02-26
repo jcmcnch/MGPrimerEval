@@ -141,7 +141,7 @@ phyloFlash_makedb.pl --remote
 
 If you do not already have bbmap installed locally, make a conda environment called bbmap-env:
 
-`mamba create -c agbiome --name bbmap-env bbtools`
+`mamba create -c bioconda --name bbmap-env bbmap`
 
 Now, download and create the database (should only take a few minutes):
 
