@@ -162,10 +162,16 @@ All you need to do is put the binary in a sensible location, and make a note of 
 ```
 #enter your analysis folder
 cd /home/jesse/MGPrimerEval-tutorial
+
 #make a directory for binaries, enter directory
 mkdir bin ; cd bin
+
 #copy uclust into this directory
 cp /location/of/uclust .
+
+#make executable
+chmod a+x uclust
+
 #get full path
 pwd
 ```
