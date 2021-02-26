@@ -94,6 +94,7 @@ Assuming you have the [python3 version of miniconda](https://conda.io/en/latest/
 ```
 #install mamba, which is faster than conda
 conda install -c conda-forge mamba
+
 #create an environment named snakemake-env
 mamba create -c conda-forge -c bioconda -n snakemake-env snakemake
 conda activate snakemake-env
@@ -123,14 +124,18 @@ Install phyloFlash into its own environment and run the database install script 
 ```
 #Install mamba into your base environment (if not already installed)
 conda install -c conda-forge mamba
+
 #Use mamba to create phyloFlash environment
 mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash
+
 #If you're getting errors, you may need to run `conda update conda` or do a fresh install of miniconda if updating is not easy (sometimes you get all sorts of incompatibilities which can just be solved by a fresh install)
 conda activate pf
+
 #change directory to suit your needs
 mkdir -p ~/databases/phyloFlash-db/
 cd ~/databases/phyloFlash-db/
 phyloFlash_makedb.pl --remote
+
 #now go do something else for few hours while the database is downloaded and QC'd
 ```
 
@@ -154,7 +159,7 @@ chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 
 3. Getting the `uclust` executable:
 
-**Please note that the pipeline will still run if this is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results).**
+**Please note that the pipeline will still run if `uclust` is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results). So double-check that the path you provide in the config below is accurate.**
 
 The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of qiime), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable I used by email by the author of `uclust`.
 
@@ -182,14 +187,12 @@ pwd
 The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your sample names at the end in the format `  sample : sample`. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
 
 ```
+#make new directory, and copy the template into it
 mkdir config/myDataset
 cp config/config-template.yaml config/myDataset/myDataset.yaml
+
 #Append sample names to template config, assuming a suffix of `1.fastq.gz` :
-for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do
-
-	printf "  $file : $file\n" 
-
-done >> config/myDataset/myDataset.yaml
+for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do printf "  $file : $file\n" ; done >> config/myDataset/myDataset.yaml
 ```
 
 Now, you need to edit your config file to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, the path to `uclust`, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
