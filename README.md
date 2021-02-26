@@ -27,6 +27,10 @@ This pipeline is designed to address several related questions at different leve
 
 The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix=gz). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental patterns with respect to primer matches/mismatches (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
 
+### Recommended operating systems
+
+The recommended operating system to run the pipeline is Linux. The pipeline has been tested on Ubuntu 16.04, Ubuntu 20.04, and CentOS. It may work on Mac/Windows sso long as you can install snakemake and conda, but has not been tested on these systems.
+
 ### Overview of Pipeline Steps:
 
 The pipeline steps are roughly as follows:
@@ -178,13 +182,13 @@ cp /location/of/uclust .
 #make executable
 chmod a+x uclust
 
-#get full path
+#get full path to put into the config file (below)
 pwd
 ```
 
 ### Setting up your configuration file
 
-The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your sample names at the end in the format `  sample : sample`. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would work to create a usable config file:
+The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your sample names at the end in the format `  sample : sample`. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would append your sample names directly to a new config file you could use entitled `config/myDataset/myDataset.yaml`:
 
 ```
 #make new directory, and copy the template into it
@@ -195,7 +199,7 @@ cp config/config-template.yaml config/myDataset/myDataset.yaml
 for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do printf "  $file : $file\n" ; done >> config/myDataset/myDataset.yaml
 ```
 
-Now, you need to edit your config file to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, the path to `uclust`, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
+Now, you need to edit your config file (e.g. `config/myDataset/myDataset.yaml`) to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, the path to `uclust`, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
 
 ```
 suffixR1: "_1.fastq.gz" #NCBI format
@@ -222,10 +226,15 @@ The simplest invocation would be as follows:
 
 ```
 conda activate snakemake-env
-snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml
+snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/myDataset/myDataset.yaml
 ```
 
-You can also do a variety of test run
+To make sure things are set up properly you can:
+
+- Append `-np` to just print out the commands to be run (good way to check if all the input files can be found)
+- Append `--conda-create-envs-only` to just install the necessary software using conda
+
+Once the compute pipeline has completed, you can run
 
 ## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
