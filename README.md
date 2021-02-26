@@ -148,7 +148,7 @@ Now, download and create the database (should only take a few minutes):
 ```
 mkdir -p ~/databases/bbsplit-db/
 cd ~/databases/bbsplit-db
-for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do ; curl -O -J -L https://osf.io/$item/download ; done
+for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do curl -O -J -L https://osf.io/$item/download ; done
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
