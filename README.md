@@ -146,6 +146,7 @@ If you do not already have bbmap installed locally, make a conda environment cal
 Now, download and create the database (should only take a few minutes):
 
 ```
+conda activate bbmap-env
 mkdir -p ~/databases/bbsplit-db/
 cd ~/databases/bbsplit-db
 for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do curl -O -J -L https://osf.io/$item/download ; done
