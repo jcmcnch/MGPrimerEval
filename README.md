@@ -155,6 +155,8 @@ chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 
 3. Getting the `uclust` executable:
 
+**Please note that the pipeline will still run if this is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results).**
+
 The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of qiime), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable I used by email by the author of `uclust`.
 
 All you need to do is put the binary in a sensible location, and make a note of the full path to add to the config file (next section). This way, when you run the workflow, this executable will be found. For example:
