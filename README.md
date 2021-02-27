@@ -29,7 +29,7 @@ The only thing you need are raw, *unassembled* paired-end meta'omics data such a
 
 ### Recommended operating systems
 
-The recommended operating system to run the pipeline is Linux. The pipeline has been tested on Ubuntu 16.04, Ubuntu 20.04, and CentOS. It may work on Mac/Windows sso long as you can install snakemake and conda, but has not been tested on these systems.
+The recommended operating system to run the pipeline is Linux. The pipeline has been tested on Ubuntu 16.04, Ubuntu 20.04, and CentOS. It may work on Mac/Windows so long as you can install snakemake and conda, but has not been tested on these systems.
 
 ### Overview of Pipeline Steps:
 
@@ -88,7 +88,7 @@ Our taxonomic classification and splitting steps also heavily depend on the [SIL
 
 ## Running the pipeline with your own data
 
-The following are instructions to get the pipeline set up for your own datasets. There is also a tutorial below showing how to download and process example data if you just want to test the mechanics and make sure it runs on your system. To run the tutorial, you need
+The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and process example data](https://github.com/jcmcnch/MGPrimerEval#example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
 
 These instructions assume you have familiarity with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive for remote servers. 
 
@@ -263,7 +263,9 @@ conda activate snakemake-env
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until plot_compute_results 
 ```
 
-## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
+Some of the 
+
+## Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
 **These steps were tested on a remote server running Ubuntu 16.04 in January 2021.**
 
