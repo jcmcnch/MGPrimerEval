@@ -260,7 +260,7 @@ I recommend first running a small portion of the workflow to generate a summary 
 ```
 #Activate and run only the summary plot step
 conda activate snakemake-env
-snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until 
+snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until plot_compute_results 
 ```
 
 ## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
