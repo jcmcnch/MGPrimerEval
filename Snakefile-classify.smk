@@ -37,8 +37,8 @@ rule plot_compute_results:
 		"{study}.ARCH.pdf"
 	conda:
 		"envs/ggplot2.yaml"
-	script:
-		"scripts/plot-individual-primers.R"
+	shell:
+		"scripts/plot-individual-primers-shell.R {params} {input} {output} || touch {output}"
 
 rule classify_mismatches:
 	input:

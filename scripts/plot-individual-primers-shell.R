@@ -1,4 +1,6 @@
+#!/usr/bin/env Rscript
 library(ggplot2)
+args = commandArgs(trailingOnly=TRUE)
 
 all.summary <- read.delim(args[2], header=FALSE)
 euk.all <- all.summary[with(all.summary, V3=="EUK" & V5!="6-mismatch" & V4!="27F" & V4!="338R" & V4!="341F" & V4!="806RB" & V4!="785R"), ]
