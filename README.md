@@ -61,7 +61,8 @@ If you run just the *compute* workflow, you will get:
 
 If you additionally run the *classify* workflow using output from above, you will get:
 - A graphical summary of the overall results
-- Taxonomic assignments for above matching/mismatching fragments
+- Taxonomic assignments for above matching / mismatching fragments (at the order level)
+- Graphical summaries of the taxonomic matches / mismatches
 - Tabular summaries across your whole dataset, indicating the proportions of order-level taxonomic groups are matched or mismatched for each primer/group/mismatch threshold (e.g. summarizing mismatches to *Archaea* for the primer 515Y at a 0-mismatch threshold)
 - Tabular summaries of the primer variants, both for the groups indicated above *and* for taxa that have abundant mismatches (so you can correct these mismatches or at least know what they are, even if the taxa are rare)
 
@@ -220,7 +221,7 @@ For example, if you used the above commands to install the databases, the paths 
 
 If you don't need or want to test all the primers specified in the config, just comment them out. If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so). Or you can just open a github issue and I can add them to the template config. *NB: If you're adding new primers, don't forget to reverse complement the reverse primer sequence.*
 
-## Running the workflow
+## Running the *Compute* workflow
 
 The simplest invocation would be as follows:
 
@@ -234,7 +235,33 @@ To make sure things are set up properly you can:
 - Append `-np` to just print out the commands to be run (good way to check if all the input files can be found)
 - Append `--conda-create-envs-only` to just install the necessary software using conda
 
-Once the compute pipeline has completed, you can run
+Once the compute pipeline has completed, I recommend you take a look at the output to make sure you're getting good data back. For example, you can scroll through the output on the command line as follows:
+
+```
+#concatenate output and pipe to less to look at the data
+cat intermediate/compute-workflow-intermediate/09-summary/\* | less
+```
+
+You should look at the 6th column to check for the number of QC'd sequences recovered per sample/direction/group/primer. It makes sense to start with  **BACT-NON-CYANO** since this category will typically be the most abundant. It's normal to see zeroes or very low numbers for some categories. For example *Archaea* are just not that abundant in many surface ocean samples. If the data is *all zeroes*, it likely means that `uclust` is not set up properly. You can confirm this by looking into the alignment files as follows:
+
+```
+#view alignment files to make sure they're not empty:
+cat intermediate/compute-workflow-intermediate/05-pyNAST-aligned/\* | less
+```
+
+If you want, you can just stop here. But if you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section).
+
+##Running the *Classify* workflow:
+
+The classify workflow summarizes all the data from the compute workflow. For example, if you had 500 samples it would give you information on the overall patterns summed across all 500 samples.
+
+I recommend first running a small portion of the workflow to generate a summary plot from the *Compute* results:
+
+```
+#Activate and run only the summary plot step
+conda activate snakemake-env
+snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until 
+```
 
 ## Tutorial (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
