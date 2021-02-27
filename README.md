@@ -251,7 +251,7 @@ cat intermediate/compute-workflow-intermediate/05-pyNAST-aligned/* | less
 
 If you want, you can just stop here. But if you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section).
 
-##Running the *Classify* workflow:
+## Running the *Classify* workflow:
 
 The classify workflow summarizes all the data from the compute workflow. For example, if you had 500 samples it would give you information on the overall patterns summed across all 500 samples.
 
