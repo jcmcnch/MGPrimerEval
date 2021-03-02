@@ -154,7 +154,7 @@ rule make_blast_dbs_16S:
 	input:
 		"intermediate/{outdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
 	output:
-		expand("{intermediate/{outdir}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
+		expand("intermediate/{{outdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
 	params:
 		filestem="intermediate/{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
 	conda:
@@ -164,7 +164,7 @@ rule make_blast_dbs_16S:
 
 rule blast_MG_vs_tags:
 	input:
-		database_files=lambda wildcards: expand("{intermediate/{outdir}}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
+		database_files=lambda wildcards: expand("intermediate/{{outdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
 		query="intermediate/{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	output:
 		"intermediate/{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
