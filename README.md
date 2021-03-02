@@ -281,7 +281,7 @@ cat intermediate/compute-workflow-intermediate/05-pyNAST-aligned/* | less
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------GGATGGGCCTGCGGCGTATCAGGTTGTAGGGGGTGTAATGTACCCTCTAGCCTTCGACGCGTACGGGT------------------------------------------------------------------------------------------------------
 ```
 
-If you want, you can just stop here. But if you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section).
+If you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section).
 
 ## Running the *Classify* workflow:
 
