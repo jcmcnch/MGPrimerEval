@@ -1,6 +1,6 @@
 #!/bin/bash
 
-snakemake --configfile config/compare/config-GA03-GP13-samples-only.yaml --snakefile Snakefile-compare2tags-16s.smk \
+snakemake --configfile config/compare/config-tutorial.yaml --snakefile Snakefile-compare2tags-16s.smk \
     --cores 20 --use-conda \
     --config cutoff=0.01 pcid=97 denoiser=dada2-old-data iLenDeblurTrunc=0 \
     ASVtable=config/compare/200514_ASV_info/DADA2/PROKs/200519_GA03-GP13_all-16S-seqs.with-tax.proportions.tsv \
