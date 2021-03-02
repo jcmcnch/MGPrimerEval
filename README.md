@@ -29,7 +29,7 @@ The only thing you need are raw, *unassembled* paired-end meta'omics data such a
 
 ### Recommended operating systems
 
-The recommended operating system to run the pipeline is Linux. The pipeline has been tested on Ubuntu 16.04, Ubuntu 20.04, and CentOS. It may work on Mac/Windows so long as you can install snakemake and conda, but has not been tested on these systems.
+The recommended operating system to run the pipeline is Linux (tested on Ubuntu 16.04/20.04, and CentOS). It may work on Mac/Windows so long as you can install snakemake and conda, but has not been tested on these systems.
 
 ### Overview of Pipeline Steps:
 
@@ -50,23 +50,23 @@ The pipeline steps are roughly as follows:
 
 ### Expected output files
 
-*NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`).*
+*NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`). This script should only be done after you finish your analysis.*
 
-If you run just the *compute* workflow, you will get:
+If you run just the *Compute* workflow, you will get:
 - phyloFlash summaries of taxa present in your metagenome/-transcriptome (can be useful to make sure your sample is what you think it is)
 - QC'd SSU rRNA fragments
 - Sorted SSU rRNA fragments (into categories noted above)
 - Aligned SSU rRNA fragments
 - Fragments subsetted from alignments to primer regions, and sorted into matching and non-matching at 0, 1, and 2-mismatch thresholds
 
-If you additionally run the *classify* workflow using output from above, you will get:
+If you additionally run the *Classify* workflow using output from above, you will get:
 - A graphical summary of the overall results
 - Taxonomic assignments for above matching / mismatching fragments (at the order level)
 - Graphical summaries of the taxonomic matches / mismatches
 - Tabular summaries across your whole dataset, indicating the proportions of order-level taxonomic groups are matched or mismatched for each primer/group/mismatch threshold (e.g. summarizing mismatches to *Archaea* for the primer 515Y at a 0-mismatch threshold)
 - Tabular summaries of the primer variants, both for the groups indicated above *and* for taxa that have abundant mismatches (so you can correct these mismatches or at least know what they are, even if the taxa are rare)
 
-The *compare* workflow (only if you have paired metagenomes and amplicon sequences you want to intercompare):
+The *Compare* workflow (only if you have paired metagenomes and amplicon sequences you want to intercompare):
 - SSU rRNA fragments subsetted to the primer region (done separately for 16S and 18S)
 - A BLASTn-based comparison between MG SSU rRNA fragments and amplicon sequence variants (using ASVs as a BLAST database and the MG SSU rRNA as query)
 - A direct intercomparison between taxonomic groups found in MG SSU rRNA and ASVs *from the same sample*, summarized in graphical and tabular format (includes R^2 values of relative abundances; see manuscript text for more details)
@@ -88,7 +88,7 @@ Our taxonomic classification and splitting steps also heavily depend on the [SIL
 
 ## Running the pipeline with your own data
 
-The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and process example data](https://github.com/jcmcnch/MGPrimerEval#example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
+The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and processing example data](https://github.com/jcmcnch/MGPrimerEval#example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
 
 These instructions assume you have familiarity with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive for remote servers. 
 
@@ -105,7 +105,7 @@ mamba create -c conda-forge -c bioconda -n snakemake-env snakemake
 conda activate snakemake-env
 ```
 
-[Source for install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
+([Source for install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html))
 
 ### Cloning the repository and adding raw data
 
