@@ -10,7 +10,7 @@ pcid=config["pcid"]
 strCutoff="minAbund-" + str(config["cutoff"])
 strPcid="blastnPcID-" + str(config["pcid"])
 denoiser=config["denoiser"]
-intdir="intermediate/compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])
+#outdir="intermediate/compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])
 outdir="output/compare-workflow-output/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])
 iLenDeblurTrunc=config["iLenDeblurTrunc"] #e.g. for the 515Y/926R amplicons, the merged reads are 373bp but I typically truncate with deblur to 363bp, so this value would be equal to 10
 ASVtable=config["ASVtable"]
@@ -32,15 +32,15 @@ rule concat_fwd_and_reverse_alignments:
 		fwd="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.fwd.SSU.{group}_pynast_aligned.fasta",
 		rev="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.rev.SSU.{group}_pynast_aligned.fasta"
 	output:
-		"{intdir}/00-concatenated/{sample}.{group}.concat.fasta"
+		"{outdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	shell:
 		"cat {input.fwd} {input.rev} > {output}"
 
 rule subset_to_primer_region:
 	input:
-		"{intdir}/00-concatenated/{sample}.{group}.concat.fasta"
+		"{outdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
+		"{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
 	conda:
 		"envs/biopython.yaml"
 	params:
@@ -52,20 +52,20 @@ rule subset_to_primer_region:
 
 rule get_names:
 	input:
-		names="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
+		names="{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids"
+		"{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids"
 	shell:
 		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output} || touch {output}"
 
 
 rule get_fastq_by_group:
 	input:
-		names="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
+		names="{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
 		fwd="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq.gz",
 		rev="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq.gz"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
+		"{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -78,10 +78,10 @@ rule get_fastq_by_group:
 
 rule revcomp_fastq_according_to_pyNAST:
 	input:
-		fasta="{intdir}/00-concatenated/{sample}.{group}.concat.fasta",
-		fastq="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
+		fasta="{outdir}/00-concatenated/{sample}.{group}.concat.fasta",
+		fastq="{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
 	output:
-		fastq_revcomp="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
+		fastq_revcomp="{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
 	conda:
 		"envs/biopython.yaml"
 	shell:
@@ -91,12 +91,12 @@ rule revcomp_fastq_according_to_pyNAST:
 #Since the above fastq will have additional bases included that are not part of the amplicon region
 rule get_sliced_fastq:
 	input:
-		fasta="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta",
-		fastq="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
+		fasta="{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta",
+		fastq="{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
 	conda:
                 "envs/biopython.yaml"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.sliced.fastq"
+		"{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.sliced.fastq"
 	shell:
 		"scripts/get-fastq-slice.py --inputfasta {input.fasta} "
 		"--inputfastq {input.fastq} --output {output}"
@@ -104,21 +104,21 @@ rule get_sliced_fastq:
 #concatenate the 3 different PROK categories
 rule merge_PROK:
 	input:
-		"{intdir}/01-subsetted/{sample}.ARCH.concat.515Y-926R.revcomped.sliced.fastq",
-		"{intdir}/01-subsetted/{sample}.BACT-NON-CYANO.concat.515Y-926R.revcomped.sliced.fastq",
-		"{intdir}/01-subsetted/{sample}.BACT-CYANO.concat.515Y-926R.revcomped.sliced.fastq"
+		"{outdir}/01-subsetted/{sample}.ARCH.concat.515Y-926R.revcomped.sliced.fastq",
+		"{outdir}/01-subsetted/{sample}.BACT-NON-CYANO.concat.515Y-926R.revcomped.sliced.fastq",
+		"{outdir}/01-subsetted/{sample}.BACT-CYANO.concat.515Y-926R.revcomped.sliced.fastq"
 	output:
-		"{intdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
+		"{outdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
 	shell:
 		"cat {input} > {output}"
 
 #Additional QC to remove a few remaining homopolymer runs and other things komplexity did not catch
 rule remove_low_complexity_bbmap:
 	input:
-		"{intdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
+		"{outdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
 	output:
-		masked="{intdir}/01-subsetted/{sample}.PROK.masked.515Y-926R.revcomped.sliced.fastq",
-		cleaned="{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
+		masked="{outdir}/01-subsetted/{sample}.PROK.masked.515Y-926R.revcomped.sliced.fastq",
+		cleaned="{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -136,18 +136,18 @@ rule parse_16S_ASV_table:
 	params:
 		"{sample}"
 	output:
-		"{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
+		"{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	script:
 		"scripts/make-db-of-non-zero-abund-ASV.py"
 
 rule get_sample_nonzero_16S_ASV_fastas:
 	input:
 		fasta=expand("{ASVseqs}", ASVseqs=config["ASVseqs"]),
-		ids="{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
+		ids="{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	conda:
 		"envs/pynast.yaml"
 	output:
-		"{intdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
+		"{outdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
 	shell:
 		"seqtk subseq {input.fasta} {input.ids} > {output}"
 
@@ -155,9 +155,9 @@ rule make_blast_dbs_16S:
 	input:
 		"{outdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
 	output:
-		expand("{{intdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
+		expand("{{outdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
 	params:
-		filestem="{intdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
+		filestem="{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
 	conda:
 		"envs/blast-env.yaml"
 	shell:
@@ -165,12 +165,12 @@ rule make_blast_dbs_16S:
 
 rule blast_MG_vs_tags:
 	input:
-		database_files=lambda wildcards: expand("{{intdir}}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
-		query="{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
+		database_files=lambda wildcards: expand("{{outdir}}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
+		query="{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	output:
 		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
 	params:
-		dbname="{intdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
+		dbname="{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
 	conda:
                 "envs/blast-env.yaml"
 	shell:
@@ -181,7 +181,7 @@ rule compare_MG_SSU_rRNA_with_ASVs:
 		"config/compare/GA03-GP13-sample-SRA.tsv",
 		expand({ASVtable}, ASVtable=config["ASVtable"]),
 		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
-		expand("{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids", intdir=intdir)
+		"{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	params:
 		"{sample}",
 		"{outdir}/"
