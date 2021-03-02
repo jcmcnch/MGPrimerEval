@@ -1,5 +1,7 @@
 ruleorder: count_tax_matches_and_mismatches_cyano > count_tax_matches_and_mismatches
 CUTOFF = config["cutoff"]
+VSEARCHudbPath=config["VSEARCHudbPath"]
+PhytoRefUdbPath=config["PhytoRefUdbPath"]
 
 rule all:
 	input:
@@ -47,11 +49,12 @@ rule classify_mismatches:
 		"intermediate/classify-workflow-intermediate/01-mismatches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.VSEARCHsintax-SILVA132.tax"
 	conda:
 		"envs/vsearch.yaml"
+	params:
+		db=VSEARCHudbPath
 	shell:
 		#Double pipe is OR operator and will only be executed if vsearch returns an error. Necessary otherwise empty files will cause vsearch to fail.
 		"""
-		vsearch --sintax {input} \
-		--db /home/db/VSEARCH/silva132_99_sintax.udb \
+		vsearch --sintax {input} --db {params.db} \
 		--tabbedout {output} --threads 1 --sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels \
 		|| touch {output}
 		"""
@@ -74,11 +77,12 @@ rule classify_matches_subsample:
 		"intermediate/classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax"
 	conda:
 		"envs/vsearch.yaml"
+        params:
+                db=VSEARCHudbPath
 	shell:
 		#Double pipe is OR operator and will only be executed if vsearch returns an error. Necessary otherwise empty files will cause vsearch to fail.
 		"""
-		vsearch --sintax {input} \
-		--db /home/db/VSEARCH/silva132_99_sintax.udb \
+                vsearch --sintax {input} --db {params.db} \
 		--tabbedout {output} --threads 1 --sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels \
 		|| touch {output}
 		"""
@@ -93,17 +97,15 @@ rule classify_cyano_fraction_phytoRef:
 	conda:
 		"envs/vsearch.yaml"
 	params:
-		db="/home/db/PhytoRef/PhytoRef_plus_Cyano.udb"
+		db=PhytoRefUdbPath
 	shell:
                 #Double pipe is OR operator and will only be executed if vsearch returns an error. Necessary otherwise empty files will cause vsearch to fail.
                 """
-                vsearch --sintax {input.nohits} \
-                --db {params.db} \
+                vsearch --sintax {input.nohits} --db {params.db} \
                 --tabbedout {output.nohits} --threads 1 --sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels \
                 || touch {output.nohits}
 
-		vsearch --sintax {input.hits} \
-                --db {params.db} \
+		vsearch --sintax {input.hits} --db {params.db} \
                 --tabbedout {output.hits} --threads 1 --sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels \
                 || touch {output.hits}
                 """

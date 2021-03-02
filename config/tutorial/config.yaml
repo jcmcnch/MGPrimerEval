@@ -7,6 +7,8 @@ cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
 phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
 uclustpath: "/home/jesse/MGPrimerEval-tutorial/bin"
+VSEARCHudbPath: "/home/db/VSEARCH/silva132_99_sintax.udb"
+PhytoRefUdbPath: "/home/db/PhytoRef/PhytoRef_plus_Cyano.udb"
 study: MGPrimerEval-tutorial 
 
 primer:
