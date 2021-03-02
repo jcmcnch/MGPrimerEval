@@ -275,6 +275,10 @@ You should look at the 6th column to check for the number of QC'd sequences reco
 ```
 #view alignment files to make sure they're not empty:
 cat intermediate/compute-workflow-intermediate/05-pyNAST-aligned/* | less
+
+#should see something like this on your screen:
+>SRR5720219.765562.1 NS500496_227_HVGG2BGXX:1:11306:17362:3569 length=150 1..68
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------GGATGGGCCTGCGGCGTATCAGGTTGTAGGGGGTGTAATGTACCCTCTAGCCTTCGACGCGTACGGGT------------------------------------------------------------------------------------------------------
 ```
 
 If you want, you can just stop here. But if you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section).
