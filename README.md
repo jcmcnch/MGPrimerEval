@@ -179,7 +179,7 @@ The following code will download the `udb`-formatted files you can use for the *
 mkdir -p ~/databases/VSEARCH_db/ ; cd ~/databases/VSEARCH_db
 
 #download database files from OSF
-for item in  IDS ; do curl -O -J -L https://osf.io/$item/download ; done
+for item in 25a8b znrv8 ; do curl -O -J -L https://osf.io/$item/download ; done
 
 #get full paths for config file
 ls $PWD/*udb
@@ -232,6 +232,8 @@ cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
 phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
 uclustpath: "/home/jesse/MGPrimerEval-tutorial/bin"
+VSEARCHudbPath: "/home/db/VSEARCH/silva132_99_sintax.udb"
+PhytoRefUdbPath: "/home/db/PhytoRef/PhytoRef_plus_Cyano.udb"
 study: <your study here>
 ```
 
@@ -240,6 +242,8 @@ For example, if you used the above commands to install the databases, the paths 
 ```
 /home/<your username>/databases/phyloFlash-db/138.1/
 /home/<your username>/databases/bbsplit-db/
+/home/<your username>/databases/VSEARCH_db/silva132_99_sintax.udb
+/home/<your username>/databases/VSEARCH_db/PhytoRef_plus_Cyano.udb
 ```
 
 If you don't need or want to test all the primers specified in the config, just comment them out. If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so). Or you can just open a github issue and I can add them to the template config. *NB: If you're adding new primers, don't forget to reverse complement the reverse primer sequence.*
