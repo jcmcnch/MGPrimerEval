@@ -270,7 +270,7 @@ Once the compute pipeline has completed, I recommend you take a look at the outp
 cat intermediate/compute-workflow-intermediate/09-summary/* | less
 ```
 
-You should look at the 6th column to check for the number of QC'd sequences recovered per sample/direction/group/primer. It makes sense to start with  **BACT-NON-CYANO** since this category will typically be the most abundant. It's normal to see zeroes or very low numbers for some categories. For example *Archaea* are just not that abundant in many surface ocean samples. If the data is *all zeroes*, it likely means that `uclust` is not set up properly. You can confirm this by looking into the alignment files as follows:
+You should look at the 6th column to check for the number of QC'd sequences recovered per sample/direction/group/primer. It makes sense to start with  *BACT-NON-CYANO* since this category will typically be the most abundant. It's normal to see zeroes or very low numbers for some categories. For example *Archaea* are just not that abundant in many surface ocean samples. If the data is *all zeroes*, it likely means that `uclust` is not set up properly. You can confirm this by looking into the alignment files as follows:
 
 ```
 #view alignment files to make sure they're not empty:
