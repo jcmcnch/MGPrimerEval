@@ -10,8 +10,7 @@ pcid=config["pcid"]
 strCutoff="minAbund-" + str(config["cutoff"])
 strPcid="blastnPcID-" + str(config["pcid"])
 denoiser=config["denoiser"]
-#intdir="intermediate/compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])
-intdir="output/compare-workflow-output/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])
+outdir="compare-workflow/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])
 iLenDeblurTrunc=config["iLenDeblurTrunc"] #e.g. for the 515Y/926R amplicons, the merged reads are 373bp but I typically truncate with deblur to 363bp, so this value would be equal to 10
 ASVtable=config["ASVtable"]
 ASVseqs=config["ASVseqs"]
@@ -20,11 +19,11 @@ iLenR2Trunc=config["iLenR2Trunc"]
 
 rule all:
 	input:
-		expand("{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta", sample=config["samples"], intdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
-		expand("{intdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg", sample=config["samples"], intdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
-		expand("{intdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg", sample=config["samples"], intdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
-		expand("{intdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta", sample=config["samples"], intdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
-		expand("{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.html", intdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"]))
+		expand("intermediate/{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
+		expand("output/{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
+		expand("output/{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
+		expand("output/{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
+		expand("output/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.html", outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"]))
 
 #Generate concatenated alignments that will be used for subsetting
 rule concat_fwd_and_reverse_alignments:
@@ -32,15 +31,15 @@ rule concat_fwd_and_reverse_alignments:
 		fwd="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.fwd.SSU.{group}_pynast_aligned.fasta",
 		rev="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.rev.SSU.{group}_pynast_aligned.fasta"
 	output:
-		"{intdir}/00-concatenated/{sample}.{group}.concat.fasta"
+		"intermediate/{outdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	shell:
 		"cat {input.fwd} {input.rev} > {output}"
 
 rule subset_to_primer_region:
 	input:
-		"{intdir}/00-concatenated/{sample}.{group}.concat.fasta"
+		"intermediate/{outdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
+		"intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
 	conda:
 		"envs/biopython.yaml"
 	params:
@@ -52,20 +51,20 @@ rule subset_to_primer_region:
 
 rule get_names:
 	input:
-		names="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
+		names="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids"
+		"intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids"
 	shell:
 		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output} || touch {output}"
 
 
 rule get_fastq_by_group:
 	input:
-		names="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
+		names="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
 		fwd="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq.gz",
 		rev="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq.gz"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
+		"intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -78,10 +77,10 @@ rule get_fastq_by_group:
 
 rule revcomp_fastq_according_to_pyNAST:
 	input:
-		fasta="{intdir}/00-concatenated/{sample}.{group}.concat.fasta",
-		fastq="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
+		fasta="intermediate/{outdir}/00-concatenated/{sample}.{group}.concat.fasta",
+		fastq="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
 	output:
-		fastq_revcomp="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
+		fastq_revcomp="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
 	conda:
 		"envs/biopython.yaml"
 	shell:
@@ -91,12 +90,12 @@ rule revcomp_fastq_according_to_pyNAST:
 #Since the above fastq will have additional bases included that are not part of the amplicon region
 rule get_sliced_fastq:
 	input:
-		fasta="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta",
-		fastq="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
+		fasta="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta",
+		fastq="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
 	conda:
                 "envs/biopython.yaml"
 	output:
-		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.sliced.fastq"
+		"intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.sliced.fastq"
 	shell:
 		"scripts/get-fastq-slice.py --inputfasta {input.fasta} "
 		"--inputfastq {input.fastq} --output {output}"
@@ -104,21 +103,21 @@ rule get_sliced_fastq:
 #concatenate the 3 different PROK categories
 rule merge_PROK:
 	input:
-		"{intdir}/01-subsetted/{sample}.ARCH.concat.515Y-926R.revcomped.sliced.fastq",
-		"{intdir}/01-subsetted/{sample}.BACT-NON-CYANO.concat.515Y-926R.revcomped.sliced.fastq",
-		"{intdir}/01-subsetted/{sample}.BACT-CYANO.concat.515Y-926R.revcomped.sliced.fastq"
+		"intermediate/{outdir}/01-subsetted/{sample}.ARCH.concat.515Y-926R.revcomped.sliced.fastq",
+		"intermediate/{outdir}/01-subsetted/{sample}.BACT-NON-CYANO.concat.515Y-926R.revcomped.sliced.fastq",
+		"intermediate/{outdir}/01-subsetted/{sample}.BACT-CYANO.concat.515Y-926R.revcomped.sliced.fastq"
 	output:
-		"{intdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
+		"intermediate/{outdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
 	shell:
 		"cat {input} > {output}"
 
 #Additional QC to remove a few remaining homopolymer runs and other things komplexity did not catch
 rule remove_low_complexity_bbmap:
 	input:
-		"{intdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
+		"intermediate/{outdir}/01-subsetted/{sample}.PROK.concat.515Y-926R.revcomped.sliced.fastq"
 	output:
-		masked="{intdir}/01-subsetted/{sample}.PROK.masked.515Y-926R.revcomped.sliced.fastq",
-		cleaned="{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
+		masked="intermediate/{outdir}/01-subsetted/{sample}.PROK.masked.515Y-926R.revcomped.sliced.fastq",
+		cleaned="intermediate/{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -136,28 +135,28 @@ rule parse_16S_ASV_table:
 	params:
 		"{sample}"
 	output:
-		"{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
+		"intermediate/{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	script:
 		"scripts/make-db-of-non-zero-abund-ASV.py"
 
 rule get_sample_nonzero_16S_ASV_fastas:
 	input:
 		fasta=expand("{ASVseqs}", ASVseqs=config["ASVseqs"]),
-		ids="{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
+		ids="intermediate/{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	conda:
 		"envs/pynast.yaml"
 	output:
-		"{intdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
+		"intermediate/{outdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
 	shell:
 		"seqtk subseq {input.fasta} {input.ids} > {output}"
 
 rule make_blast_dbs_16S:
 	input:
-		"{intdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
+		"intermediate/{outdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
 	output:
-		expand("{{intdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
+		expand("{intermediate/{outdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
 	params:
-		filestem="{intdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
+		filestem="intermediate/{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
 	conda:
 		"envs/blast-env.yaml"
 	shell:
@@ -165,12 +164,12 @@ rule make_blast_dbs_16S:
 
 rule blast_MG_vs_tags:
 	input:
-		database_files=lambda wildcards: expand("{{intdir}}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
-		query="{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
+		database_files=lambda wildcards: expand("{intermediate/{outdir}}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
+		query="intermediate/{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	output:
-		"{intdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
+		"intermediate/{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
 	params:
-		dbname="{intdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
+		dbname="intermediate/{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
 	conda:
                 "envs/blast-env.yaml"
 	shell:
@@ -180,67 +179,67 @@ rule compare_MG_SSU_rRNA_with_ASVs:
 	input:
 		"config/compare/GA03-GP13-sample-SRA.tsv",
 		expand({ASVtable}, ASVtable=config["ASVtable"]),
-		"{intdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
-		"{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
+		"intermediate/{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
+		"intermediate/{outdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
 	params:
 		"{sample}",
-		"{intdir}/"
+		"intermediate/{outdir}/"
 	conda:
 		"envs/networkx.yaml"
 	output:
-		"{intdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv"
+		"intermediate/{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv"
 	script:
 		"scripts/compare-MG-eASV-abund-from-blast-output.py"
 
 rule plot_ASV_vs_BLAST_results:
 	input:
-		"{intdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv",
+		"intermediate/{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv",
 		"config/compare/GA03-GP13-sample-SRA.tsv"
 	params:
 		"{sample}"
 	conda:
 		"envs/seaborn-env.yaml"
 	output:
-		"{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg",
-		"{outdir}/07-MG-vs-ASV-stats/{sample}.PROK.nonzero.ASV.comparison.stats.tsv"
+		"output/{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg",
+		"output/{outdir}/07-MG-vs-ASV-stats/{sample}.PROK.nonzero.ASV.comparison.stats.tsv"
 	script:
 		"scripts/seaborn-plot-correlations.py"
 
 rule plot_ASV_vs_BLAST_results_log_scale:
 	input:
-		"{intdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv",
+		"intermediate/{outdir}/06-MG-vs-ASV-tsv/{sample}.PROK.nonzero.ASV.comparison.tsv",
                 "config/compare/GA03-GP13-sample-SRA.tsv"
 	params:
 		"{sample}"
 	conda:
 		"envs/seaborn-env.yaml"
 	output:
-		"{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg",
-                "{outdir}/07-MG-vs-ASV-stats/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.stats.tsv"
+		"output/{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg",
+                "output/{outdir}/07-MG-vs-ASV-stats/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.stats.tsv"
 	script:
 		"scripts/seaborn-plot-correlations-log.py"
 
-#NOTE TO SELF: pipeline not curated beyond this point. Changed variable outdir to intdir.
+#NOTE TO SELF: pipeline not curated beyond this point. Need to change directory names if want to use rest of pipeline.
 
 rule sift_unmatched:
 	input:
-		"{intdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
-		"{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
+		"intermediate/{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
+		"intermediate/{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	output:
-		"{intdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.not-matching.ASVs.fasta",
-		"{intdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.matching.ASVs.fasta"
+		"intermediate/{outdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.not-matching.ASVs.fasta",
+		"intermediate/{outdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.matching.ASVs.fasta"
 	script:
 		"scripts/get-non-matching.py"
 
 #Align against E. coli for now, since just to get visual of locations
 rule align_unmatched:
 	input:
-		missed="{intdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.not-matching.ASVs.fasta",
-		matched="{intdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.matching.ASVs.fasta",
+		missed="intermediate/{outdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.not-matching.ASVs.fasta",
+		matched="intermediate/{outdir}/08-MG-not-in-ASVdb/{sample}.PROK.515Y-926R.matching.ASVs.fasta",
 		ref="SSU_refs/Ecoli_16s.fna"
 	output:
-		matching="{intdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.matching.ASVs.aligned.fasta",
-		missing="{intdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta"
+		matching="intermediate/{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.matching.ASVs.aligned.fasta",
+		missing="intermediate/{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta"
 	conda:
 		"envs/pynast.yaml"
 	shell:
@@ -249,15 +248,15 @@ rule align_unmatched:
 
 rule subset_non_matching:
 	input:
-		matching="{intdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.matching.ASVs.aligned.fasta",
-		missing="{intdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta"
+		matching="intermediate/{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.matching.ASVs.aligned.fasta",
+		missing="intermediate/{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta"
 	output:
-		#R1missing="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.fasta",
-		#R2missing="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.fasta",
-		R1andR2missing="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.fasta",
-		#R1matching="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.fasta",
-		#R2matching="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.fasta",
-		R1andR2matching="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.fasta"
+		#R1missing="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.fasta",
+		#R2missing="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.fasta",
+		R1andR2missing="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.fasta",
+		#R1matching="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.fasta",
+		#R2matching="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.fasta",
+		R1andR2matching="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.fasta"
 	params:
 		R1start=533,
 		R1end=533 + iLenR1Trunc,
@@ -275,19 +274,19 @@ rule subset_non_matching:
 
 rule classify_unmatched:
 	input:
-		#R1missing="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.fasta",
-		#R2missing="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.fasta",
-		R1andR2missing="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.fasta",
-		#R1matching="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.fasta",
-		#R2matching="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.fasta",
-		R1andR2matching="{intdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.fasta"
+		#R1missing="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.fasta",
+		#R2missing="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.fasta",
+		R1andR2missing="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.fasta",
+		#R1matching="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.fasta",
+		#R2matching="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.fasta",
+		R1andR2matching="intermediate/{outdir}/10-MG-not-in-ASVdb-subsetted/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.fasta"
 	output:
-		#R1missing="{intdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.tsv",
-		#R2missing="{intdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.tsv",
-		R1andR2missing="{intdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.tsv",
-		#R1matching="{intdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.class.tsv",
-		#R2matching="{intdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.class.tsv",
-		R1andR2matching="{intdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.tsv"
+		#R1missing="intermediate/{outdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.tsv",
+		#R2missing="intermediate/{outdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.tsv",
+		R1andR2missing="intermediate/{outdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.tsv",
+		#R1matching="intermediate/{outdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.class.tsv",
+		#R2matching="intermediate/{outdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.class.tsv",
+		R1andR2matching="intermediate/{outdir}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.tsv"
 	params:
 		db="/home/db/VSEARCH/silva132_99_sintax.udb",
 		options="--sintax_cutoff 0 --top_hits_only --topn 1 --notrunclabels",
@@ -305,36 +304,36 @@ rule classify_unmatched:
 #Concatenate taxonomy files
 rule cat_tax_for_all_samples_matches_and_mismatches:
 	input:
-		#R1missing=expand("{{intdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.tsv", sample=config["samples"]),
-		#R2missing=expand("{{intdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.tsv", sample=config["samples"]),
-		R1andR2missing=expand("{{intdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"]),
-		#R1matching=expand("{{intdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.class.tsv", sample=config["samples"]),
-		#R2matching=expand("{{intdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.class.tsv", sample=config["samples"]),
-		R1andR2matching=expand("{{intdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"])
+		#R1missing=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.tsv", sample=config["samples"]),
+		#R2missing=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.tsv", sample=config["samples"]),
+		R1andR2missing=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"]),
+		#R1matching=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.class.tsv", sample=config["samples"]),
+		#R2matching=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.class.tsv", sample=config["samples"]),
+		R1andR2matching=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"])
 	output:
-		#R1missing="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.tsv",
-		#R2missing="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.tsv",
-		R1andR2missing="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.tsv",
-		#R1matching="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.tsv",
-		#R2matching="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.tsv",
-		R1andR2matching="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.tsv"
+		#R1missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.tsv",
+		#R2missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.tsv",
+		R1andR2missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.tsv",
+		#R1matching="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.tsv",
+		#R2matching="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.tsv",
+		R1andR2matching="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.tsv"
 	shell:
-		#"find {intdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
+		#"find intermediate/{outdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
 		#"\"*not-matching*.R1.class.tsv\" -print0 | "
 		#"xargs -0 cat > {output.R1missing} ; "
-		#"find {intdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
+		#"find intermediate/{outdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
 		#"\"*not-matching*.R2.class.tsv\" -print0 | "
 		#"xargs -0 cat > {output.R2missing} ; "
-		"find {intdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
+		"find intermediate/{outdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
 		"\"*not-matching*.R1andR2.class.tsv\" -print0 | "
 		"xargs -0 cat > {output.R1andR2missing} ; "
-		#"find {intdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
+		#"find intermediate/{outdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
 		#"\"*.matching*.R1.class.tsv\" -print0 | "
 		#"xargs -0 cat > {output.R1matching} ; "
-		#"find {intdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
+		#"find intermediate/{outdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
 		#"\"*.matching*.R2.class.tsv\" -print0 | "
 		#"xargs -0 cat > {output.R2matching} ; "
-		"find {intdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
+		"find intermediate/{outdir}/11-MG-not-in-ASVdb-classified/ -type f -name "
 		"\"*.matching*.R1andR2.class.tsv\" -print0 | "
 		"xargs -0 cat > {output.R1andR2matching} "
 
@@ -342,25 +341,25 @@ rule cat_tax_for_all_samples_matches_and_mismatches:
 #Counting order-level groupings (can adjust level with the "cut -d, -f1-4" parameter below)
 rule count_tax_matches_and_mismatches:
 	input:
-		#R1missing="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.tsv",
-		#R2missing="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.tsv",
-		R1andR2missing="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.tsv",
-		#R1matching="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.tsv",
-		#R2matching="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.tsv",
-		R1andR2matching="{intdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.tsv"
+		#R1missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.tsv",
+		#R2missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.tsv",
+		R1andR2missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.tsv",
+		#R1matching="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.tsv",
+		#R2matching="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.tsv",
+		R1andR2matching="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.tsv"
 	output:
-		#R1missingcounts="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.tsv",
-		#R2missingcounts="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.tsv",
-		R1andR2missingcounts="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
-		#R1missingtaxtable="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.taxtable.tsv",
-		#R2missingtaxtable="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.taxtable.tsv",
-		R1andR2missingtaxtable="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.taxtable.tsv",
-		#R1matchingcounts="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.tsv",
-		#R2matchingcounts="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.tsv",
-		R1andR2matchingcounts="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
-		#R1matchingtaxtable="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.taxtable.tsv",
-		#R2matchingtaxtable="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.taxtable.tsv",
-		R1andR2matchingtaxtable="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.taxtable.tsv"
+		#R1missingcounts="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.tsv",
+		#R2missingcounts="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.tsv",
+		R1andR2missingcounts="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
+		#R1missingtaxtable="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.taxtable.tsv",
+		#R2missingtaxtable="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.taxtable.tsv",
+		R1andR2missingtaxtable="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.taxtable.tsv",
+		#R1matchingcounts="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.tsv",
+		#R2matchingcounts="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.tsv",
+		R1andR2matchingcounts="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
+		#R1matchingtaxtable="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.taxtable.tsv",
+		#R2matchingtaxtable="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.taxtable.tsv",
+		R1andR2matchingtaxtable="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.taxtable.tsv"
 	shell:
 		#"sed -re 's/\([0-9]{{1}}\.[0-9]{{2}}\)//g' {input.R1missing} | tee {output.R1missingtaxtable} |" #Remove confidence estimations from VSEARCH output, keep a copy for later steps but also pipe to subsequent commands
 		#"cut -f2 | sort | cut -d, -f1-4 | sort | uniq -c | " #Take only tax column, collapse to order level, then count unique occurrences
@@ -384,21 +383,21 @@ rule count_tax_matches_and_mismatches:
 #Now take only those with greater than 1 % abundance (among mismatches) using basic python script (can change abundance cutoff if you desire)
 rule filter_tax_matches_by_abundance:
 	input:
-		#R1missing="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.tsv",
-		#R2missing="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.tsv",
-		R1andR2missing="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
-		#R1matching="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.tsv",
-		#R2matching="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.tsv",
-		R1andR2matching="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.tsv"
+		#R1missing="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.tsv",
+		#R2missing="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.tsv",
+		R1andR2missing="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
+		#R1matching="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.tsv",
+		#R2matching="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.tsv",
+		R1andR2matching="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.tsv"
 	params:
 		minAbund = 0.001  #Change fractional value in config file if desired, default 0.01
 	output:
-		#R1missing="{intdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
-		#R2missing="{intdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
-		R1andR2missing="{intdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
-		#R1matching="{intdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
-		#R2matching="{intdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
-		R1andR2matching="{intdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.frac.min" + str(cutoff) + ".tsv"
+		#R1missing="intermediate/{outdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
+		#R2missing="intermediate/{outdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
+		R1andR2missing="intermediate/{outdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
+		#R1matching="intermediate/{outdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
+		#R2matching="intermediate/{outdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.frac.min" + str(cutoff) + ".tsv",
+		R1andR2matching="intermediate/{outdir}/14-MG-not-in-ASVdb-classified-cat-parsed-fractions/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.frac.min" + str(cutoff) + ".tsv"
 	shell:
 		#"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input.R1missing} {params.minAbund} > {output.R1missing} ; "
 		#"scripts/mismatch-characterization/filter-by-fractional-abundance.py {input.R2missing} {params.minAbund} > {output.R2missing} ; "
@@ -409,25 +408,25 @@ rule filter_tax_matches_by_abundance:
 
 rule make_kronas:
 	input:
-		#R1missing="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.tsv",
-		#R2missing="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.tsv",
-		R1andR2missing="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
-		#R1matching="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.tsv",
-		#R2matching="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.tsv",
-		R1andR2matching="{intdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.tsv"
+		#R1missing="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.counts.tsv",
+		#R2missing="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.counts.tsv",
+		R1andR2missing="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.cat.counts.tsv",
+		#R1matching="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.class.cat.counts.tsv",
+		#R2matching="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.class.cat.counts.tsv",
+		R1andR2matching="intermediate/{outdir}/13-MG-not-in-ASVdb-classified-cat-parsed/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.cat.counts.tsv"
 	output:
-		#R1missing="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.krona.input",
-		#R2missing="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.krona.input",
-		R1andR2missing="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.input",
-		#R1htmlmissing="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.krona.html",
-		#R2htmlmissing="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.krona.html",
-		R1andR2htmlmissing="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.html",
-		#R1matching="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.krona.input",
-		#R2matching="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.krona.input",
-		R1andR2matching="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.krona.input",
-		#R1htmlmatching="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.krona.html",
-		#R2htmlmatching="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.krona.html",
-		R1andR2htmlmatching="{intdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.krona.html"
+		#R1missing="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.krona.input",
+		#R2missing="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.krona.input",
+		R1andR2missing="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.input",
+		#R1htmlmissing="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.krona.html",
+		#R2htmlmissing="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.krona.html",
+		R1andR2htmlmissing="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.html",
+		#R1matching="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.krona.input",
+		#R2matching="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.krona.input",
+		R1andR2matching="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.krona.input",
+		#R1htmlmatching="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1.krona.html",
+		#R2htmlmatching="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R2.krona.html",
+		R1andR2htmlmatching="intermediate/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.matching.ASVs.aligned.R1andR2.krona.html"
 	conda:
 		"envs/krona.yaml"
 	shell:
