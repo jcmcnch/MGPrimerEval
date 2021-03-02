@@ -93,7 +93,7 @@ rule get_sliced_fastq:
 	input:
 		fasta="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta",
 		fastq="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.fastq"
-        conda:
+	conda:
                 "envs/biopython.yaml"
 	output:
 		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.revcomped.sliced.fastq"
