@@ -306,10 +306,10 @@ rule cat_tax_for_all_samples_matches_and_mismatches:
 	input:
 		#R1missing=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.tsv", sample=config["samples"]),
 		#R2missing=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.tsv", sample=config["samples"]),
-		R1andR2missing=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"]),
+		R1andR2missing=expand("intermediate/{{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"]),
 		#R1matching=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1.class.tsv", sample=config["samples"]),
 		#R2matching=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R2.class.tsv", sample=config["samples"]),
-		R1andR2matching=expand("{intermediate/{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"])
+		R1andR2matching=expand("intermediate/{{outdir}}/11-MG-not-in-ASVdb-classified/{sample}.PROK.515Y-926R.matching.ASVs.aligned.R1andR2.class.tsv", sample=config["samples"])
 	output:
 		#R1missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1.class.cat.tsv",
 		#R2missing="intermediate/{outdir}/12-MG-not-in-ASVdb-classified-cat/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R2.class.cat.tsv",
