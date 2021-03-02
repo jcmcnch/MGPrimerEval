@@ -77,7 +77,7 @@ rule classify_matches_subsample:
 		"intermediate/classify-workflow-intermediate/03-matches-classified/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.sub5k.hit.filtered.VSEARCHsintax-SILVA132.tax"
 	conda:
 		"envs/vsearch.yaml"
-        params:
+	params:
                 db=VSEARCHudbPath
 	shell:
 		#Double pipe is OR operator and will only be executed if vsearch returns an error. Necessary otherwise empty files will cause vsearch to fail.
