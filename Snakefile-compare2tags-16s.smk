@@ -154,7 +154,7 @@ rule make_blast_dbs_16S:
 	input:
 		"intermediate/{outdir}/03-ASV-fastas/{sample}.PROK.nonzero.ASV.fasta"
 	output:
-		expand("{intermediate/{outdir}}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
+		expand("{intermediate/{outdir}/04-ASV-blastdbs/{{sample}}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"])
 	params:
 		filestem="intermediate/{outdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
 	conda:
