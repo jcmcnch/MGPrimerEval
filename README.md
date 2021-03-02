@@ -120,7 +120,7 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 
 `ln -s /full/path/to/your/data/*gz intermediate/compute-workflow-intermediate/00-fastq/`
 
-### Downloading databases for phyloFlash and SSU rRNA splitting, and adding `uclust` to your path
+### Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
 
 1. PhyloFlash Database for Retrieving SSU rRNA fragments
 
@@ -137,11 +137,11 @@ mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash
 conda activate pf
 
 #change directory to suit your needs
-mkdir -p ~/databases/phyloFlash-db/
-cd ~/databases/phyloFlash-db/
-phyloFlash_makedb.pl --remote
+mkdir -p ~/databases/phyloFlash-db/ ; cd ~/databases/phyloFlash-db/
 
-#now go do something else for few hours while the database is downloaded and QC'd
+#run database download/construction script
+#will take a few hours while the database is downloaded and QC'd
+phyloFlash_makedb.pl --remote
 ```
 
 \*Note: `sortmerna` is not used in this pipeline but is part of the conda recipe.
@@ -155,14 +155,37 @@ If you do not already have bbmap installed locally, make a conda environment cal
 Now, download and create the database (should only take a few minutes):
 
 ```
+#activate environment
 conda activate bbmap-env
-mkdir -p ~/databases/bbsplit-db/
-cd ~/databases/bbsplit-db
+
+#make directory, enter it
+mkdir -p ~/databases/bbsplit-db/ ; cd ~/databases/bbsplit-db
+
+#download database files from OSF
 for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do curl -O -J -L https://osf.io/$item/download ; done
+
+#make databases
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
-3. Getting the `uclust` executable:
+3. Databases for classifying SSU rRNA fragments with VSEARCH
+
+**NB: If these databases are not set up correctly, the *Classify* workflow will run but will generate empty output files.** 
+
+The following code will download the `udb`-formatted files you can use for the *Classify* workflow (not needed if you only want to run the *Compute* workflow):
+
+```
+#make directory, enter it
+mkdir -p ~/databases/VSEARCH_db/ ; cd ~/databases/VSEARCH_db
+
+#download database files from OSF
+for item in  IDS ; do curl -O -J -L https://osf.io/$item/download ; done
+
+#get full paths for config file
+ls $PWD/*udb
+```
+
+4. Getting the `uclust` executable:
 
 **Please note that the pipeline will still run if `uclust` is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results). So double-check that the path you provide in the config below is accurate.**
 
