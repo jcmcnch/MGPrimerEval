@@ -166,7 +166,7 @@ rule make_blast_dbs_16S:
 rule blast_MG_vs_tags:
 	input:
 		database_files=lambda wildcards: expand("{{intdir}}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db.{ext}", ext=["nhr", "nin", "nsq"], sample=wildcards.sample),
-		query=intdir + "/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
+		query="{intdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta"
 	output:
 		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
 	params:
@@ -181,7 +181,7 @@ rule compare_MG_SSU_rRNA_with_ASVs:
 		"config/compare/GA03-GP13-sample-SRA.tsv",
 		expand({ASVtable}, ASVtable=config["ASVtable"]),
 		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv",
-		"{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids"
+		expand("{intdir}/02-ASV-ids/{sample}.PROK.nonzero.ASV.ids", intdir=intdir)
 	params:
 		"{sample}",
 		"{outdir}/"
