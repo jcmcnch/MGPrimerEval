@@ -122,7 +122,7 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 
 ### Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
 
-1. PhyloFlash Database for Retrieving SSU rRNA fragments
+1. **PhyloFlash Database for Retrieving SSU rRNA fragments**
 
 Install phyloFlash into its own environment and run the database install script (will take some hours as phyloFlash runs quality-control steps on the database but this only needs to be run once):
 
@@ -146,7 +146,7 @@ phyloFlash_makedb.pl --remote
 
 \*Note: `sortmerna` is not used in this pipeline but is part of the conda recipe.
 
-2. Database for Splitting SSU rRNA fragments
+2. **Database for Splitting SSU rRNA fragments**
 
 If you do not already have bbmap installed locally, make a conda environment called bbmap-env:
 
@@ -168,7 +168,7 @@ for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do curl -O -J -L https:/
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
-3. Databases for classifying SSU rRNA fragments with VSEARCH
+3. **Databases for classifying SSU rRNA fragments with VSEARCH**
 
 **NB: If these databases are not set up correctly, the *Classify* workflow will run but will generate empty output files.** 
 
@@ -185,7 +185,7 @@ for item in 25a8b znrv8 ; do curl -O -J -L https://osf.io/$item/download ; done
 ls $PWD/*udb
 ```
 
-4. Getting the `uclust` executable:
+4. **Getting the `uclust` executable:**
 
 **Please note that the pipeline will still run if `uclust` is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results). So double-check that the path you provide in the config below is accurate.**
 
