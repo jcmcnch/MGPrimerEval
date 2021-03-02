@@ -29,8 +29,8 @@ rule all:
 #Generate concatenated alignments that will be used for subsetting
 rule concat_fwd_and_reverse_alignments:
 	input:
-		fwd="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.fwd.SSU.{group}_pynast_aligned.fasta",
-		rev="compute-workflow-intermediate/05-pyNAST-aligned/{sample}.rev.SSU.{group}_pynast_aligned.fasta"
+		fwd="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.fwd.SSU.{group}_pynast_aligned.fasta",
+		rev="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.rev.SSU.{group}_pynast_aligned.fasta"
 	output:
 		"{intdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	shell:
@@ -62,8 +62,8 @@ rule get_names:
 rule get_fastq_by_group:
 	input:
 		names="{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
-		fwd="compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq.gz",
-		rev="compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq.gz"
+		fwd="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq.gz",
+		rev="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq.gz"
 	output:
 		"{intdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fastq"
 	conda:
