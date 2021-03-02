@@ -285,7 +285,7 @@ If you want to get more information about which taxa are missed by your primers,
 
 ## Running the *Classify* workflow:
 
-The classify workflow summarizes all the data from the compute workflow. For example, if you had 500 samples it would give you information on the overall patterns summed across all 500 samples.
+The classify workflow summarizes all the data from the compute workflow. For example, if you had 500 samples it would give you information on the overall patterns summed across all 500 samples. It is mainly useful for finding out which taxa might be primarily responsible for mismatches, and provides information on how to modify primers to fix these issues.
 
 I recommend first running a small portion of the workflow to generate a summary plot from the *Compute* results:
 
@@ -296,15 +296,23 @@ conda activate snakemake-env
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until plot_compute_results 
 ```
 
-This will produce boxplots summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment is without one of the groups, it's normal for some of the plots to be blank.
+This will produce 4 boxplots PDFs (in your analysis directory) summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment is without one of the groups, it's normal for some of the plots to be blank.
 
-Once you verify (at least some of) the plots look good, you can run the rest of the pipeline as follows:
+Once you verify (at least some of) the plots look good, you can run the rest of the pipeline without the `--until` flag:
 
 ```
 #Activate snakemake and run full pipeline
 conda activate snakemake-env
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml
 ```
+
+- Expected output
+- How to use data for improving primers (link to other repo)
+
+## Running the *Compare* workflow
+
+- Provide example input data
+- Show output results
 
 ## Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
