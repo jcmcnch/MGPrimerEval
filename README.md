@@ -195,7 +195,7 @@ All you need to do is put the binary in a sensible location, and make a note of 
 
 ```
 #enter your analysis folder
-cd /home/jesse/MGPrimerEval-tutorial
+cd myDataset
 
 #make a directory for binaries, enter directory
 mkdir bin ; cd bin
@@ -242,6 +242,7 @@ For example, if you used the above commands to install the databases, the paths 
 ```
 /home/<your username>/databases/phyloFlash-db/138.1/
 /home/<your username>/databases/bbsplit-db/
+/home/<your username>/myDataset/bin/
 /home/<your username>/databases/VSEARCH_db/silva132_99_sintax.udb
 /home/<your username>/databases/VSEARCH_db/PhytoRef_plus_Cyano.udb
 ```
