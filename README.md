@@ -258,14 +258,25 @@ The classify workflow summarizes all the data from the compute workflow. For exa
 I recommend first running a small portion of the workflow to generate a summary plot from the *Compute* results:
 
 ```
-#Activate and run only the summary plot step
+#Activate snakemake and run only the summary plot step
 conda activate snakemake-env
+#The until flag only runs the pipeline up to a specific step
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until plot_compute_results 
 ```
 
-Some of the 
+This will produce boxplots summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment is without one of the groups, it's normal for some of the plots to be blank.
+
+Once you verify (at least some of) the plots look good, you can run the rest of the pipeline as follows:
+
+```
+#Activate snakemake and run full pipeline
+conda activate snakemake-env
+snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml
+```
 
 ## Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
+
+The following instructions 
 
 **These steps were tested on a remote server running Ubuntu 16.04 in January 2021.**
 
