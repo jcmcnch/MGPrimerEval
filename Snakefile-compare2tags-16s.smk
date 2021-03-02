@@ -171,7 +171,7 @@ rule blast_MG_vs_tags:
 		"{outdir}/05-MG-blasted-against-ASVs/{sample}.PROK.nonzero.ASV.blastout.tsv"
 	params:
 		dbname="{intdir}/04-ASV-blastdbs/{sample}.PROK.nonzero.ASV.db"
-        conda:
+	conda:
                 "envs/blast-env.yaml"
 	shell:
 		"blastn -qcov_hsp_perc 100 -perc_identity {pcid} -outfmt 6 -query {input.query} -db {params.dbname} > {output}"
