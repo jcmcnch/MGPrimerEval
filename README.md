@@ -8,6 +8,8 @@ Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU 
 
 Our new approach as implemented with this pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest, avoiding both sources of bias mentioned above.
 
+The pipeline is divided into three modules:
+
 * *Compute* workflow: Calculate, from raw (unassembled) metagenome/transcriptome reads, the proportion of reads that perfectly match your primer(s) of interest.
 * *Classify* workflow: Using output from the *Compute* workflow, determine which taxa are matched, and which taxa are mismatched. Provide information on primer variants for specific groupings that can allow an investigator to correct biases as appropriate.
 * *Compare* workflow: Using output from the *Compute* workflow, compare relative abundances of amplicon sequence variants with those from the *same region* of the 16S/18S molecule. This allows an "apples to apples" comparison between amplicon/metagenomic methods, and can show how well the two methods correspond with one another. 
