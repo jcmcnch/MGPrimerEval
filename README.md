@@ -326,8 +326,7 @@ The *Classify* output will be found in `output/classify-workflow/`. If you want 
 Here is a brief summary of the contents of the folders:
 - `output/classify-workflow/plots/matchVSmismatch-barplots` is a good place to start. It contains plots of the community composiiton of the mismatched and matched reads at 0, 1, and 2-mismatch thresholds. It will give you a general idea which organisms may be over-represented in the mismatches and thus might merit some corrections. Some may be empty if there is insufficient data. 
 - `output/classify-workflow/overall-summaries` contains detailed information you may wish to peruse further. For example:
-	+ Files ending in `mismatch.summary.tsv` are tab-separated spreadsheets that show statistics ab
-out mismatches for order-level taxa. This will give more quantitative information complementary to the plots mentioned above.
+	+ Files ending in `mismatch.summary.tsv` are tab-separated spreadsheets that show statistics about mismatches for order-level taxa. This will give more quantitative information complementary to the plots mentioned above.
 	+ Files ending in `taxonFracMismatched.0-2mm.tsv` show the fraction of mismatches across the different mismatch thresholds. This would essentially tell you how hard it will be to improve your primer for each taxon. For example, if your taxon is not well covered at 0-mismatches but well-covered at 1-mismactches then it would only require minor modifications.
 	+ Files ending in `aln.summary.tsv` show the relative abundances for the *matching* variants at each threshold and their relative abundances. If your goal is to improve your primers, I suggest you start at the 2-mismatch threshold since it will contain things not matched by your primers.
 	+ Files ending in `aln.fasta` contain fasta files of the actual variants identified, and could be useful for plotting/visualization.
@@ -336,41 +335,49 @@ out mismatches for order-level taxa. This will give more quantitative informatio
 
 ## Running the *Compare* workflow
 
-To run this workflow, you need to provide several things:
+To run this workflow, you need to provide several files (exampls are shown in parentheses; note that the formatting needs to be exactly the same):
 
-1. 
+1. An ASV table that has been transformed to relative abundances (e.g. `config/compare/200514_ASV_info/DADA2/PROKs/200519_GA03-GP13_all-16S-seqs.with-tax.proportions.tsv`).
+2. Sequences for the ASVs (e.g. `config/compare/200514_ASV_info/DADA2/PROKs/200519_GA03-GP13_all-16S-seqs.with-tax.proportions.fasta`)
+3. A tab-separated file that indicates which metagenomic files correspond with which ASV sample (e.g. `config/compare/GA03-GP13-sample-SRA.tsv`)
+4. A config file with information on the parameters you feed to the pipeline (e.g. `config/compare/config-tutorial.yaml`)
 
-You can find information 
-- Provide example input data
-- Show output results
+If you've downloaded the example data (next section), the compare workflow can be run with the following script:
+
+`./runscripts/compare/16s-dada2-97pc-tutorial.sh`
+
+The output can be found, you guessed it, in the `output/compare-worflow` folder. Since this comparison has quite a few "knobs" you can turn, I've made it so that the output folder is named to record parameters specified by the user (so you don't forget later). For example, the output from today's test was named:
+
+`output/compare-workflow/2021-03-02_dada2-old-data_blastnPcID-97_minAbund-0.01_vs_MG/`
+
+Within this folder, you'll find two subfolders:
+
+- `07-MG-vs-ASV-plots` contains plots of the metagenomic relative abundances plotted against the ASV relative abundances on both linear and log scales.
+- `07-MG-vs-ASV-stats` contains some statistics about the correlation. Interpret these statistics with caution - they are intended to be a data exploration tool, not an authoritative description. For example, they could help identify samples that differ a lot between MG and ASV-based methods, and could point towards ways to optimize methods.
 
 ## Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
-The following instructions 
+The following instructions explain how to download 10 files from the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176) that can be used with configuration files and template scripts to test the functionality of the pipeline on your system.
 
-**These steps were tested on a remote server running Ubuntu 16.04 in January 2021.**
+1. If you haven't done so, clone the repo into a folder named `myDataset` and enter it:
 
-I'm going to assume you're familiar with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive. I'll also assume you've followed the [snakemake install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html) with the small difference that my conda environment for snakemake is `snakemake-env` not `snakemake`.
+```
+git clone https://github.com/jcmcnch/MGPrimerEval.git myDataset
+cd myDataset
+```
+ 
+2. Now, clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into your analysis folder (you should now see a `ena-fast-download` subfolder).
 
-### Getting setup: Downloading databases
+3. Install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) on your system, which is proprietary software that is a dependency of `ena-fast-download`. You may find [these instructions](https://gist.github.com/mfansler/71f09c8b6c9a95ec4e759a8ffc488be3) helpful for installing `ascp`.
 
-Our pipeline depends on open-source software, and leans heavily in particular on the wonderful [phyloFlash package](https://github.com/HRGV/phyloFlash/blob/master/README.md) which uses a curated version of the SILVA database to retrieve SSU rRNA from meta'omics data (both 16S and 18S). Before running the tutorial, you will need to download their database. Choose a sensible location, install phyloFlash using conda (the following worked for me: `conda config --set channel_priority true && conda create -n pf sortmerna=2.1b phyloflash && conda config --set channel_priority false`), activate the environment (`conda activate pf`), run their download script in the sensible location (e.g. `phyloFlash_makedb.pl --remote`; this step will take up to a few hours as phyloFlash runs quality-control steps on the database but this only needs to be run once), and then make a note of where the database is located so you can add it into your configuration file later.
+4. Run the script `./tutorial/download-BGT.sh` to download the BioGEOTRACES metagenomes with `ena-fast-download`. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
 
-There is also a splitting step for which you will need to download the sequence files found [here](https://osf.io/e65rs/). To transform these sequence files into splitting databases for the pipeline, you will need `bbtools` installed ([install with conda here](https://anaconda.org/bioconda/bbmap)). Use the commands in the shell script found in the repository. You don't need to have a `bbmap-env` conda environment - as long as your shell can access `bbtools` when you run the commands you should be fine. You will know the databases have been constructed correctly if the folder now contains three subfolders, which are the databases `bbsplit` will use to partition the SSU rRNA data into the 4 different organismal categories (*Archaea*, *Bacteria*, *Cyanobacteria* + Plastid 16S, *Eukarya*). Once this is finished, make a note of the location so you can put that information in your configuration file.
-
-### Running the workflow
-
-I usually make a new folder for each new dataset I'm analyzing to keep things organized. For the purposes of this tutorial, let's download the repo into a folder called `MGPrimerEval-tutorial` as follows:
-
-`git clone https://github.com/jcmcnch/MGPrimerEval.git MGPrimerEval-tutorial`
-
-1. Now, `cd` into the folder. If you have data to play with, add it into the folder `intermediate/compute-workflow/00-fastq/`. If not, clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into the tutorial folder (you should now see a `ena-fast-download` subfolder), install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) (which is proprietary software from IBM that downloads things *very fast*) and use the script `./tutorial/download-BGT.sh` to download a small subset of the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176). The script will also put the files into the right spot. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
-2. The next step is to set up your configuration file for snakemake to read so it knows what samples to analyze. If you're using the BioGEOTRACES data, there is already a configuration file in `config/tutorial/config.yaml`. If not, you can use the template at `config/config-template.yaml`. *Make sure to modify it to point to database locations and suit your needs*. For the tutorial, you only need to provide the locations of the datbases (i.e. edit the lines starting with `phyloFlashDB` and `bbsplitDBpath`). If you are using your own data and the template, you need to add a study name and put your sample IDs at the end, as well as providing the appropriate suffixes for your raw data (i.e. what should be stripped off your raw fastq files to get the sample IDs). You can optionally add/remove primers as you see fit (to remove existing primers, just comment them out from the config). If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so).
-3. Before you run snakemake, you'll have to activate the conda environment i.e. `conda activate snakemake-env`.
-4. Now, run the compute step (upon which the other two modules depend) as follows if you downloaded the tutorial data: `snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml`. Snakemake will now automagically install all software dependencies and should begin cranking out data. If you want to test whether everything is working before initiating the run, you can append `-np` to the above command. This will do a dry run and print out some useful output about the steps snakemake plans to execute.
+5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have the databases set up properly (as described above), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. 
 
 Known issues:
 
+* As mentioned above, some output plots will be empty if there is insufficient data.
+* If you are running the pipeline on a cluster that has a job submission system, you may need to `source ~/.bashrc` before submitting you job to get `conda` to be recognized.
 * If you are running into issues with DAG generation (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is) taking a long time, especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
 * bbmap/bbsplit steps sometimes can hang under situations of high RAM use - it will just get stuck at a particular step and not proceed further. To resolve this, just kill (i.e. CTRL-C) and restart your workflow.
 
