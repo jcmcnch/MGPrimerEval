@@ -370,10 +370,11 @@ cd myDataset
 
 4. Run the script `./tutorial/download-BGT.sh` to download the BioGEOTRACES metagenomes with `ena-fast-download`. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
 
-5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have set up the databases and configuration file (in this case, make sure to edit `config/tutorial/config.yaml`; [see above for instructions](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. 
+5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have set up the databases and configuration file (in this case, make sure to edit `config/tutorial/config.yaml`; [see above for instructions](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. The remaining steps can be run as noted above, just make sure to substitute your configuration file. 
 
 Known issues:
 
+* If paths are not set up correctly for `uclust` and the `VSEARCH` databases, the pipeline will still run but produce empty output files.
 * As mentioned above, some output plots will be empty if there is insufficient data.
 * If you are running the pipeline on a cluster that has a job submission system, you may need to `source ~/.bashrc` before submitting you job to get `conda` to be recognized.
 * If you are running into issues with DAG generation taking a long time (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is), especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
