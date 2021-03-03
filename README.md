@@ -1,13 +1,11 @@
 Just want to run the pipeline? [Jump to usage instructions.](https://github.com/jcmcnch/MGPrimerEval#running-the-pipeline-with-your-own-data)
 
 ## Preamble
-Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws, but may be subject to human error/oversight. This pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest. It does so with three main modules\*:
+Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws, but may be subject to human error/oversight. This pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest. It does so with three main modules:
 
-* *Compute workflow*: Calculate, from raw (unassembled) metagenome/transcriptome reads, the proportion of reads that perfectly match your primer(s) of interest.
-* *Classify workflow*: Using output from the *Compute workflow*, determine which taxa are matched, and which taxa are mismatched. Provide information on primer variants for specific groupings that can allow an investigator to correct biases as appropriate.
-* *Compare workflow*: Using output from the *Compute workflow*, compare relative abundances of amplicon sequence variants with those from the *same region* of the 16S/18S molecule. This allows an "apples to apples" comparison between amplicon/metagenomic methods, and can show how well the two methods correspond with one another. 
-
-\* NB: Modules are separated for the sake of clarity, not necessity.
+* *Compute* workflow: Calculate, from raw (unassembled) metagenome/transcriptome reads, the proportion of reads that perfectly match your primer(s) of interest.
+* *Classify* workflow: Using output from the *Compute* workflow, determine which taxa are matched, and which taxa are mismatched. Provide information on primer variants for specific groupings that can allow an investigator to correct biases as appropriate.
+* *Compare* workflow: Using output from the *Compute* workflow, compare relative abundances of amplicon sequence variants with those from the *same region* of the 16S/18S molecule. This allows an "apples to apples" comparison between amplicon/metagenomic methods, and can show how well the two methods correspond with one another. 
 
 We have described the results of this analysis already for oceanic ecosystems (see preprint [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v1)), but we should note that *our pipeline is agnostic to primer/dataset* and thus could be used on any meta-'omics dataset. We hope the instructions below are enough to get you started. If there are any bugs, or questions, please open a github issue above and we'll do our best to help.
 
@@ -25,7 +23,7 @@ This pipeline is designed to address several related questions at different leve
 
 ### Input Requirements:
 
-The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix=gz). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental patterns with respect to primer matches/mismatches (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
+The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix=`gz`). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental patterns with respect to primer matches/mismatches (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
 
 ### Recommended operating systems
 
@@ -378,7 +376,7 @@ Known issues:
 
 * As mentioned above, some output plots will be empty if there is insufficient data.
 * If you are running the pipeline on a cluster that has a job submission system, you may need to `source ~/.bashrc` before submitting you job to get `conda` to be recognized.
-* If you are running into issues with DAG generation (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is) taking a long time, especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
+* If you are running into issues with DAG generation taking a long time (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is), especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
 * bbmap/bbsplit steps sometimes can hang under situations of high RAM use - it will just get stuck at a particular step and not proceed further. To resolve this, just kill (i.e. CTRL-C) and restart your workflow.
 
 A visual demonstration of the compute module:
