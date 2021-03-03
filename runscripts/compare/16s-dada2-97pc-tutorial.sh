@@ -7,4 +7,4 @@ snakemake --configfile config/compare/config-tutorial.yaml --snakefile Snakefile
     ASVseqs=config/compare/200514_ASV_info/DADA2/PROKs/200519_GA03-GP13_all-16S-seqs.with-tax.proportions.fasta \
     iLenR1Trunc=220 \
     iLenR2Trunc=180 \
-    --until plot_ASV_vs_BLAST_results_log_scale
+#    --until plot_ASV_vs_BLAST_results_log_scale
