@@ -54,14 +54,16 @@ rule get_names:
 	input:
 		names="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.fasta"
 	output:
-		"intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids"
+		degapped="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
+		original="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.orig.ids"
 	shell:
-		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output} || touch {output}"
+		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output.degapped} || touch {output.degapped} ; "
+		"sed \"/^>/s/_/ /\" {output.degapped} > {output.original}"
 
 
 rule get_fastq_by_group:
 	input:
-		names="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.ids",
+		names="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.orig.ids",
 		fwd="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq.gz",
 		rev="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq.gz"
 	output:
@@ -73,7 +75,8 @@ rule get_fastq_by_group:
 		filterbyname.sh include=t substring=f app=t \
 		names={input.names} in={input.fwd} out={output}
 		filterbyname.sh include=t substring=f app=t \
-		names={input.names} in={input.rev} out={output}
+		names={input.names} in={input.rev} out={output} ; 
+		sed -i \"/^>/s/ /_/\" {output}
 		"""
 
 rule revcomp_fastq_according_to_pyNAST:
