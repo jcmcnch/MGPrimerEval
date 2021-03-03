@@ -118,7 +118,7 @@ cd myDataset
 
 Link your raw data into the input folder (the `ln -s` "softlink" prevents data duplication). For example:
 
-`ln -s /full/path/to/your/data/*gz intermediate/compute-workflow-intermediate/00-fastq/`
+`ln -s /full/path/to/your/data/*gz intermediate/compute-workflow/00-fastq/`
 
 ### Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
 
@@ -220,7 +220,7 @@ mkdir config/myDataset
 cp config/config-template.yaml config/myDataset/myDataset.yaml
 
 #Append sample names to template config, assuming a suffix of `1.fastq.gz` :
-for file in `ls intermediate/compute-workflow-intermediate/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do printf "  $file : $file\n" ; done >> config/myDataset/myDataset.yaml
+for file in `ls intermediate/compute-workflow/00-fastq | grep 1.fastq.gz | cut -f1 -d_` ; do printf "  $file : $file\n" ; done >> config/myDataset/myDataset.yaml
 ```
 
 Now, you need to edit your config file (e.g. `config/myDataset/myDataset.yaml`) to include a unique name for your study (which will be appended to output files), the paths to the databases set up above, the path to `uclust`, and the suffixes for your input files (i.e. what should be stripped off to get the sample identifier). After opening the file in your favourite editor, look for and edit the following lines:
@@ -263,25 +263,25 @@ To make sure things are set up properly you can:
 - Append `-np` to just print out the commands to be run (good way to check if all the input files can be found)
 - Append `--conda-create-envs-only` to just install the necessary software using conda
 
-Once the compute pipeline has completed, I recommend you take a look at the output to make sure you're getting good data back. For example, you can scroll through the output on the command line as follows:
+Once the compute pipeline has completed, I recommend you take a look at the output to make sure you're getting good data back. For example, you can view the output on the command line as follows:
 
 ```
 #concatenate output and pipe to less to look at the data
-cat intermediate/compute-workflow-intermediate/09-summary/* | less
+cat output/compute-workflow/09-summary/* | less
 ```
 
 You should look at the 6th column to check for the number of QC'd sequences recovered per sample/direction/group/primer. It makes sense to start with  *BACT-NON-CYANO* since this category will typically be the most abundant. It's normal to see zeroes or very low numbers for some categories. For example *Archaea* are just not that abundant in many surface ocean samples. If the data is *all zeroes*, it likely means that `uclust` is not set up properly. You can confirm this by looking into the alignment files as follows:
 
 ```
 #view alignment files to make sure they're not empty:
-cat intermediate/compute-workflow-intermediate/05-pyNAST-aligned/* | less
+cat intermediate/compute-workflow/05-pyNAST-aligned/* | less
 
-#should see something like this on your screen:
+#you should see something like this on your screen if the alignment was successful (will be empty if the alignment failed):
 >SRR5720219.765562.1 NS500496_227_HVGG2BGXX:1:11306:17362:3569 length=150 1..68
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------GGATGGGCCTGCGGCGTATCAGGTTGTAGGGGGTGTAATGTACCCTCTAGCCTTCGACGCGTACGGGT------------------------------------------------------------------------------------------------------
 ```
 
-If you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section).
+If you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section). The first step below also produces some graphical output that may be helpful determining whether it's worth proceeding further (for example, if your primers are already nearly perfect for your environment in question, then you may not care to run the next steps).
 
 ## Running the *Classify* workflow:
 
@@ -290,13 +290,16 @@ The classify workflow summarizes all the data from the compute workflow. For exa
 I recommend first running a small portion of the workflow to generate a summary plot from the *Compute* results:
 
 ```
-#Activate snakemake and run only the summary plot step
+#Activate snakemake
 conda activate snakemake-env
+
 #The until flag only runs the pipeline up to a specific step
+#In this case, it just concatenates the compute results
+#and plots them up
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until plot_compute_results 
 ```
 
-This will produce 4 boxplots PDFs (in your analysis directory) summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment is without one of the groups, it's normal for some of the plots to be blank.
+This will produce 4 boxplots (in your base analysis directory) summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment lacks one of the groups, it's normal for some of the plots to be blank.
 
 Once you verify (at least some of) the plots look good, you can run the rest of the pipeline without the `--until` flag:
 
@@ -306,8 +309,27 @@ conda activate snakemake-env
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml
 ```
 
-- Expected output
-- How to use data for improving primers (link to other repo)
+If you want taxon-specific information on primer variants, you need to run the following script:
+
+```
+#run a bash script to generate order-level summaries of primer mismatches
+#the bash script runs a python script which uses the environment specified in envs/biopython-env.yaml
+#the name of the conda environment activated in the bash script is
+#automatically generated by snakemake, and may not be the same on your system
+./scripts/make-taxa-mismatch-summaries.sh
+```
+
+**Note: this script is only generates output for order-level taxa that have greater than 5% total mismatches and 50 total sequences across your dataset. This will therefore only work for deeply-sequenced samples or if you have many replicates with moderate coverage.**
+
+The *Classify* output will be found in `output/classify-workflow/`. If you want to learn how we tackled the primer re-design, you can find detailed information [here](https://osf.io/gr4nc/). 
+
+Here is a brief summary of the contents of the folders:
+- `plots/matchVSmismatch-barplots` is a good place to start. It contains plots of the community composiiton of the mismatched and matched reads at 0, 1, and 2-mismatch thresholds. It will give you a general idea which organisms may be over-represented in the mismatches and thus might merit some corrections. Some may be empty if there is insufficient data. 
+- `overall-summaries` contains detailed information you may wish to peruse further. For example:
+	+ blah
+	+ blah
+- `taxa-mismatch-summaries`
+- `filtered-0-mismatches`, `normalized-summaries`, `summary-mismatch-overlap-primer-pairs`, and `pasted-summaries` were used for generating Figure 2 in the paper. You can mostly ignore them unless you want to reproduce our figure.
 
 ## Running the *Compare* workflow
 
@@ -334,7 +356,7 @@ I usually make a new folder for each new dataset I'm analyzing to keep things or
 
 `git clone https://github.com/jcmcnch/MGPrimerEval.git MGPrimerEval-tutorial`
 
-1. Now, `cd` into the folder. If you have data to play with, add it into the folder `intermediate/compute-workflow-intermediate/00-fastq/`. If not, clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into the tutorial folder (you should now see a `ena-fast-download` subfolder), install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) (which is proprietary software from IBM that downloads things *very fast*) and use the script `./tutorial/download-BGT.sh` to download a small subset of the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176). The script will also put the files into the right spot. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
+1. Now, `cd` into the folder. If you have data to play with, add it into the folder `intermediate/compute-workflow/00-fastq/`. If not, clone [this extremely helpful repo](https://github.com/wwood/ena-fast-download) into the tutorial folder (you should now see a `ena-fast-download` subfolder), install [ascp](https://download.asperasoft.com/download/docs/ascp/3.5.2/html/index.html) (which is proprietary software from IBM that downloads things *very fast*) and use the script `./tutorial/download-BGT.sh` to download a small subset of the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176). The script will also put the files into the right spot. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
 2. The next step is to set up your configuration file for snakemake to read so it knows what samples to analyze. If you're using the BioGEOTRACES data, there is already a configuration file in `config/tutorial/config.yaml`. If not, you can use the template at `config/config-template.yaml`. *Make sure to modify it to point to database locations and suit your needs*. For the tutorial, you only need to provide the locations of the datbases (i.e. edit the lines starting with `phyloFlashDB` and `bbsplitDBpath`). If you are using your own data and the template, you need to add a study name and put your sample IDs at the end, as well as providing the appropriate suffixes for your raw data (i.e. what should be stripped off your raw fastq files to get the sample IDs). You can optionally add/remove primers as you see fit (to remove existing primers, just comment them out from the config). If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so).
 3. Before you run snakemake, you'll have to activate the conda environment i.e. `conda activate snakemake-env`.
 4. Now, run the compute step (upon which the other two modules depend) as follows if you downloaded the tutorial data: `snakemake --cores <# of cores> --use-conda --snakefile Snakefile-compute.smk --configfile config/tutorial/config.yaml`. Snakemake will now automagically install all software dependencies and should begin cranking out data. If you want to test whether everything is working before initiating the run, you can append `-np` to the above command. This will do a dry run and print out some useful output about the steps snakemake plans to execute.
