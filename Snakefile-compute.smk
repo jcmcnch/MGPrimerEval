@@ -13,7 +13,7 @@ rule all:
 	    expand("intermediate/compute-workflow/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
 		expand("intermediate/compute-workflow/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
 		expand("intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		expand("intermediate/compute-workflow/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+		expand("output/compute-workflow/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
 	input:
@@ -273,7 +273,7 @@ rule compute_percentages:
 		mismatch="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
 		match="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
 	output:
-		"intermediate/compute-workflow/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv"
+		"output/compute-workflow/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv"
 	shell:
 		"numMatch=`grep -cE \"^@\" {input.match} || numMatch=0` ; numMismatch=`grep -cE \"^@\" {input.mismatch}` || numMismatch=0 ; "
 		"sumTotal=`expr $numMatch + $numMismatch || sumTotal=0` ; "
