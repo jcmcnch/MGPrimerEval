@@ -370,7 +370,7 @@ cd myDataset
 
 4. Run the script `./tutorial/download-BGT.sh` to download the BioGEOTRACES metagenomes with `ena-fast-download`. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
 
-5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have the databases set up properly (as [described above](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. 
+5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have set up the databases and configuration file (in this case, make sure to edit `config/tutorial/config.yaml`; [see above for instructions](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. 
 
 Known issues:
 
