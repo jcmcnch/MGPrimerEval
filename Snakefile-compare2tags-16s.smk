@@ -76,7 +76,7 @@ rule get_fastq_by_group:
 		names={input.names} in={input.fwd} out={output}
 		filterbyname.sh include=t substring=f app=t \
 		names={input.names} in={input.rev} out={output} ; 
-		sed -i \"/^>/s/ /_/\" {output}
+		sed -i '/^@/s/ /_/\' {output}
 		"""
 
 rule revcomp_fastq_according_to_pyNAST:
