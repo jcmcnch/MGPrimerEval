@@ -20,7 +20,7 @@ iLenR2Trunc=config["iLenR2Trunc"]
 rule all:
 	input:
 		expand("intermediate/{outdir}/01-subsetted/{sample}.PROK.cleaned.515Y-926R.revcomped.sliced.fasta", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
-		expand("output/{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
+		#expand("output/{outdir}/07-MG-vs-ASV-plots/log-scale/{sample}.PROK.nonzero.ASV.comparison.log-scale.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
 		expand("output/{outdir}/07-MG-vs-ASV-plots/{sample}.PROK.nonzero.ASV.comparison.svg", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
 		#expand("output/{outdir}/09-MG-not-in-ASVdb-aligned/{sample}.PROK.515Y-926R.not-matching.ASVs.aligned.fasta", sample=config["samples"], outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"])),
 		#expand("output/{outdir}/15-MG-not-in-ASVdb-classified-kronas/GP13-PROK.515Y-926R.not-matching.ASVs.aligned.R1andR2.krona.html", outdir="compare-workflow-intermediate/" + '_'.join([datestamp, denoiser, strPcid, strCutoff, "vs_MG"]))
