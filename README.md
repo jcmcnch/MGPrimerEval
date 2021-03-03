@@ -23,7 +23,7 @@ This pipeline is designed to address several related questions at different leve
 
 ### Input Requirements:
 
-The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix=`gz`). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental patterns with respect to primer matches/mismatches (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
+The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix = `gz`). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental patterns with respect to primer matches/mismatches (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
 
 ### Recommended operating systems
 
@@ -48,7 +48,7 @@ The pipeline steps are roughly as follows:
 
 ### Expected output files
 
-*NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`). This script should only be done after you finish your analysis.*
+*NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`). This script should only be run after you finish running all modules.*
 
 If you run just the *Compute* workflow, you will get:
 - phyloFlash summaries of taxa present in your metagenome/-transcriptome (can be useful to make sure your sample is what you think it is)
@@ -56,16 +56,17 @@ If you run just the *Compute* workflow, you will get:
 - Sorted SSU rRNA fragments (into categories noted above)
 - Aligned SSU rRNA fragments
 - Fragments subsetted from alignments to primer regions, and sorted into matching and non-matching at 0, 1, and 2-mismatch thresholds
+- Summaries of these data in a tab-separated format suitable for importing into plotting software
 
 If you additionally run the *Classify* workflow using output from above, you will get:
-- A graphical summary of the overall results
+- A graphical summary of the overall results from the *Compute* workflow
 - Taxonomic assignments for above matching / mismatching fragments (at the order level)
 - Graphical summaries of the taxonomic matches / mismatches
 - Tabular summaries across your whole dataset, indicating the proportions of order-level taxonomic groups are matched or mismatched for each primer/group/mismatch threshold (e.g. summarizing mismatches to *Archaea* for the primer 515Y at a 0-mismatch threshold)
 - Tabular summaries of the primer variants, both for the groups indicated above *and* for taxa that have abundant mismatches (so you can correct these mismatches or at least know what they are, even if the taxa are rare)
 
 The *Compare* workflow (only if you have paired metagenomes and amplicon sequences you want to intercompare):
-- SSU rRNA fragments subsetted to the primer region (done separately for 16S and 18S)
+- SSU rRNA fragments subsetted to the primer region
 - A BLASTn-based comparison between MG SSU rRNA fragments and amplicon sequence variants (using ASVs as a BLAST database and the MG SSU rRNA as query)
 - A direct intercomparison between taxonomic groups found in MG SSU rRNA and ASVs *from the same sample*, summarized in graphical and tabular format (includes R^2 values of relative abundances; see manuscript text for more details)
 
@@ -187,7 +188,7 @@ ls $PWD/*udb
 
 **Please note that the pipeline will still run if `uclust` is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results). So double-check that the path you provide in the config below is accurate.**
 
-The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of qiime), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable I used by email by the author of `uclust`.
+The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of `qiime`), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable by email by the author.
 
 All you need to do is put the binary in a sensible location, and make a note of the full path to add to the config file (next section). This way, when you run the workflow, this executable will be found. For example:
 
@@ -292,12 +293,11 @@ I recommend first running a small portion of the workflow to generate a summary 
 conda activate snakemake-env
 
 #The until flag only runs the pipeline up to a specific step
-#In this case, it just concatenates the compute results
-#and plots them up
+#In this case, it just concatenates the compute results and plots them up
 snakemake --cores <# of cores> --use-conda --snakefile Snakefile-classify.smk --configfile config/tutorial/config.yaml --until plot_compute_results 
 ```
 
-This will produce 4 boxplots (in your base analysis directory) summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment lacks one of the groups, it's normal for some of the plots to be blank.
+This will produce 4 boxplots (in your base analysis directory) summarizing the percent of environmental sequences perfectly matching individual primers in your environment at 0, 1, and 2-mismatch thresholds. If you have a small amount of input data, or your environment lacks some of the groups, it's normal for some plots to be blank.
 
 Once you verify (at least some of) the plots look good, you can run the rest of the pipeline without the `--until` flag:
 
@@ -326,19 +326,19 @@ Here is a brief summary of the contents of the folders:
 - `output/classify-workflow/overall-summaries` contains detailed information you may wish to peruse further. For example:
 	+ Files ending in `mismatch.summary.tsv` are tab-separated spreadsheets that show statistics about mismatches for order-level taxa. This will give more quantitative information complementary to the plots mentioned above.
 	+ Files ending in `taxonFracMismatched.0-2mm.tsv` show the fraction of mismatches across the different mismatch thresholds. This would essentially tell you how hard it will be to improve your primer for each taxon. For example, if your taxon is not well covered at 0-mismatches but well-covered at 1-mismactches then it would only require minor modifications.
-	+ Files ending in `aln.summary.tsv` show the relative abundances for the *matching* variants at each threshold and their relative abundances. If your goal is to improve your primers, I suggest you start at the 2-mismatch threshold since it will contain things not matched by your primers.
+	+ Files ending in `aln.summary.tsv` show the relative abundances for the *matching* variants at each threshold and their relative abundances. If your goal is to improve your primer, I suggest you start at the 2-mismatch threshold since it will contain things not matched by your primer. Variants found in the 0-mismatch files are already covered perfectly by your primer.
 	+ Files ending in `aln.fasta` contain fasta files of the actual variants identified, and could be useful for plotting/visualization.
 - `output/classify-workflow/taxa-mismatch-summaries` contains the output from the bash script mentioned above. It could be useful for making modifications to your primers that are taxa-specific. For example, I used this to make sure that mismatches to specific taxa such as the *Ectothiorhodospirales* were corrected in our new primer design.
-- `filtered-0-mismatches`, `normalized-summaries`, `summary-mismatch-overlap-primer-pairs`, and `pasted-summaries` were used for generating Figure 2 in the paper. You can mostly ignore them unless you want to reproduce our figure.
+- `filtered-0-mismatches`, `normalized-summaries`, `summary-mismatch-overlap-primer-pairs`, and `pasted-summaries` were used for generating the summary figure in the paper (showing coverage as function of primer pair, not individual primers). You can ignore them unless you want to reproduce our figure.
 
 ## Running the *Compare* workflow
 
-To run this workflow, you need to provide several files (exampls are shown in parentheses; note that the formatting needs to be exactly the same):
+To run this workflow, you need to provide several files (examples that are in the github repository are shown in parentheses; note that the formatting needs to be exactly the same in order for it to run correctly):
 
 1. An ASV table that has been transformed to relative abundances (e.g. `config/compare/200514_ASV_info/DADA2/PROKs/200519_GA03-GP13_all-16S-seqs.with-tax.proportions.tsv`).
 2. Sequences for the ASVs (e.g. `config/compare/200514_ASV_info/DADA2/PROKs/200519_GA03-GP13_all-16S-seqs.with-tax.proportions.fasta`)
 3. A tab-separated file that indicates which metagenomic files correspond with which ASV sample (e.g. `config/compare/GA03-GP13-sample-SRA.tsv`)
-4. A config file with information on the parameters you feed to the pipeline (e.g. `config/compare/config-tutorial.yaml`)
+4. A config file with information on the parameters you want to give the pipeline (e.g. `config/compare/config-tutorial.yaml`)
 
 If you've downloaded the example data (next section), the compare workflow can be run with the following script:
 
@@ -370,7 +370,7 @@ cd myDataset
 
 4. Run the script `./tutorial/download-BGT.sh` to download the BioGEOTRACES metagenomes with `ena-fast-download`. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
 
-5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have the databases set up properly (as described above), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. 
+5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have the databases set up properly (as [described above](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. 
 
 Known issues:
 
