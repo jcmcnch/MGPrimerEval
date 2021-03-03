@@ -58,7 +58,7 @@ rule get_names:
 		original="intermediate/{outdir}/01-subsetted/{sample}.{group}.concat.515Y-926R.orig.ids"
 	shell:
 		"grep \">\" {input} | sed 's/>//' | awk '{{print $1\" \"$2\" \"$3}}' | sort | uniq > {output.degapped} || touch {output.degapped} ; "
-		"sed 's/_/ /\' {output.degapped} > {output.original}"
+		"sed 's/_/ /\' {output.degapped} | awk '{{print $1\" \"$2}}' > {output.original}"
 
 
 rule get_fastq_by_group:
