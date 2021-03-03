@@ -33,7 +33,8 @@ rule concat_fwd_and_reverse_alignments:
 	output:
 		"intermediate/{outdir}/00-concatenated/{sample}.{group}.concat.fasta"
 	shell:
-		"cat {input.fwd} {input.rev} > {output}"
+		"cat {input.fwd} {input.rev} > {output} ; "
+		"sed -rei \"/^>/s/ /_/\" {output}"
 
 rule subset_to_primer_region:
 	input:
