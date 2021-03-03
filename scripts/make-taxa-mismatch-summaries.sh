@@ -4,11 +4,11 @@
 conda activate .snakemake/conda/a48b2588 
 
 #cleanup previous failed runs, if files exist
-rm intermediate/classify-workflow/11-taxa-with-many-mismatches/*info
-rm intermediate/classify-workflow/11-taxa-with-many-mismatches/*ids
-rm -rf output-classify-workflow/taxa-mismatch-summaries
+rm intermediate/classify-workflow/11-taxa-with-many-mismatches/*info 2> /dev/null
+rm intermediate/classify-workflow/11-taxa-with-many-mismatches/*ids 2> /dev/null
+rm -rf output/classify-workflow/taxa-mismatch-summaries 2> /dev/null
 
-mkdir -p output-classify-workflow/taxa-mismatch-summaries
+mkdir -p output/classify-workflow/taxa-mismatch-summaries
 
 for primer in 926R 806RB 515Y V4F V4R V4RB 341F 785R 27F 1389F 1510R ; do
 
