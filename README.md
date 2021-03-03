@@ -8,6 +8,8 @@ Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU 
 
 Our new approach as implemented with this pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest, avoiding both sources of bias mentioned above.
 
+## Pipeline Architecture
+
 The pipeline is divided into three modules:
 
 * *Compute* workflow: Calculate, from raw (unassembled) metagenome/transcriptome reads, the proportion of reads that perfectly match your primer(s) of interest.
