@@ -326,7 +326,7 @@ The *Classify* output will be found in `output/classify-workflow/`. If you want 
 Here is a brief summary of the contents of the folders:
 - `output/classify-workflow/plots/matchVSmismatch-barplots` is a good place to start. It contains plots of the community composiiton of the mismatched and matched reads at 0, 1, and 2-mismatch thresholds. It will give you a general idea which organisms may be over-represented in the mismatches and thus might merit some corrections. Some may be empty if there is insufficient data. 
 - `output/classify-workflow/overall-summaries` contains detailed information you may wish to peruse further. For example:
-        + Files ending in `mismatch.summary.tsv` are tab-separated spreadsheets that show statistics ab
+	+ Files ending in `mismatch.summary.tsv` are tab-separated spreadsheets that show statistics ab
 out mismatches for order-level taxa. This will give more quantitative information complementary to the plots mentioned above.
 	+ Files ending in `taxonFracMismatched.0-2mm.tsv` show the fraction of mismatches across the different mismatch thresholds. This would essentially tell you how hard it will be to improve your primer for each taxon. For example, if your taxon is not well covered at 0-mismatches but well-covered at 1-mismactches then it would only require minor modifications.
 	+ Files ending in `aln.summary.tsv` show the relative abundances for the *matching* variants at each threshold and their relative abundances. If your goal is to improve your primers, I suggest you start at the 2-mismatch threshold since it will contain things not matched by your primers.
