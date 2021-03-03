@@ -10,19 +10,19 @@ shell.prefix('PATH=' + uclustpath + ':$PATH ')
 
 rule all:
 	input:
-	    expand("intermediate/compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
-		expand("intermediate/compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
-		expand("intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
-		expand("intermediate/compute-workflow-intermediate/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
+	    expand("intermediate/compute-workflow/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
+		expand("intermediate/compute-workflow/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq", sample=config["samples"], group=config["groups"], primer=config["primer"], direction=['fwd','rev']),
+		expand("intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev']),
+		expand("intermediate/compute-workflow/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv", sample=config["samples"], group=config["groups"], primer=config["primer"], mismatches=config["mismatches"], direction=['fwd','rev'])
 
 rule fastp_clean:
 	input:
-		R1="intermediate/compute-workflow-intermediate/00-fastq/{sample}" + suffixR1,
-		R2="intermediate/compute-workflow-intermediate/00-fastq/{sample}" + suffixR2
+		R1="intermediate/compute-workflow/00-fastq/{sample}" + suffixR1,
+		R2="intermediate/compute-workflow/00-fastq/{sample}" + suffixR2
 	output:
-		R1clean=temp("intermediate/compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz"),
-		R2clean=temp("intermediate/compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz"),
-		log="intermediate/compute-workflow-intermediate/logs/01-fastp_cleaning/{sample}.log.html"
+		R1clean=temp("intermediate/compute-workflow/01-fastp-cleaned/{sample}_1_clean.fastq.gz"),
+		R2clean=temp("intermediate/compute-workflow/01-fastp-cleaned/{sample}_2_clean.fastq.gz"),
+		log="intermediate/compute-workflow/logs/01-fastp_cleaning/{sample}.log.html"
 	conda:
 		"envs/fastp.yaml"
 	threads:
@@ -32,14 +32,14 @@ rule fastp_clean:
 
 rule phyloFlash_sift:
 	input:
-		R1clean="intermediate/compute-workflow-intermediate/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
-		R2clean="intermediate/compute-workflow-intermediate/01-fastp-cleaned/{sample}_2_clean.fastq.gz"
+		R1clean="intermediate/compute-workflow/01-fastp-cleaned/{sample}_1_clean.fastq.gz",
+		R2clean="intermediate/compute-workflow/01-fastp-cleaned/{sample}_2_clean.fastq.gz"
 	output:
-		R1hits="intermediate/compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq",
-		R2hits="intermediate/compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
+		R1hits="intermediate/compute-workflow/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq",
+		R2hits="intermediate/compute-workflow/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/",
-		phyloFlash_other="intermediate/compute-workflow-intermediate/02-phyloFlash_sifted/phyloFlash-other/",
+		workdir="intermediate/compute-workflow/tmp/",
+		phyloFlash_other="intermediate/compute-workflow/02-phyloFlash_sifted/phyloFlash-other/",
 		readlimit=readlimit,
 		db=phyloFlashDB
 	threads:
@@ -57,11 +57,11 @@ rule phyloFlash_sift:
 
 rule remove_repeats_komplexity:
 	input:
-		R1hits="intermediate/compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq",
-		R2hits="intermediate/compute-workflow-intermediate/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
+		R1hits="intermediate/compute-workflow/02-phyloFlash_sifted/{sample}.fwd.SSU.hits.fastq",
+		R2hits="intermediate/compute-workflow/02-phyloFlash_sifted/{sample}.rev.SSU.hits.fastq"
 	output:
-		R1="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq",
-		R2="intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq"
+		R1="intermediate/compute-workflow/03-low-complexity-filtered/{sample}.fwd.SSU.keep.fastq",
+		R2="intermediate/compute-workflow/03-low-complexity-filtered/{sample}.rev.SSU.keep.fastq"
 	conda:
 		"envs/komplexity.yaml"
 	shell:
@@ -70,16 +70,16 @@ rule remove_repeats_komplexity:
 
 rule sort_EUK:
 	input:
-		"intermediate/compute-workflow-intermediate/03-low-complexity-filtered/{sample}.{direction}.SSU.keep.fastq"
+		"intermediate/compute-workflow/03-low-complexity-filtered/{sample}.{direction}.SSU.keep.fastq"
 	output:
-		PROK="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.PROK.fastq",
-		EUK="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.EUK.fastq"
+		PROK="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.PROK.fastq",
+		EUK="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.EUK.fastq"
 	threads:
 		8
 	conda:
 		"envs/bbmap.yaml"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/",
+		workdir="intermediate/compute-workflow/tmp/",
 		bbsplitdb=bbsplitDBpath + "/EUK-PROK-bbsplit-db/"
 	shell:
 		"cd {params.workdir} ; "
@@ -91,16 +91,16 @@ rule sort_EUK:
 
 rule sort_PROK:
 	input:
-		"intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.PROK.fastq"
+		"intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.PROK.fastq"
 	output:
-		ARCH="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.ARCH.fastq",
-		BACT="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT.fastq"
+		ARCH="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.ARCH.fastq",
+		BACT="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.BACT.fastq"
 	threads:
 		8
 	conda:
 		"envs/bbmap.yaml"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/",
+		workdir="intermediate/compute-workflow/tmp/",
                 bbsplitdb=bbsplitDBpath + "/BACT-ARCH-bbsplit-db/"
 	shell:
 		"cd {params.workdir} ; "
@@ -112,16 +112,16 @@ rule sort_PROK:
 
 rule sort_CYANO:
 	input:
-		"intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT.fastq"
+		"intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.BACT.fastq"
 	output:
-		CYANO="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fastq",
-		NONCYANO="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fastq"
+		CYANO="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fastq",
+		NONCYANO="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fastq"
 	threads:
 		8
 	conda:
 		"envs/bbmap.yaml"
 	params:
-		workdir="intermediate/compute-workflow-intermediate/tmp/",
+		workdir="intermediate/compute-workflow/tmp/",
                 bbsplitdb=bbsplitDBpath + "/BACT-CYANO-bbsplit-db/"
 	shell:
 		"cd {params.workdir} ; "
@@ -133,11 +133,11 @@ rule sort_CYANO:
 
 rule align_ARCH:
 	input:
-		seqs="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.ARCH.fastq",
+		seqs="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.ARCH.fastq",
 		ref="SSU_refs/Sulfolobus_acidocaldarius_N8_16s.fasta"
 	output:
-		aligned="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.ARCH_pynast_aligned.fasta",
-		log="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.ARCH.pyNAST.log"
+		aligned="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.ARCH_pynast_aligned.fasta",
+		log="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.ARCH.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
@@ -148,11 +148,11 @@ rule align_ARCH:
 
 rule align_BACT:
 	input:
-		seqs="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fastq",
+		seqs="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.BACT-NON-CYANO.fastq",
 		ref="SSU_refs/Ecoli_16s.fna"
 	output:
-		aligned="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta",
-		log="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-NON-CYANO.pyNAST.log"
+		aligned="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-NON-CYANO_pynast_aligned.fasta",
+		log="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-NON-CYANO.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
@@ -163,11 +163,11 @@ rule align_BACT:
 
 rule align_CYANO:
 	input:
-		seqs="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fastq",
+		seqs="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.BACT-CYANO.fastq",
 		ref="SSU_refs/longest-CYANO-with-27F.fasta"
 	output:
-		aligned="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-CYANO_pynast_aligned.fasta",
-		log="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-CYANO.pyNAST.log"
+		aligned="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-CYANO_pynast_aligned.fasta",
+		log="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.BACT-CYANO.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
@@ -178,11 +178,11 @@ rule align_CYANO:
 
 rule align_EUK:
 	input:
-		seqs="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.EUK.fastq",
+		seqs="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.EUK.fastq",
 		ref="SSU_refs/Saccharomyces_cerevisiae_S288C_18s-1_NR_132213.1.fa"
 	output:
-		aligned="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.EUK_pynast_aligned.fasta",
-		log="intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.EUK.pyNAST.log"
+		aligned="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.EUK_pynast_aligned.fasta",
+		log="intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.EUK.pyNAST.log"
 	conda:
 		"envs/pynast.yaml"
 	shell:
@@ -192,9 +192,9 @@ rule align_EUK:
 
 rule subset_to_primer_region:
 	input:
-		"intermediate/compute-workflow-intermediate/05-pyNAST-aligned/{sample}.{direction}.SSU.{group}_pynast_aligned.fasta"
+		"intermediate/compute-workflow/05-pyNAST-aligned/{sample}.{direction}.SSU.{group}_pynast_aligned.fasta"
 	output:
-		"intermediate/compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta"
+		"intermediate/compute-workflow/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta"
 	conda:
 		"envs/biopython.yaml"
 	params:
@@ -207,10 +207,10 @@ rule subset_to_primer_region:
 rule get_fastq_for_subset:
 	#Get the whole fastq files associated with the matching reads
 	input:
-		fasta="intermediate/compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
-		fastq="intermediate/compute-workflow-intermediate/04-sorted/{sample}.{direction}.SSU.{group}.fastq"
+		fasta="intermediate/compute-workflow/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
+		fastq="intermediate/compute-workflow/04-sorted/{sample}.{direction}.SSU.{group}.fastq"
 	output:
-		fastq="intermediate/compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq",
+		fastq="intermediate/compute-workflow/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq",
 	conda:
 		"envs/bbmap.yaml"
 	shell:
@@ -223,10 +223,10 @@ Since graftM actually told us which strand the SSU rRNA is on, then we need to a
 
 rule revcomp_fastqs:
 	input:
-		fasta="intermediate/compute-workflow-intermediate/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
-		fastq="intermediate/compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq"
+		fasta="intermediate/compute-workflow/06-subsetted/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.fasta",
+		fastq="intermediate/compute-workflow/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.fastq"
 	output:
-		fastq_revcomp="intermediate/compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
+		fastq_revcomp="intermediate/compute-workflow/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
 	conda:
 		"envs/biopython.yaml"
 	shell:
@@ -235,11 +235,11 @@ rule revcomp_fastqs:
 
 rule grab_matching_cutadapt_full:
 	input:
-		"intermediate/compute-workflow-intermediate/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
+		"intermediate/compute-workflow/07-subsetted-fastq/{sample}.SSU.{direction}.{group}_pyNAST_{primer}.full.revcomped.fastq"
 	output:
-		mismatch="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
-		match="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
-		info="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info"
+		mismatch="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
+		match="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
+		info="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.info"
 	log:
 		"logs/08-cutadapt/{sample}.{direction}.{group}.{primer}.{mismatches}.cutadapt.log"
 	conda:
@@ -255,12 +255,12 @@ rule grab_matching_cutadapt_full:
 rule quality_filter_primer_region:
     #Keep only sequences that have >30 phred score across the whole primer + 5 leading/trailing bases (implicit in script)
 	input:
-		mismatch="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
-		match="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
-		info="intermediate/compute-workflow-intermediate/08-checked/{primer}/6-mismatch/{sample}.SSU.{direction}.{group}.{primer}.6-mismatch.info" #Assume anything with -1 value is false positive, ignoring those with > ~30% mismatches to primer (e.g. for a 20bp primer)
+		mismatch="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.fastq",
+		match="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.fastq",
+		info="intermediate/compute-workflow/08-checked/{primer}/6-mismatch/{sample}.SSU.{direction}.{group}.{primer}.6-mismatch.info" #Assume anything with -1 value is false positive, ignoring those with > ~30% mismatches to primer (e.g. for a 20bp primer)
 	output:
-		mismatch="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
-		match="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
+		mismatch="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
+		match="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
 	conda:
 		"envs/biopython.yaml"
 	shell:
@@ -270,10 +270,10 @@ rule quality_filter_primer_region:
 
 rule compute_percentages:
 	input:
-		mismatch="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
-		match="intermediate/compute-workflow-intermediate/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
+		mismatch="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.nohit.filtered.fastq",
+		match="intermediate/compute-workflow/08-checked/{primer}/{mismatches}/{sample}.SSU.{direction}.{group}.{primer}.{mismatches}.hit.filtered.fastq"
 	output:
-		"intermediate/compute-workflow-intermediate/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv"
+		"intermediate/compute-workflow/09-summary/{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv"
 	shell:
 		"numMatch=`grep -cE \"^@\" {input.match} || numMatch=0` ; numMismatch=`grep -cE \"^@\" {input.mismatch}` || numMismatch=0 ; "
 		"sumTotal=`expr $numMatch + $numMismatch || sumTotal=0` ; "
