@@ -15,7 +15,7 @@ Just want to run the pipeline? [Jump to usage instructions.](https://github.com/
   4.1 [Setting up and activating a snakemake conda environment](https://github.com/jcmcnch/MGPrimerEval#41-setting-up-and-activating-a-snakemake-conda-environment)  
   4.2 [Cloning the repository and adding raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data)  
   4.3 [Downloading databases](https://github.com/jcmcnch/MGPrimerEval#43-downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearch-and-adding-uclust-to-your-path)  
-  4.4 [Setting up your configuration file]()https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file
+  4.4 [Setting up your configuration file](https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file)
 5. []()
 6. []()
 7. []()
