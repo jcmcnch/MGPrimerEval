@@ -130,7 +130,7 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 
 ### 4.3 Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
 
-4.3.1 **PhyloFlash Database for Retrieving SSU rRNA fragments**
+**4.3.1 PhyloFlash Database for Retrieving SSU rRNA fragments**
 
 Install phyloFlash into its own environment and run the database install script (will take some hours as phyloFlash runs quality-control steps on the database but this only needs to be run once):
 
@@ -154,7 +154,7 @@ phyloFlash_makedb.pl --remote
 
 \*Note: `sortmerna` is not used in this pipeline but is part of the conda recipe.
 
-2. **Database for Splitting SSU rRNA fragments**
+**4.3.2 Database for Splitting SSU rRNA fragments**
 
 If you do not already have bbmap installed locally, make a conda environment called bbmap-env:
 
@@ -176,7 +176,7 @@ for item in kv3xp eux4r npb2k 4qtev s5j6q 5jmkv eahds ; do curl -O -J -L https:/
 chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 ```
 
-3. **Databases for classifying SSU rRNA fragments with VSEARCH**
+**4.3.3 Databases for classifying SSU rRNA fragments with VSEARCH**
 
 **NB: If these databases are not set up correctly, the *Classify* workflow will run but will generate empty output files.** 
 
@@ -193,7 +193,7 @@ for item in 25a8b znrv8 ; do curl -O -J -L https://osf.io/$item/download ; done
 ls $PWD/*udb
 ```
 
-4. **Getting the `uclust` executable:**
+**4.3.4 Getting the `uclust` executable:**
 
 **Please note that the pipeline will still run if `uclust` is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results). So double-check that the path you provide in the config below is accurate.**
 
@@ -218,7 +218,7 @@ chmod a+x uclust
 pwd
 ```
 
-### Setting up your configuration file
+### 4.4 Setting up your configuration file
 
 The template configuration file comes pre-set with a number of primers that we tested in our study. If you just want to test these primers on your samples, all you have to do is add your sample names at the end in the format `  sample : sample`. I suggest making a new folder and config file for your analysis to keep things organized. If your forward reads end with `_1.fastq.gz` (the default for NCBI SRA data), the following code would append your sample names directly to a new config file you could use entitled `config/myDataset/myDataset.yaml`:
 
@@ -257,7 +257,7 @@ For example, if you used the above commands to install the databases, the paths 
 
 If you don't need or want to test all the primers specified in the config, just comment them out. If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so). Or you can just open a github issue and I can add them to the template config. *NB: If you're adding new primers, don't forget to reverse complement the reverse primer sequence.*
 
-## Running the *Compute* workflow
+## 5. Running the *Compute* workflow
 
 The simplest invocation would be as follows:
 
@@ -291,7 +291,7 @@ cat intermediate/compute-workflow/05-pyNAST-aligned/* | less
 
 If you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section). The first step below also produces some graphical output that may be helpful determining whether it's worth proceeding further (for example, if your primers are already nearly perfect for your environment in question, then you may not care to run the next steps).
 
-## Running the *Classify* workflow:
+## 6. Running the *Classify* workflow:
 
 The classify workflow summarizes all the data from the compute workflow. For example, if you had 500 samples it would give you information on the overall patterns summed across all 500 samples. It is mainly useful for finding out which taxa might be primarily responsible for mismatches, and provides information on how to modify primers to fix these issues.
 
@@ -340,7 +340,7 @@ Here is a brief summary of the contents of the folders:
 - `output/classify-workflow/taxa-mismatch-summaries` contains the output from the bash script mentioned above. It could be useful for making modifications to your primers that are taxa-specific. For example, I used this to make sure that mismatches to specific taxa such as the *Ectothiorhodospirales* were corrected in our new primer design.
 - `filtered-0-mismatches`, `normalized-summaries`, `summary-mismatch-overlap-primer-pairs`, and `pasted-summaries` were used for generating the summary figure in the paper (showing coverage as function of primer pair, not individual primers). You can ignore them unless you want to reproduce our figure.
 
-## Running the *Compare* workflow
+## 7. Running the *Compare* workflow
 
 To run this workflow, you need to provide several files (examples that are in the github repository are shown in parentheses; note that the formatting needs to be exactly the same in order for it to run correctly):
 
@@ -362,7 +362,7 @@ Within this folder, you'll find two subfolders:
 - `07-MG-vs-ASV-plots` contains plots of the metagenomic relative abundances plotted against the ASV relative abundances on both linear and log scales.
 - `07-MG-vs-ASV-stats` contains some statistics about the correlation. Interpret these statistics with caution - they are intended to be a data exploration tool, not an authoritative description. For example, they could help identify samples that differ a lot between MG and ASV-based methods, and could point towards ways to optimize methods.
 
-## Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
+## 8. Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
 The following instructions explain how to download 10 files from the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176) that can be used with configuration files and template scripts to test the functionality of the pipeline on your system.
 
@@ -381,7 +381,7 @@ cd myDataset
 
 5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have set up the databases and configuration file (in this case, make sure to edit `config/tutorial/config.yaml`; [see above for instructions](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. The remaining steps can be run as noted above, just make sure to substitute your configuration file. 
 
-Known issues:
+## 9. Known issues:
 
 * If paths are not set up correctly for `uclust` and the `VSEARCH` databases, the pipeline will still run but produce empty output files.
 * As mentioned above, some output plots will be empty if there is insufficient data.
