@@ -20,13 +20,13 @@ Just want to run the pipeline? [Jump to usage instructions.](https://github.com/
 6. [Running the Classify workflow](https://github.com/jcmcnch/MGPrimerEval#6-running-the-classify-workflow)
 7. [Running the Compare workflow](https://github.com/jcmcnch/MGPrimerEval#7-running-the-compare-workflow)
 8. [Downloading example data](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system)
-9. []()
+9. [Known Issues](https://github.com/jcmcnch/MGPrimerEval#9-known-issues)
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
 
-1. The highly unequal abundances in nature, so for example, a very abundant mismatched taxon has the same weight as a well-matched one occurring at vanishingly small abundance, hence the “% match” to the database could significantly over- or under-estimate the actual “% match” to the field even if all taxa are in the database.
-2. Some environments may have abundant taxa poorly represented or unrepresented in these curated reference databases. 
++ The highly unequal abundances in nature, so for example, a very abundant mismatched taxon has the same weight as a well-matched one occurring at vanishingly small abundance, hence the “% match” to the database could significantly over- or under-estimate the actual “% match” to the field even if all taxa are in the database.
++ Some environments may have abundant taxa poorly represented or unrepresented in these curated reference databases. 
 
 Our new approach as implemented with this pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest, avoiding both sources of bias mentioned above.
 
@@ -45,10 +45,10 @@ We have described the results of this analysis already for oceanic ecosystems (s
 ### 3.1 Motivating Scientific Questions
 
 This pipeline is designed to address several related questions at different levels of detail:
-1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences\* in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
-2. What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo / primer set?*
-3. How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an "optimal" primer set for my environment?*
-4. How well do results from PCR primers compare with metagenomic reads? *i.e. are the two methods consistent or inconsistent with one another?*
++ What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences\* in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
++ What taxa are perfectly matched by my primers? What taxa are not, and therefore likely to be inaccurately quantified using PCR amplicon barcoding methods? *i.e. what are the taxonomic blindspots of a given oligo / primer set?*
++ How can I improve a given oligonucleotide primer to improve its performance on a given dataset/environment? *i.e. can I create an "optimal" primer set for my environment?*
++ How well do results from PCR primers compare with metagenomic reads? *i.e. are the two methods consistent or inconsistent with one another?*
 
 \*Note: the pipeline *does* handle degenerate primers as a query, and returns a perfect match if one of the variants specified in your degenerate sequence matches the target.
 
