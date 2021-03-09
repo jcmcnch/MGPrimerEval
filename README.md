@@ -4,10 +4,18 @@ Just want to run the pipeline? [Jump to usage instructions.](https://github.com/
 
 1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
 2. [Pipeline Architecture](https://github.com/jcmcnch/MGPrimerEval#2-pipeline-architecture)
-3. Detailed Overview  
+3. Detailed Overview:  
   3.1 [Motivating Scientific Questions](https://github.com/jcmcnch/MGPrimerEval#31-motivating-scientific-questions)  
-  3.2 [Input Requirements](https://github.com/jcmcnch/MGPrimerEval#32-input-requirements)
-4. []()
+  3.2 [Input Requirements](https://github.com/jcmcnch/MGPrimerEval#32-input-requirements)  
+  3.3 [Recommended Operating Systems](https://github.com/jcmcnch/MGPrimerEval#33-recommended-operating-systems)  
+  3.4 [Overview of Pipeline Steps](https://github.com/jcmcnch/MGPrimerEval#34-overview-of-pipeline-steps)  
+  3.5 [Expected Output Files](https://github.com/jcmcnch/MGPrimerEval#35-expected-output-files)  
+  3.6 [Open Source Software and Database Dependencies](https://github.com/jcmcnch/MGPrimerEval#36-open-source-software-and-database-dependencies)
+4. Running the pipeline with your own data:  
+  4.1 [Setting up and activating a snakemake conda environment](https://github.com/jcmcnch/MGPrimerEval#41-setting-up-and-activating-a-snakemake-conda-environment)  
+  4.2 [Cloning the repository and adding raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data)  
+  4.3 [Downloading databases](https://github.com/jcmcnch/MGPrimerEval#43-downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearch-and-adding-uclust-to-your-path)  
+  4.4 [Setting up your configuration file]()https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file
 5. []()
 6. []()
 7. []()
@@ -142,7 +150,7 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 
 `ln -s /full/path/to/your/data/*gz intermediate/compute-workflow/00-fastq/`
 
-### 4.3 Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
+### 4.3 Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARCH, and adding `uclust` to your path
 
 **4.3.1 PhyloFlash Database for Retrieving SSU rRNA fragments**
 
@@ -393,7 +401,7 @@ cd myDataset
 
 4. Run the script `./tutorial/download-BGT.sh` to download the BioGEOTRACES metagenomes with `ena-fast-download`. *Keep in mind, this is still a fair bit of data! If possible, do it on a work server, not your home network unless you have unlimited bandwidth.*
 
-5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have set up the databases and configuration file (in this case, make sure to edit `config/tutorial/config.yaml`; [see above for instructions](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearc-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. The remaining steps can be run as noted above, just make sure to substitute your configuration file. 
+5. The shell script will put the downloaded files in the proper place (i.e. `intermediate/compute-workflow/00-fastq/`). So once you have set up the databases and configuration file (in this case, make sure to edit `config/tutorial/config.yaml`; [see above for instructions](https://github.com/jcmcnch/MGPrimerEval#downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearch-and-adding-uclust-to-your-path)), all you need to do to run the *Compute* workflow is invoke the `run_tutorial.sh` script found in the base directory. The remaining steps can be run as noted above, just make sure to substitute your configuration file. 
 
 ## 9. Known issues:
 
