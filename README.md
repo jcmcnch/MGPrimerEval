@@ -16,10 +16,10 @@ Just want to run the pipeline? [Jump to usage instructions.](https://github.com/
   4.2 [Cloning the repository and adding raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data)  
   4.3 [Downloading databases](https://github.com/jcmcnch/MGPrimerEval#43-downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearch-and-adding-uclust-to-your-path)  
   4.4 [Setting up your configuration file](https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file)
-5. []()
-6. []()
-7. []()
-8. []()
+5. [Running the Compute workflow](https://github.com/jcmcnch/MGPrimerEval#5-running-the-compute-workflow)
+6. [Running the Classify workflow](https://github.com/jcmcnch/MGPrimerEval#6-running-the-classify-workflow)
+7. [Running the Compare workflow](https://github.com/jcmcnch/MGPrimerEval#7-running-the-compare-workflow)
+8. [Downloading example data](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system)
 9. []()
 
 ## 1. Preamble
@@ -118,7 +118,7 @@ Our taxonomic classification and splitting steps also heavily depend on the [SIL
 
 ## 4. Running the pipeline with your own data
 
-The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and processing example data](https://github.com/jcmcnch/MGPrimerEval#example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
+The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and processing example data](https://github.com/jcmcnch/MGPrimerEval#downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
 
 These instructions assume you have familiarity with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive for remote servers. 
 
@@ -384,7 +384,7 @@ Within this folder, you'll find two subfolders:
 - `07-MG-vs-ASV-plots` contains plots of the metagenomic relative abundances plotted against the ASV relative abundances on both linear and log scales.
 - `07-MG-vs-ASV-stats` contains some statistics about the correlation. Interpret these statistics with caution - they are intended to be a data exploration tool, not an authoritative description. For example, they could help identify samples that differ a lot between MG and ASV-based methods, and could point towards ways to optimize methods.
 
-## 8. Example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
+## 8. Downloading example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
 
 The following instructions explain how to download 10 files from the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176) that can be used with configuration files and template scripts to test the functionality of the pipeline on your system.
 
