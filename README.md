@@ -1,5 +1,3 @@
-Just want to run the pipeline? [Jump to usage instructions.](https://github.com/jcmcnch/MGPrimerEval#running-the-pipeline-with-your-own-data)
-
 ## Table of contents:
 
 1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
