@@ -118,7 +118,7 @@ Our taxonomic classification and splitting steps also heavily depend on the [SIL
 
 ## 4. Running the pipeline with your own data
 
-The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and processing example data](https://github.com/jcmcnch/MGPrimerEval#downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
+The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and processing example data](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
 
 These instructions assume you have familiarity with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive for remote servers. 
 
