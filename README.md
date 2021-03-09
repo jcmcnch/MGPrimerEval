@@ -258,7 +258,6 @@ Now, you need to edit your config file (e.g. `config/myDataset/myDataset.yaml`) 
 ```
 suffixR1: "_1.fastq.gz" #NCBI format
 suffixR2: "_2.fastq.gz" #NCBI format
-cutoff: 0.01 #cutoff for classify pipeline, probably can keep the same
 phyloFlashDB: "/home/jesse/databases/phyloFlash/138.1/" #location of phyloFlash database, download with phyloFlash's built-in script
 bbsplitDBpath: "/home/db/bbsplit-db/" #Download here: https://osf.io/e65rs/
 uclustpath: "/home/jesse/MGPrimerEval-tutorial/bin"
@@ -278,6 +277,11 @@ For example, if you used the above commands to install the databases, the paths 
 ```
 
 If you don't need or want to test all the primers specified in the config, just comment them out. If you want to add new primers, you have to provide their location on the 4 different SSU rRNA references (see [this repository](https://github.com/jcmcnch/primer-regions.alignments) for an example of how to do so). Or you can just open a github issue and I can add them to the template config. *NB: If you're adding new primers, don't forget to reverse complement the reverse primer sequence.*
+
+**Other parameters you can optionally adjust in the config:**
+
++ `cutoff` determines what taxa appear in the summary. It is set by default at 0.01, meaning that only taxa that comprise 1 percent or more of either the matched or mismatched categories will appear in your summary files. You could reduce it to get more rare taxa, but there will be some limit at which noise overwhelms the signal for very rare things so be cautious.
++ `readlimit` determines the number of SSU rRNA reads retrieved by `phyloFlash`. It is currently set at 1 million per sample so the workflow won't "choke" on rRNA-rich samples like metatranscriptomes.
 
 ## 5. Running the *Compute* workflow
 
