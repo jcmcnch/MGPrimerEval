@@ -5,7 +5,7 @@ Just want to run the pipeline? [Jump to usage instructions.](https://github.com/
 1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
 2. [Pipeline Architecture](https://github.com/jcmcnch/MGPrimerEval#2-pipeline-architecture)
 3. [Detailed Overview](https://github.com/jcmcnch/MGPrimerEval#3-detailed-overview)  
-  3.1 [Motivating Scientific Questions](https://github.com/jcmcnch/MGPrimerEval#31-motivating-scientific-questions)
+  3.1 [Motivating Scientific Questions](https://github.com/jcmcnch/MGPrimerEval#31-motivating-scientific-questions)  
   3.2 [Input Requirements](https://github.com/jcmcnch/MGPrimerEval#32-input-requirements)
 4. []()
 5. []()
