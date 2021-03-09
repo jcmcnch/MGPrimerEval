@@ -313,6 +313,19 @@ cat intermediate/compute-workflow/05-pyNAST-aligned/* | less
 
 If you want to get more information about which taxa are missed by your primers, you can run the *Classify* workflow (next section). The first step below also produces some graphical output that may be helpful determining whether it's worth proceeding further (for example, if your primers are already nearly perfect for your environment in question, then you may not care to run the next steps).
 
+The *Compute* output will be found in `output/compute-workflow/09-summary/`. It starts with `09` since it's the ninth step in the pipeline. Intermediate files are found in `intermediate/compute-workflow` (note that `01-fastp_cleaning` will normally be missing because those files are marked as temporary in the workflow).
+
+Output is composed of tab-separated files with a single line of data in the following format `{sample}.{direction}.{group}.{primer}.{mismatches}.summary.tsv`. You can easily concatenate them on the command line if you just want to take a quick look or redirect to a file:
+
+```
+#concatenate and view all the bacterial samples from the 515Y primer at a 0-mismatch threshold
+cat output/compute-workflow/09-summary/*BACT-NON-CYANO.515Y.0-mismatch* | less
+
+#output same information to a file with headers
+echo "SampleName	ReadDirection	OrganismalCategory	Primer	MismatchThreshold	IdentifiedSeqs	MatchedSeqs	MismatchedSeqs	FracMatched" > MGPrimerEval-tutorial.BACT-NON-CYANO.515Y.0-mismatch.tsv
+cat output/compute-workflow/09-summary/*BACT-NON-CYANO.515Y.0-mismatch* >> MGPrimerEval-tutorial.BACT-NON-CYANO.515Y.0-mismatch.tsv
+```
+
 ## 6. Running the *Classify* workflow:
 
 The classify workflow summarizes all the data from the compute workflow. For example, if you had 500 samples it would give you information on the overall patterns summed across all 500 samples. It is mainly useful for finding out which taxa might be primarily responsible for mismatches, and provides information on how to modify primers to fix these issues.
