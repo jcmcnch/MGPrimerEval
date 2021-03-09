@@ -1,6 +1,6 @@
 Just want to run the pipeline? [Jump to usage instructions.](https://github.com/jcmcnch/MGPrimerEval#running-the-pipeline-with-your-own-data)
 
-## Preamble
+## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
 
 1. The highly unequal abundances in nature, so for example, a very abundant mismatched taxon has the same weight as a well-matched one occurring at vanishingly small abundance, hence the “% match” to the database could significantly over- or under-estimate the actual “% match” to the field even if all taxa are in the database.
@@ -8,7 +8,7 @@ Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU 
 
 Our new approach as implemented with this pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest, avoiding both sources of bias mentioned above.
 
-## Pipeline Architecture
+## 2. Pipeline Architecture
 
 The pipeline is divided into three modules:
 
@@ -18,9 +18,9 @@ The pipeline is divided into three modules:
 
 We have described the results of this analysis already for oceanic ecosystems (see preprint [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v1)), but we should note that *our pipeline is agnostic to primer/dataset* and thus could be used on any meta-'omics dataset. We hope the instructions below are enough to get you started. If there are any bugs, or questions, please open a github issue above and we'll do our best to help.
 
-## Detailed Overview
+## 3. Detailed Overview
 
-### Motivating Scientific Questions
+### 3.1 Motivating Scientific Questions
 
 This pipeline is designed to address several related questions at different levels of detail:
 1. What fraction of environmental SSU rRNA fragments match oligonucleotide primer sequences\* in a given environment at 0, 1, and 2-mismatch thresholds? *i.e., how well do primers theoretically perform for a given environment / dataset?*
@@ -30,15 +30,15 @@ This pipeline is designed to address several related questions at different leve
 
 \*Note: the pipeline *does* handle degenerate primers as a query, and returns a perfect match if one of the variants specified in your degenerate sequence matches the target.
 
-### Input Requirements:
+### 3.2 Input Requirements:
 
 The only thing you need are raw, *unassembled* paired-end meta'omics data such as metagenomes or metatranscriptomes. They should be compressed in gzip format (suffix = `gz`). Merged read pairs or single-end reads are not currently supported. It is important that data have not been filtered or assembled, since the goal of this pipeline is to recover the underlying environmental patterns with respect to primer matches/mismatches (which assumes that your metagenome/-transcriptome is an accurate representation of the environment in question). 
 
-### Recommended operating systems
+### 3.3 Recommended operating systems
 
 The recommended operating system to run the pipeline is Linux (tested on Ubuntu 16.04/20.04, and CentOS). It may work on Mac/Windows so long as you can install snakemake and conda, but has not been tested on these systems.
 
-### Overview of Pipeline Steps:
+### 3.4 Overview of Pipeline Steps:
 
 The pipeline steps are roughly as follows:
 1. Extract SSU rRNA fragments (16S and 18S) from your input data\*
@@ -55,7 +55,7 @@ The pipeline steps are roughly as follows:
 
 \*By default, the pipeline is set to limit the number of retrieved SSU rRNA per sample to 1 million (so it doesn't run too slowly on rRNA-rich data such as metatranscriptomes), but you can tweak this if you'd like to get more data back - just change the `readlimit` parameter in your config file.
 
-### Expected output files
+### 3.5 Expected output files
 
 *NB: By default, the pipeline keeps all intermediate files except for the fastp processed raw reads, but you can change this behaviour by putting `temp()` around any output files you wish to discard. That being said, the processed data files should be considerably smaller than your raw data. I also have a cleanup script in the repository you can use to compress and remove some unnecessary intermediates if you're running out of space (`scripts/compress-cleanup-MGPrimerEval.sh`). This script should only be run after you finish running all modules.*
 
@@ -79,7 +79,7 @@ The *Compare* workflow (only if you have paired metagenomes and amplicon sequenc
 - A BLASTn-based comparison between MG SSU rRNA fragments and amplicon sequence variants (using ASVs as a BLAST database and the MG SSU rRNA as query)
 - A direct intercomparison between taxonomic groups found in MG SSU rRNA and ASVs *from the same sample*, summarized in graphical and tabular format (includes R^2 values of relative abundances; see manuscript text for more details)
 
-### Open-source software and database dependencies
+### 3.6 Open-source software and database dependencies
 
 This pipeline depends on a number of amazing free and open source software packages such as:
 
@@ -94,13 +94,13 @@ This pipeline depends on a number of amazing free and open source software packa
 
 Our taxonomic classification and splitting steps also heavily depend on the [SILVA database project](https://www.arb-silva.de/), which is an expert-curated database that is the most comprehensive SSU rRNA database for diverse global environments.
 
-## Running the pipeline with your own data
+## 4. Running the pipeline with your own data
 
 The following are instructions to get the pipeline set up for your own datasets. There are also [instructions below for downloading and processing example data](https://github.com/jcmcnch/MGPrimerEval#example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system) if you just want to test the mechanics and make sure it runs on your system. You will still need to follow most of the setup below, with the exception of adding your sample names to the config (a config is already provided with the sample names for these example data).
 
 These instructions assume you have familiarity with [basic bash command line syntax](https://astrobiomike.github.io/unix/unix-intro), have github installed, and you're using something like `screen` or `tmux` to keep a persistent session alive for remote servers. 
 
-### Setting up and activating a snakemake conda environment
+### 4.1 Setting up and activating a snakemake conda environment
 
 Assuming you have the [python3 version of miniconda](https://conda.io/en/latest/miniconda.html) installed, install snakemake into its own environment and activate it as follows:
 
@@ -115,7 +115,7 @@ conda activate snakemake-env
 
 ([Source for install instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html))
 
-### Cloning the repository and adding raw data
+### 4.2 Cloning the repository and adding raw data
 
 Now, clone the repo into a new folder we'll call `myDataset` and enter that folder.
 
@@ -128,9 +128,9 @@ Link your raw data into the input folder (the `ln -s` "softlink" prevents data d
 
 `ln -s /full/path/to/your/data/*gz intermediate/compute-workflow/00-fastq/`
 
-### Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
+### 4.3 Downloading databases for phyloFlash, SSU rRNA splitting, SSU rRNA classification with VSEARC, and adding `uclust` to your path
 
-1. **PhyloFlash Database for Retrieving SSU rRNA fragments**
+4.3.1 **PhyloFlash Database for Retrieving SSU rRNA fragments**
 
 Install phyloFlash into its own environment and run the database install script (will take some hours as phyloFlash runs quality-control steps on the database but this only needs to be run once):
 
@@ -353,7 +353,7 @@ If you've downloaded the example data (next section), the compare workflow can b
 
 `./runscripts/compare/16s-dada2-97pc-tutorial.sh`
 
-The output can be found, you guessed it, in the `output/compare-worflow` folder. Since this comparison has quite a few "knobs" you can turn, I've made it so that the output folder is named to record parameters specified by the user (so you don't forget later). For example, the output from today's test was named:
+The output can be found, you guessed it, in the `output/compare-workflow` folder. Since this comparison has quite a few "knobs" you can turn, I've made it so that the output folder is named to record parameters specified by the user (so you don't forget later). For example, the output from today's test was named:
 
 `output/compare-workflow/2021-03-02_dada2-old-data_blastnPcID-97_minAbund-0.01_vs_MG/`
 
