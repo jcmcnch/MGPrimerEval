@@ -1,5 +1,18 @@
 Just want to run the pipeline? [Jump to usage instructions.](https://github.com/jcmcnch/MGPrimerEval#running-the-pipeline-with-your-own-data)
 
+## Table of contents:
+
+1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
+2. [Pipeline Architecture](https://github.com/jcmcnch/MGPrimerEval#2-pipeline-architecture)
+3. [Detailed Overview](https://github.com/jcmcnch/MGPrimerEval#3-detailed-overview)
+  + [Motivating Scientific Questions](https://github.com/jcmcnch/MGPrimerEval#31-motivating-scientific-questions)
+4. []()
+5. []()
+6. []()
+7. []()
+8. []()
+9. []()
+
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
 
@@ -385,7 +398,7 @@ cd myDataset
 
 * If paths are not set up correctly for `uclust` and the `VSEARCH` databases, the pipeline will still run but produce empty output files.
 * As mentioned above, some output plots will be empty if there is insufficient data.
-* If you are running the pipeline on a cluster that has a job submission system, you may need to `source ~/.bashrc` before submitting you job to get `conda` to be recognized.
+* If you are running the pipeline on a cluster that has a job submission system, you may need to `source ~/.bashrc` before submitting your job to get `conda` to be recognized.
 * If you are running into issues with DAG generation taking a long time (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is), especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
 * bbmap/bbsplit steps sometimes can hang under situations of high RAM use - it will just get stuck at a particular step and not proceed further. To resolve this, just kill (i.e. CTRL-C) and restart your workflow.
 
