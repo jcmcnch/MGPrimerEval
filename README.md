@@ -1,6 +1,6 @@
 Table of contents:
 
-0. QuickStart
+0. [QuickStart](https://github.com/jcmcnch/MGPrimerEval#0-quickstart)
 1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
 2. [Pipeline Architecture](https://github.com/jcmcnch/MGPrimerEval#2-pipeline-architecture)
 3. Detailed Overview:  
