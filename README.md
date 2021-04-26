@@ -1,7 +1,6 @@
 Just want to run the pipeline? [Jump to usage instructions.](https://github.com/jcmcnch/MGPrimerEval#running-the-pipeline-with-your-own-data)
-
+d
 ## Preamble
-Just
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws, but may be subject to human error/oversight. This pipeline is an attempt to provide an automated, less biased way of evaluating primer performance based on meta-'omics datasets from the environment of interest. It does so with three main modules\*:
 
 * *Compute workflow*: Calculate, from raw (unassembled) metagenome/transcriptome reads, the proportion of reads that perfectly match your primer(s) of interest.
@@ -146,7 +145,7 @@ phyloFlash_makedb.pl --remote
 
 If you do not already have bbmap installed locally, make a conda environment called bbmap-env:
 
-`mamba create -c agbiome --name bbmap-env bbtools`
+`mamba create -c bioconda --name bbmap-env bbmap`
 
 Now, download and create the database (should only take a few minutes):
 
@@ -163,6 +162,8 @@ chmod u+x make-dbs-bbsplit.sh ; ./make-dbs-bbsplit.sh
 
 3. Getting the `uclust` executable:
 
+**Please note that the pipeline will still run if this is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results).**
+
 The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of qiime), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable I used by email by the author of `uclust`.
 
 All you need to do is put the binary in a sensible location, and make a note of the full path to add to the config file (next section). This way, when you run the workflow, this executable will be found. For example:
@@ -177,7 +178,10 @@ mkdir bin ; cd bin
 #copy uclust into this directory
 cp /location/of/uclust .
 
-#get full path (for your config file)
+#make executable
+chmod a+x uclust
+
+#get full path
 pwd
 ```
 
