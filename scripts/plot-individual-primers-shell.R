@@ -1,6 +1,8 @@
+#!/usr/bin/env Rscript
 library(ggplot2)
+args = commandArgs(trailingOnly=TRUE)
 
-all.summary <- read.delim(snakemake@input[[1]], header=FALSE)
+all.summary <- read.delim(args[2], header=FALSE)
 euk.all <- all.summary[with(all.summary, V3=="EUK" & V5!="6-mismatch" & V4!="27F" & V4!="338R" & V4!="341F" & V4!="806RB" & V4!="785R"), ]
 euk.all$V4=factor(euk.all$V4, levels=c("515Y","926R","V4F","V4R","V4RB","926wF","1392R","1389F","1510R"))
 
@@ -17,7 +19,7 @@ euk.all$V10[euk.all$V4=="1392R"] <- "V6-V8"
 euk.all$V10[euk.all$V4=="1389F"] <- "V9"
 euk.all$V10[euk.all$V4=="1510R"] <- "V9"
 
-strDatasetName = snakemake@params[[1]]
+strDatasetName = args[1]
 ylabelEUK = paste("Coverage of ", strDatasetName, " SSU rRNA (Eukaryotes)",sep="") 
 ylabelBACT = paste("Coverage of ", strDatasetName, " SSU rRNA (Bacteria)",sep="")
 ylabelCYANO = paste("Coverage of ", strDatasetName, " SSU rRNA (Cyano + plastid)",sep="")
@@ -35,7 +37,7 @@ p<-p+ theme_bw() + theme(plot.title = element_text(hjust = 0.5), panel.border = 
                         axis.text = element_text(size = rel(1.3)), strip.text = element_text(size = rel(1.3)),
                         legend.text = element_text(size = rel(1.3)), legend.title = element_text(size = rel(1.3),hjust = 0.5),
                         legend.box.background = element_rect(colour = "black", fill=NA, size=0.5) )
-ggsave(file=snakemake@output[[1]], plot=p, width=11, height=8)
+ggsave(file=args[3], plot=p, width=11, height=8)
 
 #Bacteria (non-cyano)
 
@@ -66,7 +68,7 @@ p<-p+ theme_bw() + theme(plot.title = element_text(hjust = 0.5), panel.border = 
                         axis.text = element_text(size = rel(1.3)), strip.text = element_text(size = rel(1.3)),
                         legend.text = element_text(size = rel(1.3)), legend.title = element_text(size = rel(1.3),hjust = 0.5),
                         legend.box.background = element_rect(colour = "black", fill=NA, size=0.5) )
-ggsave(file=snakemake@output[[2]], plot=p, width=11, height=8)
+ggsave(file=args[4], plot=p, width=11, height=8)
 
 #Cyano + plastids
 cyano.all <- all.summary[with(all.summary, V3=="BACT-CYANO" & V6>=10 & V5!="6-mismatch" & V4!="V4F" & V4!="V4R" & V4!="V4RB" & V4!="1389F" & V4!="1510R"), ]
@@ -99,7 +101,7 @@ p<-p+ theme_bw() + theme(plot.title = element_text(hjust = 0.5), panel.border = 
                         axis.text = element_text(size = rel(1.3)), strip.text = element_text(size = rel(1.3)),
                         legend.text = element_text(size = rel(1.3)), legend.title = element_text(size = rel(1.3),hjust = 0.5),
                         legend.box.background = element_rect(colour = "black", fill=NA, size=0.5) )
-ggsave(file=snakemake@output[[3]], plot=p, width=10, height=8)
+ggsave(file=args[5], plot=p, width=10, height=8)
 
 #Archaea
 arch.all <- all.summary[with(all.summary, V3=="ARCH" & V6>=10 & V9!="NA" & V5!="6-mismatch" & V4!="1389F" & V4!="27F" & V4!="338R" & V4!="1510R" & V4!="V4F" & V4!="V4R" & V4!="V4RB"), ]
@@ -126,4 +128,4 @@ p<-p+ theme_bw() + theme(plot.title = element_text(hjust = 0.5), panel.border = 
                         axis.text = element_text(size = rel(1.3)), strip.text = element_text(size = rel(1.3)),
                         legend.text = element_text(size = rel(1.3)), legend.title = element_text(size = rel(1.3),hjust = 0.5),
                         legend.box.background = element_rect(colour = "black", fill=NA, size=0.5) )
-ggsave(file=snakemake@output[[4]], width=10, height=8)
+ggsave(file=args[6], width=10, height=8)
