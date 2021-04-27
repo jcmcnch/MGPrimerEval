@@ -1,0 +1,1 @@
+To provide a way to run the worflow without downloading large metagenomes, we chose to provide a "dummy" input which is just the sequences phyloFlash identifies as SSU rRNA. They can then be run through the pipeline to test its functionality.
