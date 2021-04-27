@@ -1,6 +1,6 @@
+Table of contents:
 
-f contents:
-
+0. [QuickStart](https://github.com/jcmcnch/MGPrimerEval#0-quickstart)
 1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
 2. [Pipeline Architecture](https://github.com/jcmcnch/MGPrimerEval#2-pipeline-architecture)
 3. Detailed Overview:  
@@ -20,6 +20,8 @@ f contents:
 7. [Running the Compare workflow](https://github.com/jcmcnch/MGPrimerEval#7-running-the-compare-workflow)
 8. [Downloading example data](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system)
 9. [Known Issues](https://github.com/jcmcnch/MGPrimerEval#9-known-issues)
+
+## 0. Quickstart
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
