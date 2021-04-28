@@ -1,6 +1,6 @@
 Table of contents:
 
-0. [QuickStart](https://github.com/jcmcnch/MGPrimerEval#0-quickstart)
+0. [QuickStart and Reproducibility](https://github.com/jcmcnch/MGPrimerEval#0-quickstart-and-reproducibility)
 1. [Preamble](https://github.com/jcmcnch/MGPrimerEval#1-preamble)
 2. [Pipeline Architecture](https://github.com/jcmcnch/MGPrimerEval#2-pipeline-architecture)
 3. Detailed Overview:  
@@ -21,7 +21,7 @@ Table of contents:
 8. [Downloading example data](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system)
 9. [Known Issues](https://github.com/jcmcnch/MGPrimerEval#9-known-issues)
 
-## 0. Quickstart
+## 0. Quickstart and Reproducibility
 
 To reproduce steps
 
