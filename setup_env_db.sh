@@ -58,4 +58,4 @@ silvaudb=`echo ~/databases/VSEARCH_db/silva132_99_sintax.udb` ; printf "VSEARCHu
 phytoudb=`echo ~/databases/VSEARCH_db/PhytoRef_plus_Cyano.udb` ; printf "PhytoRefUdbPath: \"${phytoudb}\"\n" >> database.paths
 echo "To run the tutorial, you now need to copy the lines in the file \"database.paths\" into your config found in config/tutorial/config.yaml"
 
-ln -s test-input/*fastq.gz intermediate/compute-workflow/00-fastq/
+ln -s $PWD/test-input/*fastq.gz $PWD/intermediate/compute-workflow/00-fastq/
