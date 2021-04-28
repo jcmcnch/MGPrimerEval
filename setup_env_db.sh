@@ -8,6 +8,7 @@
 #chmod a+x Miniconda3-py39_4.9.2-Linux-x86_64.sh
 #./Miniconda3-py39_4.9.2-Linux-x86_64.sh
 #conda init bash
+#rm -f Miniconda3-py39_4.9.2-Linux-x86_64.sh
 
 #install mamba, which is faster than conda, -y flag says yes to everything
 #conda install -c conda-forge mamba -y
