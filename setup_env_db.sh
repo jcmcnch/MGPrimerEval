@@ -47,7 +47,15 @@
 
 #Setup classification databases
 #make directory, enter it
-mkdir -p ~/databases/VSEARCH_db/ ; cd ~/databases/VSEARCH_db
+#mkdir -p ~/databases/VSEARCH_db/ ; cd ~/databases/VSEARCH_db
 
 #download database files from OSF
-for item in 25a8b znrv8 ; do curl -O -J -L https://osf.io/$item/download ; done
+#for item in 25a8b znrv8 ; do curl -O -J -L https://osf.io/$item/download ; done
+bbsplitpath=`echo ~/databases/bbsplit-db/` ; printf "bbsplitDBpath: \"${bbsplitpath}\"\n" > database.paths
+phyloFlashdb=`echo ~/databases/phyloFlash-db/138.1/` ; printf "phyloFlashDB: \"${phyloFlashdb}\"\n" >> database.paths
+dbdir=`echo ~/databases/` ; printf "uclustpath: \"${dbdir}\"\n" >> database.paths
+silvaudb=`echo ~/databases/VSEARCH_db/silva132_99_sintax.udb` ; printf "VSEARCHudbPath: \"${silvaudb}\"\n" >> database.paths
+phytoudb=`echo ~/databases/VSEARCH_db/PhytoRef_plus_Cyano.udb` ; printf "PhytoRefUdbPath: \"${phytoudb}\"\n" >> database.paths
+echo "To run the tutorial, you now need to copy the lines in the file \"database.paths\" into your config found in config/tutorial/config.yaml"
+
+ln -s test-input/*fastq.gz intermediate/compute-workflow/00-fastq/
