@@ -18,7 +18,7 @@ Table of contents:
 5. [Running the Compute workflow](https://github.com/jcmcnch/MGPrimerEval#5-running-the-compute-workflow)
 6. [Running the Classify workflow](https://github.com/jcmcnch/MGPrimerEval#6-running-the-classify-workflow)
 7. [Running the Compare workflow](https://github.com/jcmcnch/MGPrimerEval#7-running-the-compare-workflow)
-8. [Downloading example data](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system)
+8. [Example showing how to quickly download data from ENA](https://github.com/jcmcnch/MGPrimerEval#8-downloading-data-from-ena-to-either-reproduce-our-analysis-or-conduct-a-new-evaluation)
 9. [Known Issues](https://github.com/jcmcnch/MGPrimerEval#9-known-issues)
 
 ## 0. Quickstart and Reproducibility
