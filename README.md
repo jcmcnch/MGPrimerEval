@@ -66,7 +66,7 @@ There are many more outputs to peruse which are described more fully in the sect
 
 6. To run the pipeline with your own data, you now merely have to follow the instructions [here](https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file) to set up your own configuration file and to [add your own raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data).
 
-7. If you want to reproduce the analysis reported in our publication, we provide ENA/SRA identifiers in the folder `config/dataset-info/`. In our experience, downloading such large datasets is best accomplished with `ascp` and an associated python library, and we include instructions [here](https://github.com/jcmcnch/MGPrimerEval#8-downloading-data-from-ena-to-either-reproduce-our-analysis-or-conduct-a-new-evaluation).
+7. If you want to reproduce the analysis reported in our publication, we provide ENA/SRA identifiers in the folder `config/dataset-info/`. In our experience, downloading such large datasets is best accomplished with `ascp` and an associated python library, and we include instructions [here](https://github.com/jcmcnch/MGPrimerEval#8-downloading-data-from-ena-to-either-reproduce-our-analysis-or-conduct-a-new-evaluation). For each of the datasets, the pipeline was run in a separate folder and the explicit invocation of `snakemake` used to generate output can be found in the `runscripts` folder.
 
 8. To intercompare metagenomes with ASVs, you can follow the template pipeline described [here](https://github.com/jcmcnch/MGPrimerEval#7-running-the-compare-workflow) which reproduces the outputs discussed in the paper.
 
