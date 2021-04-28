@@ -56,7 +56,7 @@ The pipeline will run for a few hours, and then you should see output from `snak
 
 6. To run the pipeline with your own data, you now merely have to follow the instructions [here](https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file) to set up your own configuration file and to [add your own raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data).
 
-7. If you want to reproduce the analysis reported in our publication, we provide ENA/SRA identifiers in the folder ``
+7. If you want to reproduce the analysis reported in our publication, we provide ENA/SRA identifiers in the folder `config/dataset-info/`. In our experience, downloading such large datasets is best accomplished with `ascp` and an associated python library, and we include instructions [here](https://github.com/jcmcnch/MGPrimerEval#8-downloading-example-data-eg-if-you-just-want-to-testverify-the-functionality-of-the-pipeline-on-your-system).
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
