@@ -23,6 +23,8 @@ Table of contents:
 
 ## 0. Quickstart and Reproducibility
 
+**The following steps will get you ready to analyze your own data quickly and/or reproduce our paper's analysis. You can then read the sections below for more information about the pipeline design/rationale and how to interpret output files.**
+
 The following instructions assume you are using a linux system and have `git` installed. You should also email me at mcnichol at alum dot mit dot edu to get the `uclust` binary (which cannot be distributed freely on github).
 
 1. First, clone the repo and `cd` into the directory:
