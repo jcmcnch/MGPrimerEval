@@ -437,9 +437,9 @@ Within this folder, you'll find two subfolders:
 - `07-MG-vs-ASV-plots` contains plots of the metagenomic relative abundances plotted against the ASV relative abundances on both linear and log scales.
 - `07-MG-vs-ASV-stats` contains some statistics about the correlation. Interpret these statistics with caution - they are intended to be a data exploration tool, not an authoritative description. For example, they could help identify samples that differ a lot between MG and ASV-based methods, and could point towards ways to optimize methods.
 
-## 8. Downloading example data (e.g. if you just want to test/verify the functionality of the pipeline on your system)
+## 8. Downloading data from ENA to either reproduce our analysis or conduct a new evaluation
 
-The following instructions explain how to download 10 files from the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176) that can be used with configuration files and template scripts to test the functionality of the pipeline on your system.
+The following instructions explain how to download 10 files from the [BioGEOTRACES metagenomes](https://www.nature.com/articles/sdata2018176) that can be used with configuration files and template scripts to test the functionality of the pipeline on your system. They are the raw data from which the `test-input` files are derived. Just modify the scripts / input to the scripts with your own ENA/SRA identifiers if you want to download something different.
 
 1. If you haven't done so, clone the repo into a folder named `myDataset` and enter it:
 
