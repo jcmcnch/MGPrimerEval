@@ -428,6 +428,7 @@ cd myDataset
 * If you are running the pipeline on a cluster that has a job submission system, you may need to `source ~/.bashrc` before submitting your job to get `conda` to be recognized.
 * If you are running into issues with DAG generation taking a long time (read [snakemake documentation](https://snakemake.readthedocs.io/en/stable/) if you want to know what a DAG is), especially if you have a *lot* of samples, you might need to subset your workflow. You can do this manually (some examples of how to do so are found in the `runscripts` folder), or use a [new batch mode](https://snakemake.readthedocs.io/en/stable/executing/cli.html#dealing-with-very-large-workflows) built into the latest versions of snakemake (not implemented in this workflow).
 * bbmap/bbsplit steps sometimes can hang under situations of high RAM use - it will just get stuck at a particular step and not proceed further. To resolve this, just kill (i.e. CTRL-C) and restart your workflow.
+* 210427: I ran into a strange error with pyNAST failing, deleting a temporary file (`rm /tmp/fastq-ids_pynast_fail.fasta`) seemed to resolve it/
 
 A visual demonstration of the compute module:
 ![Rule graph for initial (Snakefile-compute.smk) steps](https://github.com/jcmcnch/MGPrimerEval/blob/master/images/Snakefile-compute.svg)
