@@ -32,7 +32,7 @@ git clone git@github.com:jcmcnch/MGPrimerEval.git
 cd MGPrimerEval
 ```
 
-2. To quickly set up the pipeline and its required databases/software dependencies, we provide a helper script that can be run as follows:
+2. To quickly set up the pipeline and its required databases/software dependencies, we provide a helper script that can be run as follows (see section 4 for more information about what it does):
 
 ```
 ./setup_env_db.sh
@@ -40,13 +40,23 @@ cd MGPrimerEval
 
 This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. This process will take a few hours and will use about 8 Gb of space. Once it's finished you need to do two more things:
 
-3. Put the `uclust` executable in your `~/databases/` directory. 
+3. Put the `uclust` executable you received by email in your `~/databases/` directory. 
 
 4. Modify `config/tutorial/config.yaml` to include the correct paths to your databases. They are specified in the file `database.paths` which is produced by the `setup_env_db.sh` script.
 
 Now, we are ready to test the pipeline:
 
-5. Run 
+5. As part of this github repository we provide a few small input files (see folder `test-input`) to verify the pipeline functions on your system. You can test it as follows:
+
+```
+./run_tutorial.sh
+```
+
+The pipeline will run for a few hours, and then you should see output from `snakemake` saying 100% of the steps have been completed. It will produce a few summary pdf plots which can be useful to verify it worked (some may be blank if there is not sufficient data).
+
+6. To run the pipeline with your own data, you now merely have to follow the instructions [here](https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file) to set up your own configuration file and to [add your own raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data).
+
+7. If you want to reproduce the analysis reported in our publication, we provide ENA/SRA identifiers in the folder ``
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
