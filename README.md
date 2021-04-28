@@ -54,17 +54,21 @@ Now, we are ready to test the pipeline:
 ./run_tutorial.sh
 ```
 
-The pipeline will run for a few hours, and then you should see output from `snakemake` saying 100% of the steps have been completed:
+The pipeline will run for a few hours, and then you should see output from `snakemake` saying 100% of the steps have been completed (NB: the number of steps will be different):
 
 ![Completion Message:](https://github.com/jcmcnch/MGPrimerEval/blob/master/images/Completion_message_snakemake.png)
 
-It will produce a few summary pdf plots which can be useful to verify it worked (some may be blank if there is not sufficient data).
+It will produce a few summary pdf plots which can be useful to verify it worked (some may be blank if there is not sufficient data). For example, this is what is produced from the tutorial data for *Bacteria* (excluding *Cyanobacteria* and plastids):
 
 ![For example:](https://github.com/jcmcnch/MGPrimerEval/blob/master/images/MGPrimerEval-tutorial.BACT-NON-CYANO.svg)
+
+There are many more outputs to peruse which are described more fully in the sections on [expected output files](https://github.com/jcmcnch/MGPrimerEval#35-expected-output-files), as well as the detailed instructions for running the [compute](https://github.com/jcmcnch/MGPrimerEval#5-running-the-compute-workflow) and [classify](https://github.com/jcmcnch/MGPrimerEval#6-running-the-classify-workflow) workflows.
 
 6. To run the pipeline with your own data, you now merely have to follow the instructions [here](https://github.com/jcmcnch/MGPrimerEval#44-setting-up-your-configuration-file) to set up your own configuration file and to [add your own raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data).
 
 7. If you want to reproduce the analysis reported in our publication, we provide ENA/SRA identifiers in the folder `config/dataset-info/`. In our experience, downloading such large datasets is best accomplished with `ascp` and an associated python library, and we include instructions [here](https://github.com/jcmcnch/MGPrimerEval#8-downloading-data-from-ena-to-either-reproduce-our-analysis-or-conduct-a-new-evaluation).
+
+8. To intercompare metagenomes with ASVs, you can follow the template pipeline described [here](https://github.com/jcmcnch/MGPrimerEval#7-running-the-compare-workflow) which reproduces the outputs discussed in the paper.
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
