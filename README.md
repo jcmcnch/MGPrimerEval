@@ -23,7 +23,7 @@ Table of contents:
 
 ## 0. Quickstart and Reproducibility
 
-The following instructions assume you are using a linux system and have `git` installed.
+The following instructions assume you are using a linux system and have `git` installed. You should also email me at mcnichol at alum dot mit dot edu to get the `uclust` binary (which cannot be distributed freely on github).
 
 1. First, clone the repo and `cd` into the directory:
 
@@ -38,9 +38,15 @@ cd MGPrimerEval
 ./setup_env_db.sh
 ```
 
-This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. This process will take a few hours and will use about 8 Gb of space.
+This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. This process will take a few hours and will use about 8 Gb of space. Once it's finished you need to do two more things:
 
-3. Once the setup script has successfully terminated
+3. Put the `uclust` executable in your `~/databases/` directory. 
+
+4. Modify `config/tutorial/config.yaml` to include the correct paths to your databases. They are specified in the file `database.paths` which is produced by the `setup_env_db.sh` script.
+
+Now, we are ready to test the pipeline:
+
+5. Run 
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
