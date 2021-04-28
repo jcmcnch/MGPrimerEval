@@ -10,7 +10,7 @@ Table of contents:
   3.4 [Overview of Pipeline Steps](https://github.com/jcmcnch/MGPrimerEval#34-overview-of-pipeline-steps)  
   3.5 [Expected Output Files](https://github.com/jcmcnch/MGPrimerEval#35-expected-output-files)  
   3.6 [Open Source Software and Database Dependencies](https://github.com/jcmcnch/MGPrimerEval#36-open-source-software-and-database-dependencies)
-4. Running the pipeline with your own data:  
+4. Setting up databases and configuration files:  
   4.1 [Setting up and activating a snakemake conda environment](https://github.com/jcmcnch/MGPrimerEval#41-setting-up-and-activating-a-snakemake-conda-environment)  
   4.2 [Cloning the repository and adding raw data](https://github.com/jcmcnch/MGPrimerEval#42-cloning-the-repository-and-adding-raw-data)  
   4.3 [Downloading databases](https://github.com/jcmcnch/MGPrimerEval#43-downloading-databases-for-phyloflash-ssu-rrna-splitting-ssu-rrna-classification-with-vsearch-and-adding-uclust-to-your-path)  
@@ -23,7 +23,24 @@ Table of contents:
 
 ## 0. Quickstart and Reproducibility
 
-To reproduce steps
+The following instructions assume you are using a linux system and have `git` installed.
+
+1. First, clone the repo and `cd` into the directory:
+
+```
+git clone git@github.com:jcmcnch/MGPrimerEval.git
+cd MGPrimerEval
+```
+
+2. To quickly set up the pipeline and its required databases/software dependencies, we provide a helper script that can be run as follows:
+
+```
+./setup_env_db.sh
+```
+
+This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. This process will take a few hours and will use about 8 Gb of space.
+
+3. Once the setup script has successfully terminated
 
 ## 1. Preamble
 Accurate design of oligonucleotide primers for small subunit ribosomal RNA (SSU rRNA) polymerase chain reaction (PCR) amplicon sequencing (or indeed any PCR-based analysis) determines how quantitiative the resulting data is. So far, primers have been mainly designed based on comprehensive and highly-curated reference databases such as SILVA. This has provided important insights into theoretical primer performance and corrected many flaws. However in past primer evaluations, the reliance on full-length references and giving each sequence equal weight can lead to a distorted perspective on the actual extent of matches and mismatches expected in real samples. Prior approaches did not take into account: 
