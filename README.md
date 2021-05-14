@@ -1,3 +1,5 @@
+**Update 2021-05-14**: The manuscript describing the results from this pipeline for marine systems has now been accepted for publication in _mSystems_. The final text can be freely accessed on bioRxiv [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v2).
+
 Table of contents:
 
 0. [QuickStart and Reproducibility](https://github.com/jcmcnch/MGPrimerEval#0-quickstart-and-reproducibility)
@@ -86,7 +88,7 @@ The pipeline is divided into three modules:
 * *Classify* workflow: Using output from the *Compute* workflow, determine which taxa are matched, and which taxa are mismatched. Provide information on primer variants for specific groupings that can allow an investigator to correct biases as appropriate.
 * *Compare* workflow: Using output from the *Compute* workflow, compare relative abundances of amplicon sequence variants with those from the *same region* of the 16S/18S molecule. This allows an "apples to apples" comparison between amplicon/metagenomic methods, and can show how well the two methods correspond with one another. 
 
-We have described the results of this analysis already for oceanic ecosystems (see preprint [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v1)), but we should note that *our pipeline is agnostic to primer/dataset* and thus could be used on any meta-'omics dataset. We hope the instructions below are enough to get you started. If there are any bugs, or questions, please open a github issue above and we'll do our best to help.
+We have described the results of this analysis already for oceanic ecosystems (see preprint [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v2), which was recently aceepted in _mSystems_), but we should note that *our pipeline is agnostic to primer/dataset* and thus could be used on any meta-'omics dataset. We hope the instructions below are enough to get you started. If there are any bugs, or questions, please open a github issue above and we'll do our best to help.
 
 ## 3. Detailed Overview
 
