@@ -1,4 +1,4 @@
-**Update 2021-05-14**: The manuscript describing the results from this pipeline for marine systems has now been accepted for publication in _mSystems_. The final text can be freely accessed on bioRxiv [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v2).
+**Update 2021-05-14**: The manuscript describing the results from this pipeline for marine systems has now been accepted for publication in _mSystems_. The final text can be freely accessed on bioRxiv [here](https://www.biorxiv.org/content/10.1101/2020.11.09.375543v2) and on the mSystems [website](https://journals.asm.org/doi/epdf/10.1128/mSystems.00565-21).
 
 Table of contents:
 
