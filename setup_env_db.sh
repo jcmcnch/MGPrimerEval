@@ -1,5 +1,7 @@
 #!/bin/bash -i
 
+currdir=$PWD
+
 #Install miniconda3, saying "yes" to all recommended options
 #Comment out if you've already installed on your system
 #Note this is for Linux, other system information found here:
@@ -7,7 +9,7 @@
 wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.9.2-Linux-x86_64.sh
 chmod a+x Miniconda3-py39_4.9.2-Linux-x86_64.sh
 ./Miniconda3-py39_4.9.2-Linux-x86_64.sh
-conda init bash
+#conda init bash
 rm -f Miniconda3-py39_4.9.2-Linux-x86_64.sh
 
 #install mamba, which is faster than conda, -y flag says yes to everything
@@ -51,6 +53,7 @@ mkdir -p ~/databases/VSEARCH_db/ ; cd ~/databases/VSEARCH_db
 #download database files from OSF
 for item in 25a8b znrv8 ; do curl -O -J -L https://osf.io/$item/download ; done
 
+cd $currdir
 #output information to file database.paths to add to your config file
 bbsplitpath=`echo ~/databases/bbsplit-db/` ; printf "bbsplitDBpath: \"${bbsplitpath}\"\n" > database.paths
 phyloFlashdb=`echo ~/databases/phyloFlash-db/138.1/` ; printf "phyloFlashDB: \"${phyloFlashdb}\"\n" >> database.paths
