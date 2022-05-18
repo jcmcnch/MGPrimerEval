@@ -44,7 +44,7 @@ cd MGPrimerEval
 
 This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. This process will take a few hours and will use about 8 Gb of space. Once it's finished you need to do two more things:
 
-3. Put the `uclust` executable you received by email in your `~/databases/` directory. 
+3. Put the `uclust` executable you received by email in your `~/databases/` directory and make it executable (i.e. `chmod a+x uclust`).
 
 4. Modify `config/tutorial/config.yaml` to include the correct paths to your databases. They are specified in the file `database.paths` which is produced by the `setup_env_db.sh` script.
 
