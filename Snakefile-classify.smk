@@ -255,6 +255,8 @@ rule make_mismatch_alignments_and_summarize:
 		mismatchAlignment="output/classify-workflow/overall-summaries/{study}.{group}.{primer}.{mismatches}.aln.fasta"
 	input:
 		"intermediate/classify-workflow/10-concatenated-info-files/{study}.{group}.{primer}.{mismatches}.nohits.all.info"
+	conda:
+		"envs/biopython.yaml"
 	shell:
 		"scripts/make-mismatch-alignments-and-summarize.py --info {input} "
 		"--summaryout {output.summary} --alignmentout {output.mismatchAlignment}"
