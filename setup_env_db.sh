@@ -3,6 +3,9 @@
 #if you have just installed a fresh system curl may not be installed
 sudo apt-get install curl
 
+#move UCLUST automatically into your databases folder now that it no longer needs to be emailed
+mkdir ~/databases ; cp bin/uclust ~/databases ; chmod a+x ~/databases/uclust
+
 currdir=$PWD
 
 #Install miniconda3, saying "yes" to all recommended options
@@ -67,5 +70,6 @@ silvaudb=`echo ~/databases/VSEARCH_db/silva132_99_sintax.udb` ; printf "VSEARCHu
 phytoudb=`echo ~/databases/VSEARCH_db/PhytoRef_plus_Cyano.udb` ; printf "PhytoRefUdbPath: \"${phytoudb}\"\n" >> database.paths
 
 echo "To run the tutorial, you now need to copy the lines in the file \"database.paths\" into your config found in config/tutorial/config.yaml"
+echo "UCLUST has been automatically copied to your ~/databases folder and given executable permissions for all users."
 
 ln -s $PWD/test-input/*fastq.gz $PWD/intermediate/compute-workflow/00-fastq/
