@@ -1,5 +1,8 @@
 #!/bin/bash -i
 
+#if you have just installed a fresh system curl may not be installed
+sudo apt-get install curl
+
 currdir=$PWD
 
 #Install miniconda3, saying "yes" to all recommended options
