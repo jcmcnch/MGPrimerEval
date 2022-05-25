@@ -32,6 +32,8 @@ The following instructions assume you are using a linux system and have `git` in
 1. First, clone the repo and `cd` into the directory:
 
 ```
+#if you're running a fresh system may need to install git
+sudo apt-get install git
 git clone git@github.com:jcmcnch/MGPrimerEval.git
 cd MGPrimerEval
 ```
@@ -42,7 +44,7 @@ cd MGPrimerEval
 ./setup_env_db.sh
 ```
 
-This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. This process will take a few hours and will use about 8 Gb of space. Once it's finished you need to do two more things:
+This script assumes `miniconda3` is *NOT* installed. It will install `miniconda3`, `snakemake`, download and set up the required databases. You will have to reply "yes" several times during the install. This process will take a few hours and will use about 8 Gb of space. Once it's finished you need to do two more things:
 
 3. Put the `uclust` executable you received by email in your `~/databases/` directory and make it executable (i.e. `chmod a+x uclust`).
 
