@@ -3,6 +3,9 @@
 #if you have just installed a fresh system curl may not be installed
 sudo apt-get install curl
 
+#move UCLUST automatically into your databases folder now that it no longer needs to be emailed
+mkdir ~/databases ; cp bin/uclust ~/databases ; chmod a+x ~/databases/uclust
+
 currdir=$PWD
 
 #Install miniconda3, saying "yes" to all recommended options
@@ -15,15 +18,16 @@ chmod a+x Miniconda3-py39_4.9.2-Linux-x86_64.sh
 #conda init bash
 rm -f Miniconda3-py39_4.9.2-Linux-x86_64.sh
 source ~/.bashrc
+#conda config --set channel_priority strict
 
 #install mamba, which is faster than conda, -y flag says yes to everything
-conda install -c conda-forge mamba -y
+conda install -c conda-forge mamba=0.23.3 -y
 
 #create an environment named snakemake-env
-mamba create -c conda-forge -c bioconda -n snakemake-env snakemake -y
+mamba create -c conda-forge -c bioconda -n snakemake-env snakemake=5.30.1-0 -y
 
 #Use mamba to create phyloFlash environment
-mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash -y
+mamba create -c conda-forge -c bioconda --name pf sortmerna=2.1b phyloflash=3.4-0 -y
 
 #If you're getting errors, you may need to run `conda update conda` or do a fresh install of miniconda if updating is not easy (sometimes you get all sorts of incompatibilities which can just be solved by a fresh install)
 conda activate pf
@@ -66,5 +70,6 @@ silvaudb=`echo ~/databases/VSEARCH_db/silva132_99_sintax.udb` ; printf "VSEARCHu
 phytoudb=`echo ~/databases/VSEARCH_db/PhytoRef_plus_Cyano.udb` ; printf "PhytoRefUdbPath: \"${phytoudb}\"\n" >> database.paths
 
 echo "To run the tutorial, you now need to copy the lines in the file \"database.paths\" into your config found in config/tutorial/config.yaml"
+echo "UCLUST has been automatically copied to your ~/databases folder and given executable permissions for all users."
 
 ln -s $PWD/test-input/*fastq.gz $PWD/intermediate/compute-workflow/00-fastq/
