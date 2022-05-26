@@ -18,11 +18,6 @@ chmod a+x Miniconda3-py39_4.9.2-Linux-x86_64.sh
 #conda init bash
 rm -f Miniconda3-py39_4.9.2-Linux-x86_64.sh
 source ~/.bashrc
-<<<<<<< HEAD
-#conda config --set channel_priority strict
-=======
-conda config --set channel_priority strict
->>>>>>> e684e6a81c42d9a61ba7302169d853a8597fc2e0
 
 #install mamba, which is faster than conda, -y flag says yes to everything
 conda install -c conda-forge mamba=0.23.3 -y
