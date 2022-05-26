@@ -82,7 +82,7 @@ rule sort_EUK:
 		workdir="intermediate/compute-workflow/tmp/",
 		bbsplitdb=bbsplitDBpath + "/EUK-PROK-bbsplit-db/"
 	shell:
-		"cd {params.workdir} ; "
+		"cd {params.workdir} ; mkdir -p ../../../intermediate/compute-workflow/04-sorted/ ;"
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path={params.bbsplitdb} "
 		"in=../../../{input} basename={input}_%.fastq ; "
@@ -103,7 +103,7 @@ rule sort_PROK:
 		workdir="intermediate/compute-workflow/tmp/",
                 bbsplitdb=bbsplitDBpath + "/BACT-ARCH-bbsplit-db/"
 	shell:
-		"cd {params.workdir} ; "
+		"cd {params.workdir} ; mkdir -p ../../../intermediate/compute-workflow/04-sorted/ ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path={params.bbsplitdb} "
 		"in=../../../{input} basename={input}_%.fastq ; "
@@ -124,7 +124,7 @@ rule sort_CYANO:
 		workdir="intermediate/compute-workflow/tmp/",
                 bbsplitdb=bbsplitDBpath + "/BACT-CYANO-bbsplit-db/"
 	shell:
-		"cd {params.workdir} ; "
+		"cd {params.workdir} ; mkdir -p ../../../intermediate/compute-workflow/04-sorted/ ; "
 		"bbsplit.sh ow=f threads={threads} -Xmx100g usequality=f qtrim=f minratio=0.30 minid=0.30 pairedonly=f "
 		"path={params.bbsplitdb} "
 		"in=../../../{input} basename={input}_%.fastq ; "
