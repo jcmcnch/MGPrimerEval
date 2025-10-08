@@ -288,26 +288,7 @@ ls $PWD/*udb
 
 **Please note that the pipeline will still run if `uclust` is not set up correctly, but will produce empty output files for the alignment step (meaning you won't get any results). So double-check that the path you provide in the config below is accurate.**
 
-The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. However, the `uclust` executable is not available through standard repositories as it is not open-source. You may have access to `uclust` (e.g. from an older install of `qiime`), but you can also just email me at mcnichol at alum dot mit dot edu and I'll send you the binary. I have [been given permission](https://github.com/biocore/pynast/issues/21) to distribute the executable by email by the author.
-
-All you need to do is put the binary in a sensible location, and make a note of the full path to add to the config file (next section). This way, when you run the workflow, this executable will be found. For example:
-
-```
-#enter your analysis folder
-cd myDataset
-
-#make a directory for binaries, enter directory
-mkdir bin ; cd bin
-
-#copy uclust into this directory
-cp /location/of/uclust .
-
-#make executable
-chmod a+x uclust
-
-#get full path to put into the config file (below)
-pwd
-```
+The alignment steps in this pipeline currently depend on `pyNAST`, which also depends on `uclust`. `uclust` is now available for use as part of this repo thanks to author Dr. Robert Edgar (https://github.com/jcmcnch/MGPrimerEval/issues/3). It should now work "out of the box".
 
 ### 4.4 Setting up your configuration file
 
